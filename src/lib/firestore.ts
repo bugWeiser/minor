@@ -53,11 +53,14 @@ export async function getNotice(id: string): Promise<Notice | null> {
 }
 
 // Real-time notices listener
-export function onNoticesSnapshot(callback: (notices: Notice[]) => void): () => void {
+export function onNoticesSnapshot(callback: (notices: Notice[]) => void, onError?: (error: Error) => void): () => void {
   const q = query(collection(db, NOTICES_COLLECTION), orderBy('postedAt', 'desc'));
   return onSnapshot(q, (snapshot) => {
     const notices = snapshot.docs.map(docToNotice);
     callback(notices);
+  }, (error) => {
+    console.error("Firestore Snapshot Error:", error);
+    if (onError) onError(error);
   });
 }
 

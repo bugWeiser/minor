@@ -35,6 +35,10 @@ export function useNotices() {
       const unsubscribe = onNoticesSnapshot((firebaseNotices) => {
         setNotices(firebaseNotices);
         setLoading(false);
+      }, (error) => {
+        console.error("Firebase connection blocked:", error);
+        setNotices(getSeededNotices());
+        setLoading(false);
       });
       return () => unsubscribe();
     }).catch(() => {
