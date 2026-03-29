@@ -1,0 +1,144 @@
+'use client';
+import { useState } from 'react';
+import { Category, Urgency, NoticeFormData } from '@/lib/types';
+import { CATEGORIES } from '@/lib/constants';
+
+interface Props {
+  onSubmit: (data: NoticeFormData) => Promise<void>;
+  initialData?: Partial<NoticeFormData> & { tags?: string[] };
+  isEdit?: boolean;
+}
+
+export default function AdminNoticeForm({ onSubmit, initialData, isEdit }: Props) {
+  const [form, setForm] = useState<NoticeFormData>({
+    title: initialData?.title || '',
+    body: initialData?.body || '',
+    category: initialData?.category || 'Academic',
+    tags: initialData?.tags || ['ALL'],
+    urgency: initialData?.urgency || 'Normal',
+    expiryDate: initialData?.expiryDate || '',
+    isPinned: initialData?.isPinned || false,
+    postedBy: initialData?.postedBy || '',
+    attachmentUrl: initialData?.attachmentUrl || '',
+    attachmentName: initialData?.attachmentName || '',
+  });
+  const [tagInput, setTagInput] = useState<string>(
+    initialData?.tags?.join(', ') || 'ALL'
+  );
+  const [loading, setLoading] = useState(false);
+  const [msg, setMsg] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.title || !form.body || !form.expiryDate || !form.postedBy) {
+      setMsg('❌ Fill all required fields');
+      return;
+    }
+    
+    setLoading(true);
+    setMsg('');
+    
+    try {
+      // Process tags
+      const processedTags = tagInput
+        .split(',')
+        .map(t => t.trim().toUpperCase())
+        .filter(t => t !== '');
+        
+      const submissionData = {
+        ...form,
+        tags: processedTags.length > 0 ? processedTags : ['ALL']
+      };
+
+      await onSubmit(submissionData);
+      setMsg(isEdit ? '✅ Notice updated!' : '✅ Notice posted successfully!');
+      
+      if (!isEdit) {
+        setForm({
+          title: '', body: '', category: 'Academic', tags: ['ALL'], urgency: 'Normal',
+          expiryDate: '', isPinned: false, postedBy: '',
+          attachmentUrl: '', attachmentName: '',
+        });
+        setTagInput('ALL');
+      }
+    } catch {
+      setMsg('❌ Failed. Try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const inp = 'w-full px-4 py-3 rounded-xl border border-[var(--border-primary)] bg-slate-50 dark:bg-slate-800 text-sm font-medium text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-indigo-400 focus:ring-4 focus:ring-indigo-500/10 transition-all';
+  const lbl = 'block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2';
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div>
+        <label className={lbl}>Title <span className="text-red-500">*</span></label>
+        <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} maxLength={120} className={inp} placeholder="Notice title" />
+      </div>
+      <div>
+        <label className={lbl}>Description <span className="text-red-500">*</span></label>
+        <textarea value={form.body} onChange={(e) => setForm({ ...form, body: e.target.value })} rows={4} className={`${inp} resize-none`} placeholder="Notice description" />
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label className={lbl}>Category <span className="text-red-500">*</span></label>
+          <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value as Category })} className={inp}>
+            {CATEGORIES.map((c) => (<option key={c} value={c}>{c}</option>))}
+          </select>
+        </div>
+        <div>
+          <label className={lbl}>Expiry Date <span className="text-red-500">*</span></label>
+          <input type="date" value={form.expiryDate} onChange={(e) => setForm({ ...form, expiryDate: e.target.value })} className={inp} />
+        </div>
+      </div>
+      <div>
+        <label className={lbl}>Target Tags (Comma separated) <span className="text-red-500">*</span></label>
+        <input 
+          value={tagInput} 
+          onChange={(e) => setTagInput(e.target.value)} 
+          className={inp} 
+          placeholder="e.g. ALL or CSE-3, BBA-4" 
+        />
+        <p className="text-[10px] text-slate-500 mt-1.5 font-medium ml-1">Use "ALL" for public notices, or target specific groups like "CSE-3".</p>
+      </div>
+      <div>
+        <label className={lbl}>Urgency</label>
+        <div className="flex flex-wrap gap-4 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-[var(--border-primary)]">
+          {(['Normal', 'Important', 'Urgent'] as Urgency[]).map((u) => (
+            <label key={u} className="flex items-center gap-2 cursor-pointer group">
+              <input type="radio" name="urgency" value={u} checked={form.urgency === u} onChange={() => setForm({ ...form, urgency: u })} className="accent-indigo-600 w-4 h-4" />
+              <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 group-hover:text-indigo-600 transition-colors">{u}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+      <div className="flex items-center gap-3 p-4 bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-900/50 rounded-xl">
+        <input type="checkbox" checked={form.isPinned} onChange={(e) => setForm({ ...form, isPinned: e.target.checked })} className="accent-amber-600 w-5 h-5 rounded" />
+        <label className="text-sm font-bold text-amber-900 dark:text-amber-300">Pin to top of feed</label>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label className={lbl}>Posted By <span className="text-red-500">*</span></label>
+          <input value={form.postedBy} onChange={(e) => setForm({ ...form, postedBy: e.target.value })} className={inp} placeholder="Your name / Dept" />
+        </div>
+        <div>
+          <label className={lbl}>Attachment URL</label>
+          <input value={form.attachmentUrl} onChange={(e) => setForm({ ...form, attachmentUrl: e.target.value })} className={inp} placeholder="https://..." />
+        </div>
+      </div>
+
+      {msg && (
+        <div className={`p-4 rounded-xl text-sm font-bold flex items-center gap-2 ${msg.startsWith('✅') ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-rose-50 text-rose-700 border border-rose-200'}`}>
+          {msg}
+        </div>
+      )}
+      
+      <button type="submit" disabled={loading} className="w-full h-14 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-base transition-all duration-200 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-indigo-600/20">
+        {loading ? '⏳ Processing...' : isEdit ? '✏️ Save Changes' : '🚀 Publish Notice'}
+      </button>
+    </form>
+  );
+}
