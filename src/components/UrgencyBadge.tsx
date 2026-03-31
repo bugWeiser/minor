@@ -1,27 +1,17 @@
-'use client';
+import Badge, { BadgeVariant } from './ui/Badge';
 
-import { Urgency } from '@/lib/types';
-import { URGENCY_STYLES } from '@/lib/constants';
+interface Props {
+  urgency: 'Normal' | 'Important' | 'Urgent';
+  className?: string;
+}
 
-export default function UrgencyBadge({ urgency }: { urgency: Urgency }) {
+export default function UrgencyBadge({ urgency, className = '' }: Props) {
   if (urgency === 'Normal') return null;
+
+  let variant: BadgeVariant = 'Pending';
   
-  const s = URGENCY_STYLES[urgency];
-  
-  return (
-    <span
-      className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-[6px] text-[11px] font-semibold uppercase tracking-wide border h-[24px]"
-      style={{ 
-        backgroundColor: s.bg, 
-        color: s.text, 
-        borderColor: s.border 
-      }}
-    >
-      <div 
-        className={`w-1.5 h-1.5 rounded-full ${urgency === 'Urgent' ? 'animate-pulse' : ''}`} 
-        style={{ backgroundColor: s.dot }} 
-      />
-      {urgency}
-    </span>
-  );
+  if (urgency === 'Important') variant = 'In Review';
+  else if (urgency === 'Urgent') variant = 'Pending';
+
+  return <Badge variant={variant} forceText={urgency} className={className} />;
 }

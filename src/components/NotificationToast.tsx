@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import { HiOutlineBell } from 'react-icons/hi2';
 
 interface ToastData {
   title: string;
@@ -19,7 +20,7 @@ export default function NotificationToast() {
     const handler = (e: Event) => {
       const detail = (e as CustomEvent<ToastData>).detail;
       setToast(detail);
-      setTimeout(() => setToast(null), 4000);
+      setTimeout(() => setToast(null), 5000);
     };
     window.addEventListener('show-toast', handler);
     return () => window.removeEventListener('show-toast', handler);
@@ -28,12 +29,17 @@ export default function NotificationToast() {
   if (!toast) return null;
 
   return (
-    <div className="fixed top-4 right-4 left-4 md:left-auto md:w-96 z-[100] animate-slideDown">
-      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg p-4">
-        <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-          🔔 {toast.title}
-        </p>
-        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{toast.body}</p>
+    <div className="fixed top-6 right-6 z-[100] animate-fadeUp">
+      <div className="bg-white border-2 border-charcoal/5 rounded-[22px] shadow-2xl p-5 w-[340px] flex gap-4 ring-1 ring-black/5">
+        <div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center text-charcoal shrink-0 shadow-lg shadow-accent/20">
+          <HiOutlineBell className="w-6 h-6" />
+        </div>
+        <div className="min-w-0">
+          <p className="text-[14px] font-black text-charcoal truncate">
+            {toast.title}
+          </p>
+          <p className="text-[12px] text-text-secondary mt-1 font-medium leading-relaxed line-clamp-2">{toast.body}</p>
+        </div>
       </div>
     </div>
   );

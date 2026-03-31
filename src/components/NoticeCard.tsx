@@ -2,11 +2,11 @@
 
 import Link from 'next/link';
 import { Notice } from '@/lib/types';
-import { CATEGORY_COLORS } from '@/lib/constants';
 import { timeAgo } from '@/lib/utils';
-import UrgencyBadge from './UrgencyBadge';
-import { HiOutlineUser, HiOutlineTag, HiOutlinePaperClip, HiOutlineClock } from 'react-icons/hi';
+import { HiOutlineUser, HiOutlineTag, HiOutlinePaperClip, HiOutlineClock, HiOutlineChevronRight } from 'react-icons/hi2';
+import { HiOutlineMapPin, HiOutlineMegaphone } from 'react-icons/hi2';
 import { useAuth } from '@/context/AuthContext';
+import { format } from 'date-fns';
 
 interface Props {
   notice: Notice;
@@ -14,112 +14,85 @@ interface Props {
   showExpired?: boolean;
 }
 
+const CATEGORY_CHIP_THEMES: Record<string, string> = {
+  Academic: 'bg-soft-blue text-charcoal border-blue-100',
+  Placement: 'bg-soft-green text-charcoal border-emerald-100',
+  Events: 'bg-soft-yellow text-charcoal border-amber-100',
+  Urgent: 'bg-soft-red text-charcoal border-red-100',
+  General: 'bg-bg-card-secondary text-text-muted border-border-subtle',
+};
+
 export default function NoticeCard({ notice, index = 0, showExpired }: Props) {
   const { appUser } = useAuth();
-  const theme = CATEGORY_COLORS[notice.category];
+  const themeClass = CATEGORY_CHIP_THEMES[notice.category] || CATEGORY_CHIP_THEMES.General;
   
-  // Highlight tags that match user's tags
-  const isTagMatched = (tag: string) => {
-    if (!appUser?.tags) return false;
-    if (tag.toUpperCase() === 'ALL') return true;
-    return appUser.tags.some(userTag => userTag.toUpperCase() === tag.toUpperCase());
-  };
-
   const isUnread = appUser && (!appUser.readNotices || !appUser.readNotices.includes(notice.id));
 
   return (
-    <Link href={`/notice/${notice.id}`} className="group block h-full">
-      <div 
-        className="notice-card h-full bg-[var(--surface-secondary)] border border-[var(--border-primary)] rounded-2xl p-5 shadow-[var(--shadow-card)] flex flex-col relative overflow-hidden transition-all duration-200 ease-out animate-fadeInUp cursor-pointer"
+    <Link href={`/notices/${notice.id}`} className="group block h-full">
+      <div
+        className={`
+          card-shell h-full p-6 flex flex-col relative overflow-hidden transition-all duration-300
+          ${notice.isPinned ? 'border-l-4 border-l-warning bg-soft-yellow/10' : 'bg-white'}
+        `}
         style={{ animationDelay: `${index * 50}ms` }}
       >
-        {/* Decorative top accent line for pinned notices */}
-        {notice.isPinned && (
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 to-purple-500"></div>
-        )}
+        {/* Header Metadata */}
+        <header className="flex items-center justify-between mb-4 gap-3">
+           <div className="flex flex-wrap items-center gap-2">
+             <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border shadow-sm ${themeClass}`}>
+               {notice.category}
+             </span>
+             {notice.urgency === 'Urgent' && (
+               <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border border-red-100 bg-soft-red text-charcoal">
+                 High Priority
+               </span>
+             )}
+             {isUnread && (
+               <span className="w-2 h-2 rounded-full bg-accent shadow-lg shadow-accent/50 soft-pulse" />
+             )}
+           </div>
+           <span className="text-[11px] font-bold text-text-muted uppercase tracking-widest whitespace-nowrap">
+             {timeAgo(notice.postedAt)}
+           </span>
+        </header>
 
-        {/* Row 1: Header */}
-        <div className="flex items-start justify-between gap-3 mb-2">
-          <div className="flex flex-wrap gap-2 items-center">
-            {/* Category Pill */}
-            <span 
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold uppercase tracking-wide border"
-              style={{ 
-                backgroundColor: theme.bg, 
-                color: theme.text,
-                borderColor: theme.border,
-              }}
-            >
-              <span>{theme.icon}</span> {notice.category}
-            </span>
-            <UrgencyBadge urgency={notice.urgency} />
-            
-            {showExpired && (
-              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400">
-                Expired
-              </span>
-            )}
-            
-            {isUnread && (
-              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-indigo-600 text-white animate-pulse">
-                NEW
-              </span>
-            )}
-          </div>
-          <span className="text-xs font-medium text-slate-400 dark:text-slate-500 whitespace-nowrap">
-            {timeAgo(notice.postedAt)}
-          </span>
+        {/* Title */}
+        <div className="mb-2.5">
+          <h3 className="text-[16px] font-bold text-text-primary leading-snug group-hover:text-charcoal transition-colors flex items-start gap-2">
+            {notice.isPinned && <HiOutlineMapPin className="w-5 h-5 text-warning shrink-0 mt-0.5" />}
+            {notice.title}
+          </h3>
         </div>
-
-        {/* Row 2: Title */}
-        <h3 className="text-[15px] font-semibold text-slate-800 dark:text-slate-100 leading-tight mb-1 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-          {notice.isPinned && <span className="mr-1.5 text-indigo-500">📌</span>}
-          {notice.title}
-        </h3>
         
-        {/* Row 3: Body */}
-        <p className="text-[13px] text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed mb-3 flex-grow">
+        {/* Preview content */}
+        <p className="text-[13px] text-text-secondary line-clamp-2 leading-relaxed mb-4 flex-grow opacity-80 decoration-accent/20 group-hover:opacity-100 transition-opacity">
           {notice.body}
         </p>
 
-        {/* Row 4: Subtle divider & Footer metadata */}
-        <div className="mt-auto pt-2 border-t border-dashed border-slate-200 dark:border-slate-700/60 flex items-center justify-between text-xs font-medium text-slate-400 dark:text-slate-500">
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-            <span className="flex items-center gap-1 truncate max-w-[120px]">
-              <HiOutlineUser /> {notice.postedBy}
-            </span>
-            {notice.attachmentUrl && (
-              <span className="flex items-center gap-1 text-indigo-500">
-                <HiOutlinePaperClip /> PDF
-              </span>
-            )}
-          </div>
-          <span className="flex items-center gap-1 shrink-0">
-            <HiOutlineClock /> Exp: {notice.expiryDate.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' })}
-          </span>
-        </div>
-
-        {/* Row 5: Tags */}
-        {(notice.tags && notice.tags.length > 0) && (
-          <div className="mt-2.5 flex flex-wrap gap-1">
-            <HiOutlineTag className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5 mr-0.5" />
-            {notice.tags.slice(0, 3).map(tag => (
-              <span 
-                key={tag} 
-                className={`text-[10px] font-medium px-1.5 py-0.5 rounded-md border ${
-                  isTagMatched(tag) 
-                    ? 'border-indigo-200 bg-indigo-50 text-indigo-700 dark:border-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300' 
-                    : 'border-slate-200 bg-slate-50 text-slate-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400'
-                }`}
-              >
-                {tag}
-              </span>
-            ))}
-            {notice.tags.length > 3 && (
-              <span className="text-[10px] font-medium text-slate-400 px-1 py-0.5">+{notice.tags.length - 3}</span>
-            )}
-          </div>
-        )}
+        {/* Action Row */}
+        <footer className="mt-auto pt-4 border-t border-border-subtle flex items-center justify-between transition-all group-hover:pt-5">
+           <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-8 h-8 rounded-lg bg-bg-card-secondary flex items-center justify-center border border-border-subtle text-text-muted shrink-0 group-hover:bg-accent group-hover:text-charcoal transition-all">
+                <HiOutlineUser className="w-3.5 h-3.5" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-[11px] font-bold text-text-primary truncate">{notice.postedBy}</p>
+                <p className="text-[9px] font-bold text-text-muted uppercase tracking-wider leading-none mt-0.5">{format(notice.expiryDate, 'MMM d, yyyy')}</p>
+              </div>
+           </div>
+           
+           <div className="flex items-center gap-2">
+             {notice.attachmentUrl && (
+               <div className="w-8 h-8 rounded-lg bg-soft-blue flex items-center justify-center text-charcoal border border-blue-100/50 shadow-sm" title="Attachment available">
+                 <HiOutlinePaperClip className="w-3.5 h-3.5" />
+               </div>
+             )}
+             <div className="w-8 h-8 rounded-lg bg-bg-card-secondary flex items-center justify-center text-text-muted group-hover:bg-charcoal group-hover:text-white transition-all">
+               <HiOutlineChevronRight className="w-3.5 h-3.5" />
+             </div>
+           </div>
+        </footer>
       </div>
     </Link>
   );

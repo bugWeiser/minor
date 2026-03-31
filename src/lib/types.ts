@@ -33,6 +33,8 @@ export interface CalendarEvent {
   endDate?: Date;
   tags: string[];
   color: string;
+  time?: string;
+  location?: string;
 }
 
 export interface Assignment {

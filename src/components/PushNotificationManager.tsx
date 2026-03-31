@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { db } from '@/lib/firebase';
 import { doc, updateDoc } from 'firebase/firestore';
+import { HiOutlineBellAlert, HiOutlineXMark } from 'react-icons/hi2';
 
 export default function PushNotificationManager() {
   const { user, appUser } = useAuth();
@@ -10,23 +11,20 @@ export default function PushNotificationManager() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    // Check if permission is already granted or denied
     if (typeof window !== 'undefined' && 'Notification' in window) {
       if (Notification.permission === 'default' && user && appUser) {
-        // Show our beautiful prompt instead of raw browser prompt immediately
         setShowPrompt(true);
       }
     }
   }, [user, appUser]);
 
   useEffect(() => {
-    audioRef.current = new Audio('https://cdn.pixabay.com/download/audio/2021/08/04/audio_0625c1539c.mp3'); // Free alert ping
+    audioRef.current = new Audio('https://cdn.pixabay.com/download/audio/2021/08/04/audio_0625c1539c.mp3');
   }, []);
 
   useEffect(() => {
     if (typeof window === 'undefined' || !user || !appUser) return;
     
-    // Listen for foreground FCM messages if permission granted
     const initMessaging = async () => {
       try {
         const { getMessaging, onMessage } = await import('firebase/messaging');
@@ -35,7 +33,6 @@ export default function PushNotificationManager() {
         
         onMessage(messaging, (payload) => {
           console.log('[Foreground] Message received. ', payload);
-          // Play sound
           if (audioRef.current && payload.data?.urgency === 'Urgent') {
             audioRef.current.play().catch(e => console.log('Audio error:', e));
           }
@@ -59,7 +56,6 @@ export default function PushNotificationManager() {
         const { default: app } = await import('@/lib/firebase');
         const messaging = getMessaging(app);
         
-        // The hackathon uses auto-tokens if VapidKey is undefined, fallback gracefully
         const token = await getToken(messaging, { 
           vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY 
         }).catch(() => null);
@@ -78,28 +74,36 @@ export default function PushNotificationManager() {
   if (!showPrompt) return null;
 
   return (
-    <div className="fixed bottom-24 md:bottom-8 right-4 md:right-8 z-[100] max-w-sm w-[calc(100%-2rem)] bg-white dark:bg-slate-900 border border-indigo-100 dark:border-slate-800 shadow-2xl rounded-2xl p-5 animate-fadeInUp">
+    <div className="fixed bottom-6 right-6 z-[100] max-w-sm w-[calc(100%-3rem)] bg-white border-2 border-charcoal/5 shadow-2xl rounded-[28px] p-6 animate-fadeUp ring-1 ring-black/5">
       <div className="flex gap-4">
-        <div className="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center shrink-0">
-          <span className="text-xl">🔔</span>
+        <div className="w-12 h-12 rounded-2xl bg-accent flex items-center justify-center text-charcoal shrink-0 shadow-lg shadow-accent/20">
+          <HiOutlineBellAlert className="w-6 h-6" />
         </div>
-        <div>
-          <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">Enable Smart Alerts</h3>
-          <p className="text-xs text-slate-500 mt-1 mb-3">
-            Get instant push notifications and an alert sound when urgent hackathon notices drop.
+        <div className="flex-1">
+          <div className="flex justify-between items-start">
+            <h3 className="text-[15px] font-black text-charcoal tracking-tight">Signal Integration</h3>
+            <button onClick={() => setShowPrompt(false)} className="text-text-muted hover:text-charcoal transition-colors">
+                <HiOutlineXMark className="w-5 h-5" />
+            </button>
+          </div>
+          <p className="text-[12px] text-text-secondary mt-1.5 font-bold uppercase tracking-wider opacity-60 leading-tight">
+            Enable Push Protocols
           </p>
-          <div className="flex gap-2">
+          <p className="text-[13px] text-text-secondary mt-2 font-medium leading-relaxed">
+            Broadcast high-priority alerts and temporal markers directly to this terminal.
+          </p>
+          <div className="flex gap-3 mt-5">
             <button 
               onClick={requestPermission}
-              className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition-all shadow-md hover:shadow-lg active:scale-95"
+              className="px-6 py-2.5 bg-charcoal text-white text-[11px] font-black uppercase tracking-widest rounded-xl transition-all shadow-xl shadow-charcoal/20 hover:shadow-charcoal/40 active:scale-95"
             >
-              Allow Alerts
+              Establish Link
             </button>
             <button 
               onClick={() => setShowPrompt(false)}
-              className="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold rounded-xl transition-all"
+              className="px-6 py-2.5 bg-bg-card-secondary text-text-muted text-[11px] font-black uppercase tracking-widest rounded-xl transition-all hover:bg-bg-hover hover:text-charcoal border border-border-subtle"
             >
-              Later
+              Defer
             </button>
           </div>
         </div>

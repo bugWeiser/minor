@@ -1,7 +1,8 @@
 'use client';
 import { Notice } from '@/lib/types';
-import { CATEGORY_COLORS, CATEGORY_ICONS } from '@/lib/constants';
-import { formatDate } from '@/lib/utils';
+import { CATEGORY_ICONS } from '@/lib/constants';
+import { format } from 'date-fns';
+import { HiOutlinePencilSquare, HiOutlineTrash, HiOutlineBookmark, HiOutlineBookmarkSlash, HiOutlineCalendarDays } from 'react-icons/hi2';
 
 interface Props {
   notices: Notice[];
@@ -10,29 +11,70 @@ interface Props {
   onTogglePin: (id: string, pinned: boolean) => void;
 }
 
+const THEMES: Record<string, string> = {
+  Academic: 'bg-soft-blue text-charcoal border-blue-100',
+  Placement: 'bg-soft-green text-charcoal border-emerald-100',
+  Events: 'bg-soft-yellow text-charcoal border-amber-100',
+  Urgent: 'bg-soft-red text-charcoal border-red-100',
+  General: 'bg-bg-card-secondary text-text-muted border-border-subtle',
+};
+
 export default function NoticeList({ notices, onEdit, onDelete, onTogglePin }: Props) {
   return (
-    <div className="space-y-2">
+    <div className="space-y-3">
       {notices.map((n) => {
-        const color = CATEGORY_COLORS[n.category];
+        const Icon = CATEGORY_ICONS[n.category] || HiOutlineCalendarDays;
+        const themeClass = THEMES[n.category] || THEMES.General;
+        
         return (
-          <div key={n.id} className="flex items-center justify-between gap-3 p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
+          <div 
+            key={n.id} 
+            className="flex items-center justify-between gap-4 p-4 bg-white border border-border-subtle rounded-2xl hover:border-charcoal/20 hover:shadow-xl hover:shadow-black/5 transition-all duration-300 group"
+          >
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-xs px-2 py-0.5 rounded-full font-medium" style={{ backgroundColor: color.bg, color: color.text }}>
-                  {CATEGORY_ICONS[n.category]} {n.category}
+              <div className="flex items-center gap-2 mb-2">
+                <span className={`text-[9px] font-black uppercase tracking-[0.15em] px-2.5 py-1 rounded-md border flex items-center gap-1.5 shadow-sm ${themeClass}`}>
+                   <Icon className="w-3.5 h-3.5" strokeWidth={2.5} />
+                   {n.category}
                 </span>
-                {n.isPinned && <span className="text-xs">📌</span>}
+                {n.isPinned && (
+                    <span className="text-[10px] font-black uppercase tracking-widest text-warning bg-soft-yellow px-2 py-0.5 rounded-md border border-amber-200">
+                      Pinned
+                    </span>
+                )}
+                <span className="text-[10px] font-bold text-text-muted opacity-60 uppercase tracking-widest ml-1">
+                  {format(n.postedAt, 'MMM d, yyyy')}
+                </span>
               </div>
-              <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{n.title}</p>
-              <p className="text-xs text-gray-400">{formatDate(n.postedAt)}</p>
+              <h4 className="text-[15px] font-black text-charcoal truncate tracking-tight group-hover:text-black">
+                {n.title}
+              </h4>
             </div>
-            <div className="flex items-center gap-1">
-              <button onClick={() => onTogglePin(n.id, !n.isPinned)} className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm cursor-pointer" title={n.isPinned ? 'Unpin' : 'Pin'}>
-                {n.isPinned ? '📌' : '📍'}
+            
+            <div className="flex items-center gap-2">
+              <button 
+                onClick={() => onTogglePin(n.id, !n.isPinned)} 
+                className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all border ${n.isPinned ? 'bg-soft-yellow text-charcoal border-amber-200 shadow-md' : 'bg-bg-card-secondary text-text-muted border-border-subtle hover:bg-white hover:border-charcoal'}`}
+                title={n.isPinned ? 'Unpin Matrix' : 'Anchor to Top'}
+              >
+                {n.isPinned ? <HiOutlineBookmarkSlash className="w-4 h-4" /> : <HiOutlineBookmark className="w-4 h-4" />}
               </button>
-              <button onClick={() => onEdit(n)} className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm cursor-pointer">✏️</button>
-              <button onClick={() => { if (confirm('Delete this notice?')) onDelete(n.id); }} className="p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-sm cursor-pointer">🗑️</button>
+              
+              <button 
+                onClick={() => onEdit(n)} 
+                className="w-9 h-9 rounded-xl bg-bg-card-secondary text-text-muted border border-border-subtle flex items-center justify-center transition-all hover:bg-white hover:border-charcoal hover:text-charcoal shadow-sm hover:shadow-md"
+                title="Edit Protocol"
+              >
+                <HiOutlinePencilSquare className="w-4 h-4" />
+              </button>
+              
+              <button 
+                onClick={() => { if (confirm('Purge this notice from the institutional grid?')) onDelete(n.id); }} 
+                className="w-9 h-9 rounded-xl bg-soft-red/10 text-danger border border-red-100 flex items-center justify-center transition-all hover:bg-soft-red hover:text-white hover:border-danger shadow-sm hover:shadow-lg shadow-danger/20"
+                title="Delete Entry"
+              >
+                <HiOutlineTrash className="w-4 h-4" />
+              </button>
             </div>
           </div>
         );

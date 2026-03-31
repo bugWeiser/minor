@@ -5,6 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { registerStudent } from '@/lib/auth';
 import Link from 'next/link';
+import { HiOutlineUser, HiOutlineAcademicCap, HiOutlineEnvelope, HiOutlineLockClosed, HiOutlineChevronRight } from 'react-icons/hi2';
 
 export default function SignupPage() {
   const [formData, setFormData] = useState({
@@ -46,112 +47,131 @@ export default function SignupPage() {
     }
   };
 
-  const inp = "w-full px-4 py-3 rounded-2xl border border-[var(--border-primary)] bg-white/50 dark:bg-slate-800/50 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-400 outline-none transition-all placeholder:text-slate-400";
-  const lbl = "block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2";
+  const inp = "w-full h-14 px-5 rounded-2xl border border-border-subtle bg-bg-card-secondary text-[14px] font-bold text-text-primary placeholder:text-text-muted focus:bg-white focus:shadow-xl focus:border-charcoal outline-none transition-all";
+  const lbl = "block text-[11px] font-black text-text-muted uppercase tracking-[0.14em] mb-2.5 ml-1";
 
   return (
-    <div className="min-h-[70vh] flex items-center justify-center p-4">
-      <div className="max-w-md w-full rounded-4xl p-8 shadow-2xl space-y-8 relative overflow-hidden bg-white/70 dark:bg-slate-900/60 backdrop-blur-xl border border-white dark:border-slate-800">
+    <div className="min-h-screen flex items-center justify-center p-6 bg-white selection:bg-accent/40 selection:text-charcoal selection:font-black">
+      <div className="max-w-[480px] w-full card-shell !rounded-[40px] p-10 md:p-12 space-y-10 relative overflow-hidden bg-white shadow-2xl group transition-all duration-700 hover:shadow-black/5">
         
-        <div className="absolute top-[-20%] left-[-10%] w-48 h-48 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-[-20%] right-[-10%] w-48 h-48 bg-purple-500/20 rounded-full blur-3xl pointer-events-none" />
+        {/* Background Decor */}
+        <div className="absolute top-[-40px] right-[-40px] w-48 h-48 bg-accent/20 rounded-full blur-3xl pointer-events-none group-hover:bg-accent/30 transition-all duration-1000" />
+        <div className="absolute bottom-[-40px] left-[-40px] w-48 h-48 bg-soft-blue/20 rounded-full blur-3xl pointer-events-none group-hover:bg-soft-blue/30 transition-all duration-1000" />
         
-        <div className="relative z-10 text-center">
-          <h2 className="text-3xl font-extrabold pb-2 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-            Student Signup
-          </h2>
-          <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
-            Create an account to personalize your feed
-          </p>
-        </div>
-        
-        <form onSubmit={handleSignup} className="relative z-10 space-y-5">
-          <div>
-            <label className={lbl}>Full Name</label>
-            <input 
-              type="text" 
-              value={formData.name}
-              onChange={(e) => setFormData({...formData, name: e.target.value})}
-              className={inp}
-              placeholder="Alice Walker"
-              required
-            />
-          </div>
-          <div>
-            <label className={lbl}>Student Email</label>
-            <input 
-              type="email" 
-              value={formData.email}
-              onChange={(e) => setFormData({...formData, email: e.target.value})}
-              className={inp}
-              placeholder="alice@college.edu"
-              required
-            />
-          </div>
-          
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className={lbl}>Department</label>
-              <select 
-                value={formData.department}
-                onChange={(e) => setFormData({...formData, department: e.target.value})}
-                className={inp}
-              >
-                <option value="CSE">CSE</option>
-                <option value="BBA">BBA</option>
-                <option value="ECE">ECE</option>
-                <option value="MECH">MECH</option>
-              </select>
+        <header className="relative z-10 text-center">
+            <div className="w-16 h-16 rounded-2xl bg-accent flex items-center justify-center text-charcoal shadow-lg shadow-accent/20 mx-auto mb-6 transform hover:rotate-6 transition-transform">
+                <HiOutlineAcademicCap className="w-8 h-8" />
             </div>
+            <h1 className="text-4xl font-black text-charcoal tracking-tighter leading-tight mb-2">
+                Identity Initiation
+            </h1>
+            <p className="text-[14px] font-bold text-text-muted uppercase tracking-widest opacity-60">
+                Establish Your Institutional Node
+            </p>
+        </header>
+        
+        <form onSubmit={handleSignup} className="relative z-10 space-y-6">
+          <div className="space-y-5">
             <div>
-              <label className={lbl}>Year</label>
-              <select 
-                value={formData.year}
-                onChange={(e) => setFormData({...formData, year: e.target.value})}
-                className={inp}
-              >
-                <option value="1">1st Year</option>
-                <option value="2">2nd Year</option>
-                <option value="3">3rd Year</option>
-                <option value="4">4th Year</option>
-              </select>
+              <label className={lbl}>Designation Name</label>
+              <div className="relative group/field">
+                <HiOutlineUser className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within/field:text-charcoal transition-colors" />
+                <input 
+                  type="text" 
+                  value={formData.name}
+                  onChange={(e) => setFormData({...formData, name: e.target.value})}
+                  className={`${inp} pl-12`}
+                  placeholder="e.g. Alice Walker"
+                  required
+                />
+              </div>
             </div>
-          </div>
 
-          <div>
-            <label className={lbl}>Password</label>
-            <input 
-              type="password" 
-              value={formData.password}
-              onChange={(e) => setFormData({...formData, password: e.target.value})}
-              className={inp}
-              placeholder="••••••••"
-              required
-              minLength={6}
-            />
+            <div>
+              <label className={lbl}>Communication Email</label>
+              <div className="relative group/field">
+                <HiOutlineEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within/field:text-charcoal transition-colors" />
+                <input 
+                  type="email" 
+                  value={formData.email}
+                  onChange={(e) => setFormData({...formData, email: e.target.value})}
+                  className={`${inp} pl-12`}
+                  placeholder="institutional@sagi.ac.in"
+                  required
+                />
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-5">
+              <div>
+                <label className={lbl}>Department Code</label>
+                <select 
+                  value={formData.department}
+                  onChange={(e) => setFormData({...formData, department: e.target.value})}
+                  className={inp}
+                >
+                  <option value="CSE">CSE (School of Engg)</option>
+                  <option value="BBA">BBA (School of Mgmt)</option>
+                  <option value="ECE">ECE (Electronics)</option>
+                  <option value="MECH">MECH (Mechanical)</option>
+                </select>
+              </div>
+              <div>
+                <label className={lbl}>Academic Year</label>
+                <select 
+                  value={formData.year}
+                  onChange={(e) => setFormData({...formData, year: e.target.value})}
+                  className={inp}
+                >
+                  <option value="1">Year 1 (Freshman)</option>
+                  <option value="2">Year 2 (Sophomore)</option>
+                  <option value="3">Year 3 (Pre-Final)</option>
+                  <option value="4">Year 4 (Final)</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label className={lbl}>Security Keyphrase</label>
+              <div className="relative group/field">
+                <HiOutlineLockClosed className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within/field:text-charcoal transition-colors" />
+                <input 
+                  type="password" 
+                  value={formData.password}
+                  onChange={(e) => setFormData({...formData, password: e.target.value})}
+                  className={`${inp} pl-12`}
+                  placeholder="••••••••••••"
+                  required
+                  minLength={6}
+                />
+              </div>
+            </div>
           </div>
           
           {error && (
-            <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-800/50 text-rose-600 dark:text-rose-400 text-sm font-medium flex items-center gap-2">
-              ⚠️ {error}
+            <div className="p-4 rounded-xl bg-soft-red text-danger border border-red-100 text-[13px] font-black flex items-center gap-2 animate-shake">
+              <span className="text-lg">⚠️</span> {error}
             </div>
           )}
           
           <button 
             type="submit" 
             disabled={loading}
-            className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold text-sm shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40 transition-all hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60 disabled:pointer-events-none"
+            className="w-full h-16 rounded-[22px] bg-charcoal hover:bg-black text-white font-black text-sm uppercase tracking-[0.2em] transition-all hover:shadow-2xl hover:shadow-black/10 active:scale-[0.98] disabled:opacity-60 disabled:pointer-events-none flex items-center justify-center gap-3 group/btn shadow-xl shadow-black/5"
           >
-            {loading ? 'Creating Account...' : 'Sign Up'}
+            {loading ? 'Establishiing Connection...' : 'Register Instance'}
+            {!loading && <HiOutlineChevronRight className="w-5 h-5 text-accent opacity-60 group-hover/btn:opacity-100 group-hover/btn:translate-x-1 transition-all" />}
           </button>
         </form>
         
-        <p className="text-center text-sm font-medium text-slate-500 pt-2 z-10 relative">
-          Faculty member?{' '}
-          <Link href="/login" className="text-indigo-600 hover:text-indigo-700 font-bold ml-1">
-            Login here
-          </Link>
-        </p>
+        <footer className="relative z-10 pt-4 text-center border-t border-border-subtle border-dashed">
+            <p className="text-[13px] font-bold text-text-muted">
+                Already indexed in the directory?{' '}
+                <Link href="/login" className="text-charcoal hover:underline decoration-accent decoration-2 underline-offset-4 decoration-dashed font-black ml-1">
+                    Establish Session
+                </Link>
+            </p>
+        </footer>
       </div>
     </div>
   );

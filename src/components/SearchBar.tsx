@@ -1,6 +1,6 @@
 'use client';
 
-import { HiSearch, HiX } from 'react-icons/hi';
+import { HiOutlineMagnifyingGlass, HiOutlineXMark } from 'react-icons/hi2';
 
 interface Props {
   value: string;
@@ -9,24 +9,28 @@ interface Props {
   className?: string;
 }
 
-export default function SearchBar({ value, onChange, placeholder = 'Search...', className = '' }: Props) {
+export default function SearchBar({ value, onChange, placeholder = 'Search documentation...', className = '' }: Props) {
   return (
-    <div className={`relative w-full ${className} flex items-center`}>
-      <HiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors text-[18px] shrink-0 pointer-events-none" />
+    <div className={`relative w-full group ${className}`}>
+      <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-8 h-8 rounded-lg bg-bg-card-secondary text-text-muted group-focus-within:bg-charcoal group-focus-within:text-white transition-all duration-500 pointer-events-none">
+        <HiOutlineMagnifyingGlass className="w-4 h-4" strokeWidth={2.5} />
+      </div>
+      
       <input
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full h-[48px] lg:h-[44px] pl-11 pr-10 rounded-xl border border-[var(--border-primary)] bg-white dark:bg-slate-800/80 text-[14px] text-slate-700 dark:text-slate-200 placeholder-slate-300 dark:placeholder-slate-600 focus:outline-none focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-950/30 hover:border-slate-300 dark:hover:border-slate-600 transition-all duration-200"
+        className="w-full h-14 pl-14 pr-12 rounded-[22px] border border-border-subtle bg-white shadow-sm shadow-black/5 text-[14px] font-bold text-charcoal placeholder:text-text-muted placeholder:font-medium focus:bg-white focus:shadow-2xl focus:shadow-black/5 focus:border-charcoal/20 outline-none transition-all duration-500"
       />
+      
       {value && (
         <button
           onClick={() => onChange('')}
-          className="absolute right-3 top-1/2 -translate-y-1/2 w-[18px] h-[18px] flex items-center justify-center rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:text-slate-300 dark:hover:bg-slate-700 transition-all cursor-pointer p-0.5"
-          aria-label="Clear search"
+          className="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-xl text-text-muted hover:text-charcoal hover:bg-bg-hover transition-all group/clear"
+          aria-label="Clear Query"
         >
-          <HiX className="text-[14px]" />
+          <HiOutlineXMark className="w-5 h-5 group-hover/clear:rotate-90 transition-transform" />
         </button>
       )}
     </div>

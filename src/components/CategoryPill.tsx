@@ -1,6 +1,7 @@
 'use client';
 import { Category } from '@/lib/types';
-import { CATEGORY_COLORS, CATEGORY_ICONS } from '@/lib/constants';
+import { CATEGORY_ICONS } from '@/lib/constants';
+import { HiOutlineQueueList } from 'react-icons/hi2';
 
 interface Props {
   category: Category | 'All';
@@ -11,35 +12,32 @@ interface Props {
 export default function CategoryPill({ category, active, onClick }: Props) {
   const isAll = category === 'All';
   
-  const theme = isAll 
-    ? {
-        bg: '#E0E7FF', // indigo-100
-        text: '#3730A3', // indigo-800
-        border: '#C7D2FE', // indigo-200
-        accent: '#6366F1', // indigo-500
-        icon: '📋'
-      }
-    : CATEGORY_COLORS[category];
+  const getActiveStyles = () => {
+    if (active) {
+        if (category === 'All') return 'bg-charcoal text-white shadow-xl shadow-charcoal/20 border-charcoal';
+        if (category === 'Academic') return 'bg-soft-blue text-charcoal shadow-md border-blue-200';
+        if (category === 'Placement') return 'bg-soft-green text-charcoal shadow-md border-emerald-200';
+        if (category === 'Events') return 'bg-soft-yellow text-charcoal shadow-md border-amber-200';
+        return 'bg-bg-card-secondary text-charcoal shadow-md border-border-strong';
+    }
+    return 'bg-white text-text-muted border-border-subtle hover:bg-bg-hover hover:text-text-primary hover:border-border-strong';
+  };
 
-  const iconBase = isAll ? '📋' : CATEGORY_ICONS[category];
+  const Icon = isAll ? HiOutlineQueueList : CATEGORY_ICONS[category];
 
   return (
     <button
       onClick={onClick}
-      className={`flex-shrink-0 flex items-center gap-1.5 h-[36px] px-4 py-2 rounded-full whitespace-nowrap w-fit transition-all duration-200 active:scale-95 border ${
-        active 
-          ? 'font-semibold ring-2' 
-          : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-transparent hover:bg-slate-200 dark:hover:bg-slate-700 font-medium'
-      }`}
-      style={active ? { 
-        backgroundColor: theme.bg, 
-        color: theme.text,
-        borderColor: theme.border,
-        boxShadow: `0 0 0 2px ${theme.accent}33` // 20% opacity hex ring
-      } : {}}
+      className={`
+        flex items-center gap-2.5 h-[42px] px-6 rounded-full whitespace-nowrap 
+        active:scale-[0.96] transition-all duration-300 text-[13px] font-black uppercase tracking-widest border shadow-sm
+        ${getActiveStyles()}
+      `}
     >
-      <span className={active ? 'opacity-100 text-sm' : 'opacity-70 text-sm'}>{iconBase}</span>
-      <span className="text-[13px]">{category}</span>
+      {Icon && (
+        <Icon className={`w-[18px] h-[18px] transition-transform duration-300 ${active ? 'scale-110' : 'opacity-40 group-hover:opacity-100'}`} />
+      )}
+      <span className={active ? 'opacity-100' : 'opacity-80'}>{category}</span>
     </button>
   );
 }

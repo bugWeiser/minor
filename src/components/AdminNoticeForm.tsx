@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { Category, Urgency, NoticeFormData } from '@/lib/types';
 import { CATEGORIES } from '@/lib/constants';
 import { uploadToCloudinary } from '@/lib/cloudinary';
+import TagSelector from './admin/TagSelector';
+import { HiOutlineArrowUpTray, HiOutlineCalendarDays, HiOutlineCheckCircle, HiOutlineExclamationTriangle } from 'react-icons/hi2';
 
 interface Props {
   onSubmit: (data: NoticeFormData) => Promise<void>;
@@ -23,8 +25,8 @@ export default function AdminNoticeForm({ onSubmit, initialData, isEdit }: Props
     attachmentUrl: initialData?.attachmentUrl || '',
     attachmentName: initialData?.attachmentName || '',
   });
-  const [tagInput, setTagInput] = useState<string>(
-    initialData?.tags?.join(', ') || 'ALL'
+  const [selectedTags, setSelectedTags] = useState<string[]>(
+    initialData?.tags || ['ALL']
   );
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
@@ -33,7 +35,7 @@ export default function AdminNoticeForm({ onSubmit, initialData, isEdit }: Props
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.title || !form.body || !form.expiryDate || !form.postedBy) {
-      setMsg('❌ Fill all required fields');
+      setMsg('❌ Field Input Missing: Ensure all required fields are populated.');
       return;
     }
     
@@ -45,17 +47,14 @@ export default function AdminNoticeForm({ onSubmit, initialData, isEdit }: Props
       let finalAttachmentName = form.attachmentName;
 
       if (file) {
-        setMsg('⏳ Uploading attachment...');
+        setMsg('⏳ Uploading packet to Cloudinary...');
         finalAttachmentUrl = await uploadToCloudinary(file);
         finalAttachmentName = file.name;
-        setMsg('✅ Upload complete. Publishing notice...');
+        setMsg('✅ Packet staged. Finalizing notice...');
       }
 
       // Process tags
-      const processedTags = tagInput
-        .split(',')
-        .map(t => t.trim().toUpperCase())
-        .filter(t => t !== '');
+      const processedTags = selectedTags.length > 0 ? selectedTags : ['ALL'];
         
       const submissionData = {
         ...form,
@@ -80,7 +79,7 @@ export default function AdminNoticeForm({ onSubmit, initialData, isEdit }: Props
         }).catch(err => console.log("Push failed:", err));
       }
 
-      setMsg(isEdit ? '✅ Notice updated!' : '✅ Notice posted successfully!');
+      setMsg(isEdit ? '✅ Transaction Complete: Notice updated.' : '✅ Transaction Complete: Notice published to grid.');
       
       if (!isEdit) {
         setForm({
@@ -88,94 +87,98 @@ export default function AdminNoticeForm({ onSubmit, initialData, isEdit }: Props
           expiryDate: '', isPinned: false, postedBy: '',
           attachmentUrl: '', attachmentName: '',
         });
-        setTagInput('ALL');
+        setSelectedTags(['ALL']);
       }
     } catch {
-      setMsg('❌ Failed. Try again.');
+      setMsg('❌ Terminal Exception: Failed to complete operation.');
     } finally {
       setLoading(false);
     }
   };
 
-  const inp = 'w-full px-4 py-3 rounded-xl border border-[var(--border-primary)] bg-slate-50 dark:bg-slate-800 text-sm font-medium text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-indigo-400 focus:ring-4 focus:ring-indigo-500/10 transition-all';
-  const lbl = 'block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2';
+  const inp = 'w-full h-14 px-5 rounded-2xl border border-border-subtle bg-bg-card-secondary text-[14px] font-bold text-text-primary placeholder:text-text-muted focus:bg-white focus:shadow-xl focus:border-charcoal outline-none transition-all';
+  const lbl = 'block text-[11px] font-black text-text-muted uppercase tracking-[0.14em] mb-2.5 ml-1';
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-8">
       <div>
-        <label className={lbl}>Title <span className="text-red-500">*</span></label>
-        <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} maxLength={120} className={inp} placeholder="Notice title" />
+        <label className={lbl}>Announcement Heading <span className="text-danger">*</span></label>
+        <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} maxLength={120} className={inp} placeholder="Title of notice (Brief and clear)" />
       </div>
       <div>
-        <label className={lbl}>Description <span className="text-red-500">*</span></label>
-        <textarea value={form.body} onChange={(e) => setForm({ ...form, body: e.target.value })} rows={4} className={`${inp} resize-none`} placeholder="Notice description" />
+        <label className={lbl}>Content Protocol <span className="text-danger">*</span></label>
+        <textarea value={form.body} onChange={(e) => setForm({ ...form, body: e.target.value })} rows={5} className={`${inp} !h-auto py-5 resize-none`} placeholder="Detailed body of the notification..." />
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
-          <label className={lbl}>Category <span className="text-red-500">*</span></label>
+          <label className={lbl}>Category Selection <span className="text-danger">*</span></label>
           <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value as Category })} className={inp}>
             {CATEGORIES.map((c) => (<option key={c} value={c}>{c}</option>))}
           </select>
         </div>
         <div>
-          <label className={lbl}>Expiry Date <span className="text-red-500">*</span></label>
+          <label className={lbl}>Expiration Timestamp <span className="text-danger">*</span></label>
           <input type="date" value={form.expiryDate} onChange={(e) => setForm({ ...form, expiryDate: e.target.value })} className={inp} />
         </div>
       </div>
       <div>
-        <label className={lbl}>Target Tags (Comma separated) <span className="text-red-500">*</span></label>
-        <input 
-          value={tagInput} 
-          onChange={(e) => setTagInput(e.target.value)} 
-          className={inp} 
-          placeholder="e.g. ALL or CSE-3, BBA-4" 
-        />
-        <p className="text-[10px] text-slate-500 mt-1.5 font-medium ml-1">Use "ALL" for public notices, or target specific groups like "CSE-3".</p>
+        <label className={lbl}>Broadcast Audience Network <span className="text-danger">*</span></label>
+        <div className="bg-bg-card-secondary p-5 rounded-2xl border border-dashed border-border-strong group-hover:border-charcoal/20 transition-all">
+          <TagSelector selectedTags={selectedTags} onChange={setSelectedTags} />
+        </div>
       </div>
       <div>
-        <label className={lbl}>Urgency</label>
-        <div className="flex flex-wrap gap-4 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-[var(--border-primary)]">
+        <label className={lbl}>Priority Level</label>
+        <div className="flex flex-wrap gap-6 bg-bg-card-secondary p-6 rounded-2xl border border-border-subtle">
           {(['Normal', 'Important', 'Urgent'] as Urgency[]).map((u) => (
-            <label key={u} className="flex items-center gap-2 cursor-pointer group">
-              <input type="radio" name="urgency" value={u} checked={form.urgency === u} onChange={() => setForm({ ...form, urgency: u })} className="accent-indigo-600 w-4 h-4" />
-              <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 group-hover:text-indigo-600 transition-colors">{u}</span>
+            <label key={u} className="flex items-center gap-3 cursor-pointer group">
+              <input type="radio" name="urgency" value={u} checked={form.urgency === u} onChange={() => setForm({ ...form, urgency: u })} className="accent-charcoal w-5 h-5" />
+              <span className={`text-[13px] font-black transition-colors ${form.urgency === u ? 'text-charcoal' : 'text-text-muted group-hover:text-text-primary uppercase tracking-widest'}`}>{u}</span>
             </label>
           ))}
         </div>
       </div>
-      <div className="flex items-center gap-3 p-4 bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-900/50 rounded-xl">
-        <input type="checkbox" checked={form.isPinned} onChange={(e) => setForm({ ...form, isPinned: e.target.checked })} className="accent-amber-600 w-5 h-5 rounded" />
-        <label className="text-sm font-bold text-amber-900 dark:text-amber-300">Pin to top of feed</label>
+      
+      <div className={`flex items-center gap-4 p-5 border-2 rounded-2xl transition-all cursor-pointer ${form.isPinned ? 'bg-soft-yellow/30 border-warning/50' : 'bg-bg-card-secondary border-transparent hover:border-warning/30'}`} onClick={() => setForm({ ...form, isPinned: !form.isPinned })}>
+        <input type="checkbox" checked={form.isPinned} onChange={(e) => setForm({ ...form, isPinned: e.target.checked })} className="accent-warning w-5 h-5 rounded cursor-pointer" />
+        <div className="flex-1">
+           <p className="text-[14px] font-black text-charcoal flex items-center gap-2">Pinnable Protocol {form.isPinned && <HiOutlineCalendarDays className="w-4 h-4 text-warning" />}</p>
+           <p className="text-[11px] font-bold text-text-muted mt-0.5">Anchors this announcement to the top of the grid feed.</p>
+        </div>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
-          <label className={lbl}>Posted By <span className="text-red-500">*</span></label>
-          <input value={form.postedBy} onChange={(e) => setForm({ ...form, postedBy: e.target.value })} className={inp} placeholder="Your name / Dept" />
+          <label className={lbl}>Authorized Originator <span className="text-danger">*</span></label>
+          <input value={form.postedBy} onChange={(e) => setForm({ ...form, postedBy: e.target.value })} className={inp} placeholder="Faculty Member or Dept Name" />
         </div>
         <div>
-          <label className={lbl}>Attachment (Optional)</label>
+          <label className={lbl}>Document Payload (Cloudinary)</label>
           <div className="relative">
             <input 
               type="file" 
               onChange={(e) => e.target.files && setFile(e.target.files[0])} 
-              className={`${inp} file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 p-2`} 
+              className={`${inp} file:hidden p-3 pt-[14px] text-text-muted cursor-pointer`} 
             />
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+              <HiOutlineArrowUpTray className="w-5 h-5 text-text-muted" />
+            </div>
             {form.attachmentUrl && !file && (
-              <p className="text-xs text-indigo-600 mt-2 truncate">Current: {form.attachmentUrl}</p>
+              <p className="absolute bottom-[-18px] left-1 text-[10px] font-black text-charcoal uppercase tracking-widest truncate max-w-full">Staged: {form.attachmentUrl}</p>
             )}
           </div>
         </div>
       </div>
 
       {msg && (
-        <div className={`p-4 rounded-xl text-sm font-bold flex items-center gap-2 ${msg.startsWith('✅') ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-rose-50 text-rose-700 border border-rose-200'}`}>
+        <div className={`p-4 rounded-xl text-[13px] font-black flex items-center gap-3 animate-fadeUp ${msg.startsWith('✅') ? 'bg-soft-green text-charcoal border border-emerald-200' : 'bg-soft-red text-danger border border-red-200'}`}>
+          {msg.startsWith('✅') ? <HiOutlineCheckCircle className="w-5 h-5" /> : <HiOutlineExclamationTriangle className="w-5 h-5" />}
           {msg}
         </div>
       )}
       
-      <button type="submit" disabled={loading} className="w-full h-14 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-base transition-all duration-200 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-indigo-600/20">
-        {loading ? '⏳ Processing...' : isEdit ? '✏️ Save Changes' : '🚀 Publish Notice'}
+      <button type="submit" disabled={loading} className="w-full h-16 rounded-[22px] bg-charcoal hover:bg-black text-white font-black text-sm uppercase tracking-[0.2em] transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed shadow-2xl shadow-charcoal/20 flex items-center justify-center gap-3">
+        {loading ? '⏳ Processing Request...' : isEdit ? '✏️ Update Transaction' : '🚀 Publish to Grid'}
       </button>
     </form>
   );

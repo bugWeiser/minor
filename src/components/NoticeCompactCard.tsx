@@ -2,52 +2,55 @@
 
 import Link from 'next/link';
 import { Notice } from '@/lib/types';
-import { CATEGORY_COLORS } from '@/lib/constants';
-import { useTheme } from '@/context/ThemeContext';
+import { CATEGORY_ICONS } from '@/lib/constants';
 import { timeAgo } from '@/lib/utils';
-import { HiOutlineClock } from 'react-icons/hi';
+import { HiOutlineClock, HiOutlineChevronRight } from 'react-icons/hi2';
 
 interface Props {
   notice: Notice;
 }
 
+const THEMES: Record<string, string> = {
+  Academic: 'bg-soft-blue text-charcoal border-blue-100',
+  Placement: 'bg-soft-green text-charcoal border-emerald-100',
+  Events: 'bg-soft-yellow text-charcoal border-amber-100',
+  Urgent: 'bg-soft-red text-charcoal border-red-100',
+  General: 'bg-bg-card-secondary text-text-muted border-border-subtle',
+};
+
 export default function NoticeCompactCard({ notice }: Props) {
-  const { theme: currentTheme } = useTheme();
-  const theme = CATEGORY_COLORS[notice.category];
+  const Icon = CATEGORY_ICONS[notice.category] || HiOutlineClock;
+  const themeClass = THEMES[notice.category] || THEMES.General;
 
   return (
-    <Link href={`/notice/${notice.id}`} className="block group">
-      <div className="bg-white dark:bg-slate-800 p-3 rounded-xl border border-slate-100 dark:border-slate-700/50 hover:border-indigo-200 dark:hover:border-indigo-800 hover:shadow-sm transition-all flex gap-3 items-start">
-        {/* Category Icon Icon */}
-        <div 
-          className="w-10 h-10 rounded-lg flex items-center justify-center text-lg shrink-0"
-          style={{ 
-            backgroundColor: currentTheme === 'dark' ? theme.darkBg : theme.bg, 
-            color: currentTheme === 'dark' ? theme.darkText : theme.text 
-          }}
-        >
-          {theme.icon}
+    <Link href={`/notices/${notice.id}`} className="block group">
+      <div className="bg-white p-4 rounded-2xl border border-border-subtle hover:border-charcoal/20 hover:shadow-2xl hover:shadow-black/5 transition-all duration-500 flex gap-4 items-center">
+        {/* Category Indicator */}
+        <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border shadow-sm transition-all group-hover:scale-110 ${themeClass}`}>
+          <Icon className="w-5 h-5" strokeWidth={2.5} />
         </div>
         
-        {/* Content */}
+        {/* Content Matrix */}
         <div className="flex-1 min-w-0">
-          <div className="flex justify-between items-start gap-1 mb-0.5">
-            <h4 className="text-sm font-semibold text-slate-800 dark:text-slate-100 truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-              {notice.isPinned && <span className="mr-1">📌</span>}
-              {notice.title}
-            </h4>
-          </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1 mb-1">
-            {notice.body}
-          </p>
-          <div className="flex items-center gap-2 text-[10px] font-medium text-slate-400">
-            <span className="flex items-center gap-0.5">
-              <HiOutlineClock />
+          <div className="flex justify-between items-center gap-2 mb-1">
+            <span className="text-[10px] font-black uppercase tracking-[0.15em] text-text-muted opacity-60">
+                {notice.category} Protocol
+            </span>
+            <span className="flex items-center gap-1 text-[10px] font-black text-text-muted uppercase tracking-widest">
+              <HiOutlineClock className="w-3 h-3" />
               {timeAgo(notice.postedAt)}
             </span>
-            <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-600"></span>
-            <span>{notice.category}</span>
           </div>
+          
+          <h4 className="text-[15px] font-black text-charcoal truncate tracking-tight group-hover:text-black transition-colors">
+            {notice.isPinned && <span className="mr-1 text-warning">📌</span>}
+            {notice.title}
+          </h4>
+        </div>
+
+        {/* Action Vector */}
+        <div className="w-8 h-8 rounded-lg bg-bg-card-secondary flex items-center justify-center text-text-muted opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
+            <HiOutlineChevronRight className="w-4 h-4" />
         </div>
       </div>
     </Link>
