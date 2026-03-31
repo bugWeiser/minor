@@ -8,19 +8,22 @@ import {
   HiOutlineSpeakerWave, 
   HiOutlineCalendar, 
   HiOutlineClipboardDocumentCheck, 
-  HiOutlineUser 
+  HiOutlineUser,
+  HiOutlineShieldCheck
 } from 'react-icons/hi2';
-
-const TABS = [
-  { href: '/', label: 'Home', icon: HiOutlineHome },
-  { href: '/notices', label: 'Notices', icon: HiOutlineSpeakerWave },
-  { href: '/calendar', label: 'Schedule', icon: HiOutlineCalendar },
-  { href: '/assignments', label: 'Tasks', icon: HiOutlineClipboardDocumentCheck },
-  { href: '/settings', label: 'ID', icon: HiOutlineUser },
-];
+import { useAuth } from '@/context/AuthContext';
 
 export default function BottomNav() {
   const pathname = usePathname();
+  const { appUser } = useAuth();
+
+  const TABS = [
+    { href: '/', label: 'Home', icon: HiOutlineHome },
+    { href: '/notices', label: 'Notices', icon: HiOutlineSpeakerWave },
+    { href: '/calendar', label: 'Schedule', icon: HiOutlineCalendar },
+    { href: '/assignments', label: 'Tasks', icon: HiOutlineClipboardDocumentCheck },
+    ...(appUser?.isAdmin ? [{ href: '/admin', label: 'Control', icon: HiOutlineShieldCheck }] : [{ href: '/settings', label: 'ID', icon: HiOutlineUser }]),
+  ];
 
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/';

@@ -19,6 +19,8 @@ import { Notice, NoticeFormData, AppUser } from './types';
 
 const NOTICES_COLLECTION = 'notices';
 const USERS_COLLECTION = 'users';
+const ASSIGNMENTS_COLLECTION = 'assignments';
+const EVENTS_COLLECTION = 'events';
 
 // Convert Firestore doc to Notice
 function docToNotice(docSnap: { id: string; data: () => Record<string, unknown> }): Notice {
@@ -147,3 +149,34 @@ export async function getPinnedCount(): Promise<number> {
   const snapshot = await getDocs(q);
   return snapshot.size;
 }
+
+// === ASSIGNMENTS ===
+
+export async function addAssignment(data: any): Promise<string> {
+  const docRef = await addDoc(collection(db, ASSIGNMENTS_COLLECTION), {
+    ...data,
+    postedAt: Timestamp.now(),
+    dueDate: Timestamp.fromDate(new Date(data.dueDate)),
+  });
+  return docRef.id;
+}
+
+export async function deleteAssignment(id: string): Promise<void> {
+  await deleteDoc(doc(db, ASSIGNMENTS_COLLECTION, id));
+}
+
+// === EVENTS ===
+
+export async function addEvent(data: any): Promise<string> {
+  const docRef = await addDoc(collection(db, EVENTS_COLLECTION), {
+    ...data,
+    date: Timestamp.fromDate(new Date(data.date)),
+    endDate: data.endDate ? Timestamp.fromDate(new Date(data.endDate)) : null,
+  });
+  return docRef.id;
+}
+
+export async function deleteEvent(id: string): Promise<void> {
+  await deleteDoc(doc(db, EVENTS_COLLECTION, id));
+}
+
