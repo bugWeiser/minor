@@ -91,7 +91,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         {/* NAV ITEMS */}
         <nav className="flex-1 overflow-y-auto px-4 space-y-1.5 scrollbar-hide py-2">
           <div className="px-3 mb-4 mt-2 transition-all">
-            <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-text-muted">
+            <p className="text-[10px] font-black uppercase tracking-[0.15em] text-charcoal">
               Main Navigation
             </p>
           </div>
@@ -128,7 +128,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           })}
 
           <div className="px-3 mb-4 mt-8 transition-all">
-            <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-text-muted">
+            <p className="text-[10px] font-black uppercase tracking-[0.15em] text-charcoal">
               User Preferences
             </p>
           </div>

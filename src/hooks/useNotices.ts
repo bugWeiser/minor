@@ -20,32 +20,29 @@ export function useNotices() {
   const [selectedCategory, setSelectedCategory] = useState<Category | 'All'>('All');
 
   useEffect(() => {
-    const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
-
-    if (!apiKey) {
-      // No Firebase — use local seed data
-      const seeded = getSeededNotices();
-      setNotices(seeded);
-      setLoading(false);
-      return;
-    }
-
-    // Firebase configured — use real-time listener
-    import('@/lib/firestore').then(({ onNoticesSnapshot }) => {
-      const unsubscribe = onNoticesSnapshot((firebaseNotices) => {
-        setNotices(firebaseNotices);
-        setLoading(false);
-      }, (error) => {
-        console.error("Firebase connection blocked:", error);
+    const syncNotices = async () => {
+      try {
+        const res = await fetch('/api/notices');
+        const data = await res.json();
+        // Convert ISO strings back to Date objects
+        const formatted = data.map((n: any) => ({
+          ...n,
+          postedAt: new Date(n.postedAt),
+          expiryDate: new Date(n.expiryDate)
+        }));
+        setNotices(formatted);
+      } catch (error) {
+        console.error("API Fetch Error:", error);
         setNotices(getSeededNotices());
+      } finally {
         setLoading(false);
-      });
-      return () => unsubscribe();
-    }).catch(() => {
-      // Fallback to seed data on error
-      setNotices(getSeededNotices());
-      setLoading(false);
-    });
+      }
+    };
+
+    syncNotices();
+    // Poll for changes every 5 seconds for "real-time" demo feel
+    const interval = setInterval(syncNotices, 5000);
+    return () => clearInterval(interval);
   }, []);
 
   // Active notices (not expired)

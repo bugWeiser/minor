@@ -11,33 +11,28 @@ export function useEvents() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const q = query(collection(db, 'events'), orderBy('date', 'asc'));
-    
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const data = snapshot.docs.map(docSnap => {
-        const d = docSnap.data();
-        return {
-          id: docSnap.id,
-          ...d,
-          date: (d.date as Timestamp)?.toDate?.() || new Date(d.date),
-          endDate: (d.endDate as Timestamp)?.toDate?.() || new Date(d.endDate || d.date),
-        } as CalendarEvent;
-      });
-
-      // If Firestore is empty, fallback to seed data
-      if (data.length === 0) {
+    const syncEvents = async () => {
+      try {
+        const res = await fetch('/api/events');
+        const data = await res.json();
+        // Restore Date types
+        const formatted = data.map((e: any) => ({
+          ...e,
+          date: new Date(e.date),
+          endDate: e.endDate ? new Date(e.endDate) : null,
+        }));
+        setEvents(formatted);
+      } catch (error) {
+        console.error("Events API Error:", error);
         setEvents(SEED_EVENTS.map((s, i) => ({ ...s, id: `seed-event-${i}` } as CalendarEvent)));
-      } else {
-        setEvents(data);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
-    }, (error) => {
-      console.error("Events fetch error:", error);
-      setEvents(SEED_EVENTS.map((s, i) => ({ ...s, id: `seed-event-${i}` } as CalendarEvent)));
-      setLoading(false);
-    });
+    };
 
-    return () => unsubscribe();
+    syncEvents();
+    const interval = setInterval(syncEvents, 5000);
+    return () => clearInterval(interval);
   }, []);
 
   return {

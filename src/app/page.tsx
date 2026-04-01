@@ -254,6 +254,11 @@ export default function DashboardPage() {
                       <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border ${themeClass}`}>
                         {notice.category}
                       </span>
+                      {notice.tags && !notice.tags.includes('ALL') && (
+                        <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-charcoal text-white">
+                          Targeted
+                        </span>
+                      )}
                       <span className="text-[11px] font-bold text-text-muted">· {format(notice.postedAt, 'MMM d, yyyy')}</span>
                     </div>
                     <h3 className="text-[15px] font-bold text-text-primary truncate">

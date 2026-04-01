@@ -11,33 +11,28 @@ export function useAssignments() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const q = query(collection(db, 'assignments'), orderBy('dueDate', 'asc'));
-    
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const data = snapshot.docs.map(docSnap => {
-        const d = docSnap.data();
-        return {
-          id: docSnap.id,
-          ...d,
-          dueDate: (d.dueDate as Timestamp)?.toDate?.() || new Date(d.dueDate),
-          postedAt: (d.postedAt as Timestamp)?.toDate?.() || new Date(d.postedAt),
-        } as Assignment;
-      });
-
-      // If Firestore is empty, fallback to seed data for demo purposes
-      if (data.length === 0) {
+    const syncAssignments = async () => {
+      try {
+        const res = await fetch('/api/assignments');
+        const data = await res.json();
+        // Restore Date objects
+        const formatted = data.map((a: any) => ({
+          ...a,
+          dueDate: new Date(a.dueDate),
+          postedAt: new Date(a.postedAt)
+        }));
+        setAssignments(formatted);
+      } catch (error) {
+        console.error("Assignments API Error:", error);
         setAssignments(SEED_ASSIGNMENTS.map((s, i) => ({ ...s, id: `seed-${i}` } as Assignment)));
-      } else {
-        setAssignments(data);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
-    }, (error) => {
-      console.error("Assignments fetch error:", error);
-      setAssignments(SEED_ASSIGNMENTS.map((s, i) => ({ ...s, id: `seed-${i}` } as Assignment)));
-      setLoading(false);
-    });
+    };
 
-    return () => unsubscribe();
+    syncAssignments();
+    const interval = setInterval(syncAssignments, 5000);
+    return () => clearInterval(interval);
   }, []);
 
   return {

@@ -89,7 +89,7 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
             <h1 className="text-[17px] font-bold text-text-primary tracking-tight">
               {pageTitle}
             </h1>
-            <p className="text-[11px] font-black text-text-muted uppercase tracking-[0.14em] mt-0.5 opacity-60">
+            <p className="text-[11px] font-black text-charcoal uppercase tracking-[0.14em] mt-0.5">
               Academy Portal / 2026 Season
             </p>
           </div>
@@ -103,8 +103,8 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
             onClick={() => router.push('/notices')} 
             className="hidden md:flex items-center gap-3 bg-bg-card-secondary border border-border-subtle rounded-2xl px-5 h-[52px] w-[360px] lg:w-[480px] text-[13px] text-text-secondary cursor-pointer hover:border-border-strong hover:bg-white hover:shadow-xl hover:shadow-black/[0.04] transition-all duration-500 group"
           >
-            <HiOutlineMagnifyingGlass className="w-[20px] h-[20px] text-text-muted group-hover:text-charcoal transition-colors" />
-            <span className="text-text-muted font-bold tracking-tight">Search for notices, schedules, or curriculum nodes...</span>
+            <HiOutlineMagnifyingGlass className="w-[20px] h-[20px] text-charcoal/50 group-hover:text-charcoal transition-colors" />
+            <span className="text-charcoal font-bold tracking-tight">Search for notices, schedules, or curriculum nodes...</span>
           </div>
 
           <div className="flex items-center gap-2">

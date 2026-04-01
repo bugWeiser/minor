@@ -96,59 +96,66 @@ export default function AdminNoticeForm({ onSubmit, initialData, isEdit }: Props
     }
   };
 
-  const inp = 'w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-800 text-sm focus:border-[#5534FA] focus:ring-1 focus:ring-[#5534FA] outline-none transition-all';
-  const lbl = 'block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2';
+  const inp = 'w-full px-4 py-3 rounded-2xl border border-border-subtle bg-bg-card-secondary/30 text-text-primary text-[14px] font-medium focus:border-charcoal focus:bg-white outline-none transition-all placeholder:text-text-muted';
+  const lbl = 'block text-[11px] font-bold text-text-muted uppercase tracking-[0.14em] mb-2.5 ml-1';
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div>
-        <label className={lbl}>TITLE <span className="text-red-500">*</span></label>
-        <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} maxLength={120} className={inp} placeholder="Notice title" />
+      <div className="animate-fadeUp" style={{ animationDelay: '0.1s' }}>
+        <label className={lbl}>Formal Notice Title <span className="text-danger">*</span></label>
+        <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} maxLength={120} className={inp} placeholder="e.g., Mid-Semester Examination Schedule" />
       </div>
-      <div>
-        <label className={lbl}>DESCRIPTION <span className="text-red-500">*</span></label>
-        <textarea value={form.body} onChange={(e) => setForm({ ...form, body: e.target.value })} rows={5} className={`${inp} resize-none`} placeholder="Notice description" />
+      <div className="animate-fadeUp" style={{ animationDelay: '0.2s' }}>
+        <label className={lbl}>Analytical Description <span className="text-danger">*</span></label>
+        <textarea value={form.body} onChange={(e) => setForm({ ...form, body: e.target.value })} rows={5} className={`${inp} resize-none`} placeholder="Detailed breakdown of the announcement content..." />
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fadeUp" style={{ animationDelay: '0.3s' }}>
         <div>
-          <label className={lbl}>CATEGORY <span className="text-red-500">*</span></label>
+          <label className={lbl}>Institutional Category <span className="text-danger">*</span></label>
           <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value as Category })} className={inp}>
             {CATEGORIES.map((c) => (<option key={c} value={c}>{c}</option>))}
           </select>
         </div>
         <div>
-          <label className={lbl}>EXPIRY DATE <span className="text-red-500">*</span></label>
+          <label className={lbl}>Active Expiry Date <span className="text-danger">*</span></label>
           <input type="date" value={form.expiryDate} onChange={(e) => setForm({ ...form, expiryDate: e.target.value })} className={inp} />
         </div>
       </div>
-      <div>
-        <label className={lbl}>TARGET TAGS (COMMA SEPARATED) <span className="text-red-500">*</span></label>
-        <input value={selectedTags.join(', ')} readOnly className={inp} placeholder="ALL" />
-        <p className="text-xs text-gray-400 mt-2">Use "ALL" for public notices, or target specific groups like "CSE-3".</p>
-        <div className="mt-4 border border-gray-100 p-4 rounded-xl">
+
+      <div className="animate-fadeUp" style={{ animationDelay: '0.4s' }}>
+        <label className={lbl}>Issuer Identity (Faculty Name) <span className="text-danger">*</span></label>
+        <input value={form.postedBy} onChange={(e) => setForm({ ...form, postedBy: e.target.value })} className={inp} placeholder="e.g., Dr. R.K. Sharma" />
+      </div>
+
+      <div className="animate-fadeUp" style={{ animationDelay: '0.5s' }}>
+        <label className={lbl}>Target Demographic Tags <span className="text-danger">*</span></label>
+        <div className="mt-1 border border-border-subtle p-5 rounded-2xl bg-white shadow-sm flex flex-col gap-4">
+          <input value={selectedTags.join(', ')} readOnly className={`${inp} bg-bg-card-secondary border-dashed`} placeholder="ALL" />
           <TagSelector selectedTags={selectedTags} onChange={setSelectedTags} />
+          <p className="text-[11px] text-text-muted font-medium italic">Use "ALL" for wide distribution, or target specific academic streams.</p>
         </div>
       </div>
-      <div>
-        <label className={lbl}>URGENCY</label>
-        <div className="flex flex-wrap gap-6 p-4 rounded-xl border border-gray-100 bg-gray-50/50">
+
+      <div className="animate-fadeUp" style={{ animationDelay: '0.6s' }}>
+        <label className={lbl}>Urgency Classification</label>
+        <div className="flex flex-wrap gap-4 p-5 rounded-2xl border border-border-subtle bg-bg-card-secondary/30">
           {(['Normal', 'Important', 'Urgent'] as Urgency[]).map((u) => (
-            <label key={u} className="flex items-center gap-2 cursor-pointer">
-              <input type="radio" name="urgency" value={u} checked={form.urgency === u} onChange={() => setForm({ ...form, urgency: u })} className="w-4 h-4 text-[#5534FA] focus:ring-[#5534FA]" />
-              <span className={`text-sm font-semibold ${form.urgency === u ? 'text-gray-900' : 'text-gray-600'}`}>{u}</span>
+            <label key={u} className={`flex items-center gap-3 px-4 py-2.5 rounded-xl border transition-all cursor-pointer ${form.urgency === u ? 'bg-white border-border-strong border-2 shadow-sm' : 'bg-transparent border-transparent opacity-60 hover:opacity-100'}`}>
+              <input type="radio" name="urgency" value={u} checked={form.urgency === u} onChange={() => setForm({ ...form, urgency: u })} className="w-4 h-4 accent-charcoal" />
+              <span className={`text-[13px] font-bold ${form.urgency === u ? 'text-text-primary' : 'text-text-muted'}`}>{u}</span>
             </label>
           ))}
         </div>
       </div>
       
       {msg && (
-        <div className={`p-4 rounded-xl text-sm font-medium ${msg.startsWith('✅') ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+        <div className={`p-5 rounded-2xl text-[13px] font-bold border animate-fadeUp ${msg.startsWith('✅') ? 'bg-soft-green text-charcoal border-emerald-100' : 'bg-soft-red text-charcoal border-red-100'}`}>
           {msg}
         </div>
       )}
       
-      <button type="submit" disabled={loading} className="w-full h-14 rounded-xl bg-[#5534FA] hover:bg-[#4320E0] text-white font-bold text-sm transition-colors mt-8">
-        {loading ? 'Processing...' : isEdit ? 'Update Notice' : 'Post Notice'}
+      <button type="submit" disabled={loading} className="w-full h-16 rounded-2xl bg-charcoal hover:bg-black text-white font-bold text-sm transition-all mt-6 shadow-lg shadow-charcoal/20 hover:shadow-xl active:scale-[0.98] disabled:opacity-50">
+        {loading ? 'MODULATING PACKETS...' : isEdit ? 'FINALIZE TRANSACTION' : 'COMMIT TO PLATFORM'}
       </button>
     </form>
   );

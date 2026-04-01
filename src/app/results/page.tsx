@@ -59,7 +59,7 @@ export default function ResultsPage() {
       {/* PAGE HEADER */}
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2 border-b border-border-subtle">
         <section>
-          <h1 className="text-3xl font-bold text-text-primary tracking-tight">OxeliaMetrix Analytics</h1>
+          <h1 className="text-3xl font-bold text-text-primary tracking-tight">Bugweiser Metrix Analytics</h1>
           <p className="text-text-muted font-bold uppercase tracking-[0.12em] text-[11px] mt-2 group cursor-default">
             Academic progression assessment for {student.name} · BATCH {student.batch}
           </p>
@@ -98,7 +98,7 @@ export default function ResultsPage() {
               <div className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center text-charcoal shadow-md shadow-accent/20">
                  <HiOutlineArrowTrendingUp className="w-5 h-5" />
               </div>
-              <span className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em]">Latest Efficiency</span>
+              <span className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em]">Semester Performance</span>
            </div>
 
            <div className="flex items-baseline gap-1">
@@ -118,14 +118,14 @@ export default function ResultsPage() {
               <div className="w-10 h-10 rounded-xl bg-charcoal flex items-center justify-center text-white shadow-lg shadow-charcoal/20">
                  <HiOutlineTrophy className="w-5 h-5" />
               </div>
-              <span className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em]">Positioning</span>
+              <span className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em]">Class Rank</span>
            </div>
 
            <div className="flex items-baseline gap-1">
               <p className="text-5xl font-black text-text-primary tracking-tighter">{student.batchRank}</p>
               <p className="text-xl font-bold text-text-muted">/{student.totalStudents}</p>
            </div>
-           <p className="text-[13px] font-bold text-text-muted mt-1 uppercase tracking-wider">Academic Placement</p>
+           <p className="text-[13px] font-bold text-text-muted mt-1 uppercase tracking-wider">Batch Rank</p>
            
            <div className="mt-8 h-1.5 bg-bg-card-secondary rounded-full overflow-hidden">
               <div className="h-full bg-charcoal transition-all duration-1000 delay-700" style={{ width: `${(1 - (student.batchRank/student.totalStudents)) * 100}%` }} />
@@ -168,7 +168,7 @@ export default function ResultsPage() {
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="border-b border-border-subtle bg-bg-card-secondary/10">
-                    <th className="px-6 py-4 text-[11px] font-black uppercase tracking-[0.15em] text-text-muted">Course Identity</th>
+                    <th className="px-6 py-4 text-[11px] font-black uppercase tracking-[0.15em] text-text-muted">Course Details</th>
                     <th className="px-6 py-4 text-[11px] font-black uppercase tracking-[0.15em] text-text-muted text-center">Grade</th>
                     <th className="px-6 py-4 text-[11px] font-black uppercase tracking-[0.15em] text-text-muted text-center">Points</th>
                     <th className="px-6 py-4 text-[11px] font-black uppercase tracking-[0.15em] text-text-muted text-right">Verification</th>

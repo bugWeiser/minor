@@ -32,60 +32,78 @@ export default function AdminPage() {
   // Block non-admin users
   if (appUser && !appUser.isAdmin && appUser.role !== 'admin') {
     return (
-      <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4">
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">Access Denied</h2>
-        <p className="text-gray-500 mb-6">You must be an administrator to view this page.</p>
+      <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4 animate-fadeUp">
+        <h2 className="text-2xl font-bold text-text-primary mb-2 tracking-tight">Access Denied</h2>
+        <p className="text-text-muted mb-6 font-medium">You must be an administrator to perform faculty actions.</p>
         <button 
           onClick={() => router.push('/')} 
-          className="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium"
+          className="px-8 py-3 bg-charcoal text-white rounded-2xl font-bold hover:shadow-lg transition-all"
         >
-          Go Back
+          Return to Hub
         </button>
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto animate-fadeUp p-4 md:p-8 pb-24 bg-[#FCFCFD] min-h-screen font-inter">
-      <header className="mb-8">
-        <h1 className="text-4xl font-bold text-[#5534FA] tracking-tight mb-3">
-          Admin Dashboard
+    <div className="max-w-4xl mx-auto animate-fadeUp p-4 md:p-0 pb-24 min-h-screen">
+      <header className="mb-10 pb-2 border-b border-border-subtle">
+        <h1 className="text-3xl font-bold text-text-primary tracking-tight">
+          Platform Control Hub
         </h1>
-        <p className="text-lg text-gray-500 font-medium">
-          Manage notices and assignments for the smart board.
+        <p className="text-[11px] font-bold text-text-muted uppercase tracking-[0.12em] mt-2">
+          Management terminal for Institutional Notices & Academic Tasks
         </p>
       </header>
       
       {/* Content Type Tabs */}
-      <div className="flex items-center gap-3 mb-8">
-        <button
-          onClick={() => setActiveTab('Notice')}
-          className={`px-5 py-3 rounded-xl font-semibold flex items-center gap-2 transition-all ${
-            activeTab === 'Notice' 
-              ? 'bg-[#5534FA] text-white shadow-md' 
-              : 'bg-white text-gray-700 border border-gray-100 hover:bg-gray-50'
-          }`}
-        >
-          📋 Post Notice
-        </button>
-        <button
-          onClick={() => setActiveTab('Assignment')}
-          className={`px-5 py-3 rounded-xl font-semibold flex items-center gap-2 transition-all ${
-            activeTab === 'Assignment' 
-              ? 'bg-[#5534FA] text-white shadow-md' 
-              : 'bg-white text-gray-700 border border-gray-100 hover:bg-gray-50'
-          }`}
-        >
-          📚 Assignments
-        </button>
+      <div className="flex items-center gap-2.5 mb-10 bg-white border border-border-subtle p-2 rounded-[22px] shadow-sm w-fit">
+        {(['Notice', 'Assignment'] as AdminTab[]).map(tab => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`
+              px-8 py-3 rounded-2xl text-[13px] font-bold transition-all duration-200 border
+              ${activeTab === tab 
+                ? 'bg-charcoal text-white border-charcoal shadow-lg shadow-charcoal/20' 
+                : 'bg-white text-text-muted border-border-subtle hover:bg-bg-hover hover:text-text-primary hover:border-border-strong'
+              }
+            `}
+          >
+            {tab === 'Notice' ? '📢 Create Notice' : '📝 Assign Task'}
+          </button>
+        ))}
       </div>
 
-      <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 md:p-8 mb-12">
+      <div className="card-shell p-6 md:p-10 mb-12 bg-white">
+        <div className="mb-8">
+           <h2 className="text-xl font-bold text-text-primary tracking-tight">
+              {activeTab === 'Notice' ? 'Draft Institutional Notice' : 'Publish Academic Assignment'}
+           </h2>
+           <p className="text-sm text-text-muted font-medium mt-1">
+              Ensure all targeted tags and expiry metadata are correctly validated.
+           </p>
+        </div>
+
         {activeTab === 'Notice' && (
-          <AdminNoticeForm onSubmit={async (data) => { await addNotice(data); }} />
+          <AdminNoticeForm onSubmit={async (data) => { 
+            const res = await fetch('/api/notices', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(data)
+            });
+            if (!res.ok) throw new Error("Broadcast failure");
+          }} />
         )}
         {activeTab === 'Assignment' && (
-          <AdminAssignmentForm onSubmit={async (data) => { await addAssignment(data); }} />
+          <AdminAssignmentForm onSubmit={async (data) => { 
+            const res = await fetch('/api/assignments', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(data)
+            });
+            if (!res.ok) throw new Error("Protocol failure");
+          }} />
         )}
       </div>
 

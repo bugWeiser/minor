@@ -27,13 +27,13 @@ import {
 type NotifTab = 'notifications' | 'preferences';
 
 const CATEGORY_STYLE: Record<string, { bg: string, text: string, Icon: any }> = {
-  Academic: { bg: 'bg-soft-blue', text: 'text-charcoal border-blue-100', Icon: HiOutlineBookOpen },
-  Placement: { bg: 'bg-soft-green', text: 'text-charcoal border-emerald-100', Icon: HiOutlineBriefcase },
-  Events: { bg: 'bg-soft-yellow', text: 'text-charcoal border-amber-100', Icon: HiOutlineCalendarDays },
-  Scholarships: { bg: 'bg-soft-blue', text: 'text-charcoal border-blue-100', Icon: HiOutlineAcademicCap },
-  Sports: { bg: 'bg-soft-red', text: 'text-charcoal border-red-100', Icon: HiOutlinePlayCircle },
-  Hostel: { bg: 'bg-soft-blue', text: 'text-charcoal border-blue-100', Icon: HiOutlineHome },
-  General: { bg: 'bg-bg-card-secondary', text: 'text-text-muted border-border-subtle', Icon: HiOutlineMegaphone },
+  Academic: { bg: 'bg-soft-blue', text: 'text-charcoal border-charcoal/20', Icon: HiOutlineBookOpen },
+  Placement: { bg: 'bg-soft-green', text: 'text-charcoal border-charcoal/20', Icon: HiOutlineBriefcase },
+  Events: { bg: 'bg-soft-yellow', text: 'text-charcoal border-charcoal/20', Icon: HiOutlineCalendarDays },
+  Scholarships: { bg: 'bg-soft-blue', text: 'text-charcoal border-charcoal/20', Icon: HiOutlineAcademicCap },
+  Sports: { bg: 'bg-soft-red', text: 'text-charcoal border-charcoal/20', Icon: HiOutlinePlayCircle },
+  Hostel: { bg: 'bg-soft-blue', text: 'text-charcoal border-charcoal/20', Icon: HiOutlineHome },
+  General: { bg: 'bg-bg-card-secondary', text: 'text-charcoal border-charcoal/20', Icon: HiOutlineMegaphone },
 };
 
 export default function NotificationsPage() {
@@ -82,7 +82,7 @@ export default function NotificationsPage() {
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2 border-b border-border-subtle transition-all">
         <section>
           <h1 className="text-3xl font-bold text-text-primary tracking-tight">Recent Alerts</h1>
-          <p className="text-text-muted font-bold uppercase tracking-[0.12em] text-[11px] mt-2 group cursor-default">
+          <p className="text-charcoal font-black uppercase tracking-[0.12em] text-[11px] mt-2 group cursor-default">
             {loading ? 'Polling notification nodes...' : `${notifications.filter(n => n.isUnread).length} critical packets requires human interaction`}
           </p>
         </section>
@@ -226,34 +226,36 @@ export default function NotificationsPage() {
 
         {/* SIDEBAR SUMMARY (1/3) */}
         <div className="lg:col-span-1 space-y-6">
-           <section className="card-shell p-6 bg-charcoal text-white relative overflow-hidden group">
-              <div className="absolute -right-6 -bottom-6 w-32 h-32 bg-white/5 rounded-full blur-2xl group-hover:bg-white/10 transition-all pointer-events-none" />
+           <section className="card-shell p-6 bg-white relative overflow-hidden group">
+              <div className="absolute -right-6 -bottom-6 w-32 h-32 bg-accent/10 rounded-full blur-2xl group-hover:bg-accent/20 transition-all pointer-events-none" />
               
               <header className="flex justify-between items-center mb-8 relative z-10">
-                 <h2 className="text-xl font-bold tracking-tight">System Status</h2>
-                 <HiOutlineBellAlert className="w-5 h-5 text-accent soft-pulse" />
+                 <h2 className="text-xl font-bold text-text-primary tracking-tight">System Status</h2>
+                 <HiOutlineBellAlert className="w-5 h-5 text-charcoal/30 soft-pulse" />
               </header>
 
               <div className="space-y-5 relative z-10">
                  <div className="flex flex-col gap-1">
-                    <p className="text-[10px] font-bold text-accent/60 uppercase tracking-[0.2em]">Attention Factor</p>
-                    <p className="text-4xl font-black text-white tracking-tighter leading-none">{notifications.filter(n => n.isUnread).length}</p>
-                    <p className="text-[12px] font-bold text-white/50 mt-1 uppercase tracking-wider">Unread Node Pulses</p>
+                    <p className="text-[10px] font-bold text-charcoal uppercase tracking-[0.2em] mb-1">Pending Alerts</p>
+                    <p className="text-5xl font-black text-charcoal tracking-tighter leading-none">
+                      {notifications.filter(n => n.isUnread).length}
+                    </p>
+                    <p className="text-[12px] font-bold text-text-muted mt-2 uppercase tracking-wider font-inter">New Notifications</p>
                  </div>
                  
-                 <div className="h-1.5 rounded-full bg-white/10 overflow-hidden mt-2">
+                 <div className="h-1.5 rounded-full bg-bg-card-secondary overflow-hidden mt-4">
                     <div className="h-full bg-accent transition-all duration-1000 delay-300" style={{ width: `${(notifications.filter(n => n.isUnread).length / 20) * 100}%` }} />
                  </div>
               </div>
            </section>
 
            <section className="card-shell p-6 bg-white transition-all hover:bg-bg-hover border-dashed">
-              <h2 className="text-lg font-bold text-text-primary tracking-tight mb-4">Signal Integrity</h2>
+              <h2 className="text-lg font-bold text-text-primary tracking-tight mb-4">System Health</h2>
               <div className="space-y-4">
                  {[
-                   { label: 'Latency Indicator', val: 'Low', color: 'text-soft-green' },
-                   { label: 'Module Subscriptions', val: prefs.length, color: 'text-text-primary' },
-                   { label: 'Uptime Index', val: '99.98%', color: 'text-charcoal' },
+                   { label: 'Connection', val: 'Low Latency', color: 'text-soft-green' },
+                   { label: 'Subscribed Categories', val: prefs.length, color: 'text-text-primary' },
+                   { label: 'Service Uptime', val: '99.98%', color: 'text-charcoal' },
                  ].map((stat, i) => (
                    <div key={i} className="flex justify-between items-center py-2.5 border-b border-border-subtle last:border-0 border-dashed">
                       <span className="text-[11px] font-black text-text-muted uppercase tracking-wider">{stat.label}</span>

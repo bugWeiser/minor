@@ -48,12 +48,13 @@ export default function AssignmentsPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm('Delete this assignment? This action cannot be undone.')) return;
+    if (!window.confirm('Delete this academic task from the repository?')) return;
     try {
-      await deleteAssignment(id);
+      const res = await fetch(`/api/assignments?id=${id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error("Deletion protocol failed");
     } catch (error) {
       console.error('Failed to delete assignment:', error);
-      alert('Failed to delete assignment.');
+      alert('Transmission Error: Deployment could not be finalized.');
     }
   };
 
