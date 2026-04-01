@@ -51,32 +51,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsFirebaseConfigured(true);
 
     // Dynamically import to avoid errors when Firebase is not configured
-    import('@/lib/auth').then(({ onAuthChange }) => {
-      const unsubscribe = onAuthChange(async (firebaseUser) => {
-        setUser(firebaseUser);
-        if (firebaseUser) {
-          try {
-            const { getUserProfile } = await import('@/lib/firestore');
-            const profile = await getUserProfile(firebaseUser.uid);
-            // Wait, getUserProfile returns the old schema if not updated yet.
-            // Casting to AppUser or null. If null, use basic info.
-            if (profile) {
-              setAppUser(profile as unknown as AppUser);
+    import('@/lib/firebase').then(({ db }) => {
+      import('firebase/firestore').then(({ doc, onSnapshot }) => {
+        import('@/lib/auth').then(({ onAuthChange }) => {
+          let userProfileUnsubscribe: (() => void) | null = null;
+
+          const unsubscribe = onAuthChange(async (firebaseUser) => {
+            setUser(firebaseUser);
+            if (firebaseUser) {
+              const docRef = doc(db, 'users', firebaseUser.uid);
+              userProfileUnsubscribe = onSnapshot(docRef, (docSnap) => {
+                if (docSnap.exists()) {
+                  setAppUser({ uid: docSnap.id, ...docSnap.data() } as AppUser);
+                } else {
+                  setAppUser(null);
+                }
+              }, () => setAppUser(null));
             } else {
+              if (userProfileUnsubscribe) userProfileUnsubscribe();
               setAppUser(null);
             }
-          } catch {
-            setAppUser(null);
-          }
-        } else {
-          setAppUser(null);
-        }
-        setLoading(false);
-      });
+            setLoading(false);
+          });
 
-      return () => unsubscribe();
-    }).catch(() => {
-      setLoading(false);
+          return () => {
+            unsubscribe();
+            if (userProfileUnsubscribe) userProfileUnsubscribe();
+          };
+        }).catch(() => setLoading(false));
+      });
     });
   }, []);
 

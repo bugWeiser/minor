@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -76,15 +77,35 @@
 
   --animate-fadeUp: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
   --animate-shimmer: shimmer 2.5s infinite linear;
+
+  /* Paper Wireframe Kit Tokens */
+  --color-paper: #faf9f6;
+  --color-pencil: #2d2d2d;
+  --color-pencil-light: #6b6b6b;
+  --color-pencil-border: #c4c4c4;
+  --color-sketch-blue: #4a90d9;
+  --color-sketch-red: #d94a4a;
+  --color-sketch-green: #4ad97a;
+  --color-sketch-yellow: #d9b44a;
+  --color-sketch-blue-soft: #eff6ff;
+  --color-sketch-green-soft: #f0fdf4;
+  --color-sketch-yellow-soft: #fffbeb;
+  --color-sketch-red-soft: #fef2f2;
+
+  --font-sketch: 'Caveat', cursive;
+  --font-body: 'Inter', sans-serif;
+
+  --shadow-sketch: 3px 3px 0px #c4c4c4;
+  --shadow-sketch-hover: 4px 4px 0px #a0a0a0;
 }
 
 /* === GLOBAL STYLES === */
 * { box-sizing: border-box; }
 
 body {
-  background-color: var(--bg-page);
-  color: var(--text-primary);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--color-paper);
+  color: var(--color-pencil);
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
   margin: 0;

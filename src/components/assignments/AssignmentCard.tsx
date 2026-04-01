@@ -2,16 +2,17 @@
 
 import { Assignment } from '@/lib/types';
 import { format } from 'date-fns';
-import { HiOutlineCheck, HiOutlineClock, HiOutlineBookOpen, HiOutlineChevronRight } from 'react-icons/hi2';
+import { HiOutlineCheck, HiOutlineClock, HiOutlineBookOpen, HiOutlineChevronRight, HiOutlineTrash } from 'react-icons/hi2';
 
 interface Props {
   assignment: Assignment;
   isCompleted: boolean;
   onToggleComplete: (id: string) => void;
+  onDelete?: (id: string) => void;
   index?: number;
 }
 
-export default function AssignmentCard({ assignment, isCompleted, onToggleComplete, index = 0 }: Props) {
+export default function AssignmentCard({ assignment, isCompleted, onToggleComplete, onDelete, index = 0 }: Props) {
   const daysLeft = Math.ceil((new Date(assignment.dueDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
   const isOverdue = daysLeft < 0 && !isCompleted;
 
@@ -55,6 +56,15 @@ export default function AssignmentCard({ assignment, isCompleted, onToggleComple
           <span className="text-[11px] font-bold text-text-muted uppercase tracking-wider truncate">
             {assignment.course || 'General Curricula'}
           </span>
+          {onDelete && (
+            <button 
+              onClick={(e) => { e.stopPropagation(); onDelete(assignment.id); }}
+              className="ml-auto w-6 h-6 rounded bg-soft-red text-danger flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-red-200 transition-all"
+              title="Delete Assignment"
+            >
+              <HiOutlineTrash className="w-3.5 h-3.5" />
+            </button>
+          )}
         </div>
         <p className="text-[10px] font-black uppercase tracking-widest text-text-muted opacity-40 mt-3 group-hover:opacity-100 transition-opacity">
             Origin: {assignment.postedBy || 'Faculty Admin'}

@@ -3,9 +3,31 @@ import * as admin from 'firebase-admin';
 
 if (!admin.apps.length) {
   try {
-    admin.initializeApp({
-      credential: admin.credential.applicationDefault()
-    });
+    if (process.env.FIREBASE_SERVICE_ACCOUNT_KEY) {
+      // Parse JSON from env var (could be base64 or stringified JSON)
+      let serviceAccount;
+      try {
+         const keyString = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
+         if (keyString.startsWith('{')) {
+             serviceAccount = JSON.parse(keyString);
+         } else {
+             // Assume Base64 encoded
+             serviceAccount = JSON.parse(Buffer.from(keyString, 'base64').toString('ascii'));
+         }
+      } catch (e: any) {
+         console.error('Failed to parse FIREBASE_SERVICE_ACCOUNT_KEY:', e.message);
+      }
+      
+      if (serviceAccount) {
+         admin.initializeApp({
+           credential: admin.credential.cert(serviceAccount)
+         });
+      }
+    } else {
+      admin.initializeApp({
+        credential: admin.credential.applicationDefault()
+      });
+    }
   } catch (err) {
     console.error('Firebase Admin init error', err);
   }

@@ -12,6 +12,7 @@ import EventCard from '@/components/calendar/EventCard';
 import EmptyState from '@/components/EmptyState';
 import { CalendarSkeleton } from '@/components/ui/LoadingSkeleton';
 import { format, isSameDay, isFuture, isPast } from 'date-fns';
+import { deleteEvent } from '@/lib/firestore';
 import { HiOutlineCalendarDays, HiOutlineFunnel, HiOutlineBell, HiOutlineChevronRight, HiOutlineMagnifyingGlass } from 'react-icons/hi2';
 
 const EVENT_CATEGORIES = ['All', 'Exam', 'Workshop', 'Holiday', 'Club', 'Sports', 'Deadline'];
@@ -45,6 +46,16 @@ export default function CalendarPage() {
     filteredEvents.filter(e => isFuture(e.date) || isSameDay(e.date, new Date())).sort((a, b) => a.date.getTime() - b.date.getTime()).slice(0, 5),
     [filteredEvents]
   );
+
+  const handleDelete = async (id: string) => {
+    if (!window.confirm('Delete this event? This action cannot be undone.')) return;
+    try {
+      await deleteEvent(id);
+    } catch (error) {
+      console.error('Failed to delete event:', error);
+      alert('Failed to delete event.');
+    }
+  };
 
   // Tile content: dots for days with events
   const tileContent = ({ date, view }: { date: Date; view: string }) => {
@@ -152,7 +163,7 @@ export default function CalendarPage() {
                   ) : (
                     <div className="space-y-3">
                       {selectedDayEvents.map(event => (
-                        <EventCard key={event.id} event={event} />
+                        <EventCard key={event.id} event={event} onDelete={appUser?.isAdmin ? handleDelete : undefined} />
                       ))}
                     </div>
                   )}
@@ -171,13 +182,9 @@ export default function CalendarPage() {
 
                 <div className="space-y-3">
                    {upcomingEvents.map(event => (
-                     <button
-                       key={event.id}
-                       onClick={() => setSelectedDate(event.date)}
-                       className="w-full text-left transition-all active:scale-95"
-                     >
-                       <EventCard event={event} compact />
-                     </button>
+                     <div key={event.id} className="w-full text-left transition-all active:scale-95">
+                       <EventCard event={event} compact onDelete={appUser?.isAdmin ? handleDelete : undefined} />
+                     </div>
                    ))}
                    {upcomingEvents.length === 0 && (
                      <p className="text-[12px] text-text-muted font-bold uppercase tracking-widest text-center py-6 opacity-40">No entries detected</p>

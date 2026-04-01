@@ -7,7 +7,7 @@ import { HiOutlineInboxStack, HiOutlineDocumentText, HiOutlineArrowLeft, HiOutli
 import { formatDistanceToNow, format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { markNoticeAsRead } from '@/lib/firestore';
+import { markNoticeAsRead, deleteNotice } from '@/lib/firestore';
 
 const CATEGORY_CHIP_THEMES: Record<string, string> = {
   Academic: 'bg-soft-blue text-charcoal border-blue-100',
@@ -56,6 +56,17 @@ export default function NoticeDetailPage() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleDelete = async () => {
+    if (!notice || !window.confirm('Delete this notice? This action cannot be undone.')) return;
+    try {
+      await deleteNotice(notice.id);
+      router.push('/notices');
+    } catch (error) {
+      console.error('Failed to delete notice:', error);
+      alert('Failed to delete notice.');
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-[50vh] flex items-center justify-center">
@@ -96,6 +107,15 @@ export default function NoticeDetailPage() {
         </button>
 
         <div className="flex items-center gap-2">
+           {appUser?.isAdmin && (
+             <button
+               onClick={handleDelete}
+               className="h-10 px-4 rounded-xl flex items-center gap-2 text-[12px] font-bold border border-red-200 bg-soft-red text-danger hover:bg-red-100 transition-all"
+               title="Delete Document"
+             >
+               Delete
+             </button>
+           )}
            <button
              onClick={handleSave}
              className={`h-10 px-4 rounded-xl flex items-center gap-2 text-[12px] font-bold border transition-all ${saved ? 'bg-charcoal text-white border-charcoal' : 'bg-white text-text-muted border-border-subtle hover:border-border-strong'}`}

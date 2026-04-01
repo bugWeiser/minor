@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { useAssignments } from '@/hooks/useAssignments';
 import { useAuth } from '@/context/AuthContext';
+import { deleteAssignment } from '@/lib/firestore';
 import { filterByUserTags } from '@/lib/filterUtils';
 import AssignmentCard from '@/components/assignments/AssignmentCard';
 import EmptyState from '@/components/EmptyState';
@@ -44,6 +45,16 @@ export default function AssignmentsPage() {
       localStorage.setItem('completedAssignments', JSON.stringify(next));
       return next;
     });
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!window.confirm('Delete this assignment? This action cannot be undone.')) return;
+    try {
+      await deleteAssignment(id);
+    } catch (error) {
+      console.error('Failed to delete assignment:', error);
+      alert('Failed to delete assignment.');
+    }
   };
 
   // Tag-filtered assignments
@@ -142,6 +153,7 @@ export default function AssignmentsPage() {
                      assignment={a}
                      isCompleted={completedIds.includes(a.id)}
                      onToggleComplete={toggleComplete}
+                     onDelete={appUser?.isAdmin ? handleDelete : undefined}
                      index={i}
                    />
                  ))}
