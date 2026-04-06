@@ -13,7 +13,8 @@ function getSeededNotices(): Notice[] {
   return SEED_NOTICES.map((notice, index) => ({
     ...notice,
     id: `seed-${index + 1}`,
-  }));
+    organizationId: 'org-1',
+  } as Notice));
 }
 
 export function useNotices() {

@@ -29,6 +29,7 @@ export default function PushNotificationManager() {
       try {
         const { getMessaging, onMessage } = await import('firebase/messaging');
         const { default: app } = await import('@/lib/firebase');
+        if (!app) return;
         const messaging = getMessaging(app);
         
         onMessage(messaging, (payload) => {
@@ -54,6 +55,7 @@ export default function PushNotificationManager() {
       if (permission === 'granted' && user) {
         const { getMessaging, getToken } = await import('firebase/messaging');
         const { default: app } = await import('@/lib/firebase');
+        if (!app) return;
         const messaging = getMessaging(app);
         
         const token = await getToken(messaging, { 

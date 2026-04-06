@@ -29,7 +29,7 @@ export function useEvents() {
         setEvents(formatted);
       } catch (error) {
         console.error("Events API Error:", error);
-        setEvents(SEED_EVENTS.map((s, i) => ({ ...s, id: `seed-event-${i}` } as CalendarEvent)));
+        setEvents(SEED_EVENTS.map((s, i) => ({ ...s, id: `seed-event-${i}`, organizationId: 'org-1' } as CalendarEvent)));
       } finally {
         setLoading(false);
       }

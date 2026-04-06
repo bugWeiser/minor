@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { ThemeProvider } from "@/context/ThemeContext";
@@ -25,16 +26,18 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)]`}>
         <ThemeProvider>
-          <InstitutionProvider>
-            <AuthProvider>
-              {/* AppShell handles the Sidebar, TopBar, and BottomNav routing logic */}
-              <AppShell>
-                {children}
-              </AppShell>
-              <PushNotificationManager />
-              <NotificationToast />
-            </AuthProvider>
-          </InstitutionProvider>
+          <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-bg-page"><div className="w-8 h-8 border-4 border-charcoal border-t-transparent rounded-full animate-spin"></div></div>}>
+            <InstitutionProvider>
+              <AuthProvider>
+                {/* AppShell handles the Sidebar, TopBar, and BottomNav routing logic */}
+                <AppShell>
+                  {children}
+                </AppShell>
+                <PushNotificationManager />
+                <NotificationToast />
+              </AuthProvider>
+            </InstitutionProvider>
+          </Suspense>
         </ThemeProvider>
       </body>
     </html>

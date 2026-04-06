@@ -50,7 +50,7 @@ export function useAssignments() {
         setAssignments(formatted);
       } catch (error) {
         console.error("Assignments API Error:", error);
-        setAssignments(SEED_ASSIGNMENTS.map((s, i) => ({ ...s, id: `seed-${i}` } as Assignment)));
+        setAssignments(SEED_ASSIGNMENTS.map((s, i) => ({ ...s, id: `seed-${i}`, organizationId: 'org-1' } as Assignment)));
       } finally {
         setLoading(false);
       }

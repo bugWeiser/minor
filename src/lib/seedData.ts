@@ -13,7 +13,7 @@ function daysAgo(days: number): Date {
   return d;
 }
 
-export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
+export const SEED_NOTICES: Omit<Notice, 'id' | 'organizationId'>[] = [
   // ACADEMIC (6)
   {
     title: 'BBA Semester 8: Provisional Timetable (Even Sem 2025-26)',
@@ -432,7 +432,7 @@ export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
   },
 ];
 
-export const SEED_EVENTS: Omit<CalendarEvent, 'id'>[] = [
+export const SEED_EVENTS: Omit<CalendarEvent, 'id' | 'organizationId'>[] = [
   { title: "BBA Sem 8 Commencement", category: "Academic", date: daysFromNow(2), tags: ["BBA-4"], color: "#6366F1", description: "First day of the final semester." },
   { title: "Mid-Sem Examinations", category: "Exam", date: daysFromNow(45), tags: ["ALL"], color: "#EF4444", description: "Mid-semester internal assessment." },
   { title: "HDFC Placement Drive", category: "Placement", date: daysFromNow(15), tags: ["BBA-4"], color: "#10B981", description: "On-campus recruitment for MT roles." },
@@ -443,7 +443,7 @@ export const SEED_EVENTS: Omit<CalendarEvent, 'id'>[] = [
   { title: "Inter-Dept Football", category: "Sports", date: daysFromNow(12), tags: ["ALL"], color: "#F43F5E", description: "Opening match of SAGI Cup." },
 ];
 
-export const SEED_ASSIGNMENTS: Omit<Assignment, 'id'>[] = [
+export const SEED_ASSIGNMENTS: Omit<Assignment, 'id' | 'organizationId'>[] = [
   { title: "SWOT Analysis: Indore Startups", course: "Strategic Management (BBA801)", dueDate: daysFromNow(5), tags: ["BBA-4"], description: "Perform a detailed SWOT analysis of any two startups based in Indore. Minimum 2000 words.", postedBy: "Dr. Rajesh Sharma", postedAt: daysAgo(2) },
   { title: "International Trade Policy Review", course: "International Business (BBA802)", dueDate: daysFromNow(12), tags: ["BBA-4"], description: "Critically examine India's new Foreign Trade Policy. Compare with neighboring nations.", postedBy: "Prof. Anita Gupta", postedAt: daysAgo(1) },
   { title: "Case Study: Satyam Scam", course: "Corporate Law & Governance (BBA803)", dueDate: daysFromNow(8), tags: ["BBA-4"], description: "Analyze the governance failures in the Satyam case. 15-page report format.", postedBy: "Prof. Suresh Verma", postedAt: daysAgo(3) },

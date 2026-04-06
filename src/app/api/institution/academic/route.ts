@@ -8,19 +8,19 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const { action, type, name } = await request.json();
+    const { action, type, name, orgId = 'org-1' } = await request.json();
     
     if (!name || !type) return NextResponse.json({ error: 'Missing parameters' }, { status: 400 });
 
     if (action === 'add') {
-      if (type === 'department') db.addDepartment(name);
-      else if (type === 'section') db.addSection(name);
+      if (type === 'department') db.addDepartment(orgId, name);
+      else if (type === 'section') db.addSection(orgId, name);
     } else if (action === 'remove') {
-      if (type === 'department') db.removeDepartment(name);
-      else if (type === 'section') db.removeSection(name);
+      if (type === 'department') db.removeDepartment(orgId, name);
+      else if (type === 'section') db.removeSection(orgId, name);
     }
 
-    return NextResponse.json(db.getAcademicStructure());
+    return NextResponse.json(db.getAcademicStructure(orgId));
   } catch (error) {
     return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
   }

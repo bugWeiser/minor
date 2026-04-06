@@ -38,6 +38,7 @@ function docToNotice(docSnap: { id: string; data: () => Record<string, unknown> 
     isPinned: data.isPinned as boolean,
     attachmentUrl: (data.attachmentUrl as string) || null,
     attachmentName: (data.attachmentName as string) || null,
+    organizationId: (data.organizationId as string) || 'org-1',
   };
 }
 
