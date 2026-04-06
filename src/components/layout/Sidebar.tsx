@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { useInstitution } from '@/context/InstitutionContext';
 import { useNotices } from '@/hooks/useNotices';
 import {
   HiOutlineHome,
@@ -19,7 +20,7 @@ import {
 } from 'react-icons/hi2';
 
 const NAV_ITEMS = [
-  { href: '/', label: 'Overview', icon: HiOutlineHome },
+  { href: '/dashboard', label: 'Overview', icon: HiOutlineHome },
   { href: '/notices', label: 'College Notices', icon: HiOutlineSpeakerWave },
   { href: '/calendar', label: 'Academic Schedule', icon: HiOutlineCalendar },
   { href: '/assignments', label: 'Assignments', icon: HiOutlineClipboardDocumentCheck },
@@ -39,7 +40,8 @@ interface SidebarProps {
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
-  const { appUser, user, isFirebaseConfigured } = useAuth();
+  const { appUser, user, isFirebaseConfigured, capabilities, isAdmin, isFaculty } = useAuth();
+  const { name: institutionName, logoUrl } = useInstitution();
   const { activeNotices } = useNotices();
 
   const unreadCount = activeNotices.filter(n =>
@@ -49,6 +51,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const handleLogout = () => {
     if (!isFirebaseConfigured) {
       localStorage.removeItem('mockRole');
+      localStorage.removeItem('activeUserEmail');
       window.location.href = '/login';
     } else {
       import('@/lib/auth').then(({ logout }) => logout());
@@ -56,7 +59,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   };
 
   const isActive = (href: string) => {
-    if (href === '/') return pathname === '/';
+    if (href === '/dashboard') return pathname === '/dashboard';
     return pathname.startsWith(href);
   };
 
@@ -82,10 +85,14 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       >
         {/* LOGO AREA */}
         <div className="flex items-center gap-3 px-7 h-[76px] mb-4 shrink-0 transition-all">
-          <div className="w-9 h-9 rounded-xl bg-accent flex items-center justify-center shadow-lg shadow-accent/20">
-            <HiOutlineAcademicCap className="w-5 h-5 text-charcoal" />
-          </div>
-          <span className="text-xl font-bold text-text-primary tracking-tight">Bugweiser</span>
+          {logoUrl ? (
+            <img src={logoUrl} alt={institutionName} className="w-9 h-9 rounded-xl object-cover shadow-lg" />
+          ) : (
+            <div className="w-9 h-9 rounded-xl bg-accent flex items-center justify-center shadow-lg shadow-accent/20">
+              <HiOutlineAcademicCap className="w-5 h-5 text-charcoal" />
+            </div>
+          )}
+          <span className="text-xl font-bold text-text-primary tracking-tight truncate max-w-[170px]">{institutionName}</span>
         </div>
 
         {/* NAV ITEMS */}
@@ -157,23 +164,25 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             );
           })}
 
-          {/* Admin Panel Link */}
-          {appUser?.isAdmin && (
+          {/* Role-Aware Control Panel Link */}
+          {capabilities.canAccessAdminArea && (
             <Link
-              href="/admin"
+              href={capabilities.canViewAdminDashboard ? '/admin' : '/admin/assignments'}
               onClick={onClose}
               className={`
                 flex items-center gap-3 px-4 py-3 rounded-2xl text-sm transition-all duration-200 ease-out group mt-2
-                ${isActive('/admin')
+                ${(isActive('/admin') || isActive('/admin/assignments'))
                   ? 'bg-soft-blue text-text-primary font-semibold shadow-sm'
                   : 'text-warning font-medium hover:bg-soft-yellow/40'
                 }
               `}
             >
-              <div className={`w-6 h-6 flex items-center justify-center rounded-lg transition-colors ${isActive('/admin') ? 'text-charcoal' : 'text-warning'}`}>
+              <div className={`w-6 h-6 flex items-center justify-center rounded-lg transition-colors ${(isActive('/admin') || isActive('/admin/assignments')) ? 'text-charcoal' : 'text-warning'}`}>
                 <HiOutlineShieldCheck className="w-[18px] h-[18px] shrink-0" />
               </div>
-              <span>Platform Control</span>
+              <span className="flex-1 whitespace-nowrap">
+                {capabilities.canViewAdminDashboard ? 'Platform Control' : 'Task Management'}
+              </span>
             </Link>
           )}
         </nav>
@@ -190,12 +199,13 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                   {appUser?.name || 'Academic User'}
                 </p>
                 <p className="text-[11px] text-text-muted truncate mt-0.5">
-                  {appUser?.isAdmin ? 'Faculty Admin' : 'Active Student'}
+                  {isAdmin ? 'System Administrator' : isFaculty ? 'Faculty / Staff' : 'Active Student'}
                 </p>
               </div>
             </div>
             <button
               onClick={handleLogout}
+              aria-label="Securely end current session"
               className="mt-3 text-xs text-text-muted hover:text-danger flex items-center gap-2 cursor-pointer font-medium w-full px-3 py-1 transition-colors hover:translate-x-1"
             >
               <HiOutlineArrowRightOnRectangle className="w-[14px] h-[14px]" />

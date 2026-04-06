@@ -10,12 +10,14 @@ import CategoryFilter from '@/components/CategoryFilter';
 import NoticeCard from '@/components/NoticeCard';
 import PinnedSection from '@/components/PinnedSection';
 import EmptyState from '@/components/EmptyState';
+import SectionHeader from '@/components/ui/SectionHeader';
+import InputShell from '@/components/ui/InputShell';
 import { NoticeListSkeleton } from '@/components/ui/LoadingSkeleton';
 import { Category } from '@/lib/types';
 import { HiOutlineMagnifyingGlass, HiOutlineFunnel, HiOutlineBell, HiOutlineArrowPath } from 'react-icons/hi2';
 
 export default function NoticesPage() {
-  const { notices, loading } = useNotices();
+  const { filteredNotices: notices, loading } = useNotices();
   const { appUser } = useAuth();
 
   const [search, setSearch] = useState('');
@@ -62,34 +64,27 @@ export default function NoticesPage() {
     <div className="space-y-8 animate-fadeUp">
       
       {/* PAGE HEADER */}
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2 border-b border-border-subtle">
-        <section>
-          <h1 className="text-3xl font-bold text-text-primary tracking-tight">Institutional Board</h1>
-          <p className="text-text-muted font-bold uppercase tracking-[0.12em] text-[11px] mt-2 group cursor-default">
-            {loading ? 'Consulting repositories...' : `${totalCount} active notices available for access`}
-            {appUser && ` · Filtered by ${appUser.department || 'Universal Tags'}`}
-          </p>
-        </section>
-        
-        <div className="flex items-center gap-2">
-           <button onClick={() => setSelectedCategory('All')} className="h-10 px-4 bg-white border border-border-subtle rounded-xl text-xs font-bold text-text-primary hover:border-border-strong hover:bg-bg-hover transition-all flex items-center gap-2">
-              <HiOutlineArrowPath className="w-4 h-4 text-text-muted" /> Reset Filters
-           </button>
-        </div>
-      </header>
+      <SectionHeader
+        title="Institutional Board"
+        subtitle={
+          loading ? 'Consulting repositories...' : `${totalCount} active notices available for access${appUser ? ` · Filtered by ${appUser.department || 'Universal Tags'}` : ''}`
+        }
+        actions={
+          <button onClick={() => setSelectedCategory('All')} className="h-10 px-4 bg-white border border-border-subtle rounded-xl text-xs font-bold text-text-primary hover:border-border-strong hover:bg-bg-hover transition-all flex items-center gap-2">
+            <HiOutlineArrowPath className="w-4 h-4 text-text-muted" /> Reset Filters
+          </button>
+        }
+      />
 
       {/* SEARCH AND FILTERS */}
       <div className="flex flex-col gap-6 bg-white border border-border-subtle p-6 rounded-[22px] shadow-sm transition-all focus-within:shadow-md focus-within:border-border-strong">
-        <div className="relative group">
-           <HiOutlineMagnifyingGlass className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within:text-charcoal transition-colors" />
-           <input
-             type="text"
-             value={search}
-             onChange={(e) => setSearch(e.target.value)}
-             placeholder="Search for notices, faculty, or announcements..."
-             className="w-full h-[52px] pl-12 pr-4 bg-bg-card-secondary border border-border-subtle rounded-xl text-[14px] text-text-primary placeholder:text-text-muted focus:bg-white focus:shadow-md focus:border-border-strong outline-none transition-all"
-           />
-        </div>
+        <InputShell
+          icon={<HiOutlineMagnifyingGlass className="w-5 h-5" />}
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search for notices, faculty, or announcements..."
+        />
 
         <div className="flex flex-wrap gap-2 pt-2 border-t border-border-subtle pt-6">
            {['All', ...CATEGORIES].map((cat) => (

@@ -39,7 +39,7 @@ export default function SignupPage() {
         formData.department, 
         parseInt(formData.year)
       );
-      router.push('/');
+      router.push('/dashboard');
     } catch (err: any) {
       setError(err.message || 'Failed to register account.');
     } finally {
@@ -106,6 +106,7 @@ export default function SignupPage() {
               <div>
                 <label className={lbl}>Department Code</label>
                 <select 
+                  title="Department Code"
                   value={formData.department}
                   onChange={(e) => setFormData({...formData, department: e.target.value})}
                   className={inp}
@@ -119,6 +120,7 @@ export default function SignupPage() {
               <div>
                 <label className={lbl}>Academic Year</label>
                 <select 
+                  title="Academic Year"
                   value={formData.year}
                   onChange={(e) => setFormData({...formData, year: e.target.value})}
                   className={inp}

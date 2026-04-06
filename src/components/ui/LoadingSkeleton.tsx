@@ -93,3 +93,38 @@ export function NoticeListSkeleton({ count = 3 }: { count?: number }) {
     </div>
   );
 }
+
+// Table Skeleton
+export function TableSkeleton({ rows = 5 }: { rows?: number }) {
+  return (
+    <div className="w-full bg-white border border-border-subtle rounded-[24px] overflow-hidden animate-pulse">
+      <div className="h-14 bg-bg-card-secondary border-b border-border-subtle" />
+      <div className="p-4 space-y-4">
+        {Array.from({ length: rows }).map((_, i) => (
+          <div key={i} className="flex items-center gap-6">
+            <div className="w-12 h-12 rounded-xl bg-bg-hover shrink-0" />
+            <div className="flex-1 space-y-2">
+              <div className="h-4 w-3/4 bg-bg-card-secondary rounded-lg" />
+              <div className="h-3 w-1/4 bg-bg-hover rounded-lg" />
+            </div>
+            <div className="h-8 w-24 bg-bg-card-secondary rounded-xl" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export function CourseCardSkeleton() {
+  return (
+    <div className="card-shell p-6 space-y-4 animate-pulse bg-white border-border-subtle">
+      <div className="h-32 w-full bg-bg-hover rounded-2xl" />
+      <div className="h-6 w-3/4 bg-bg-card-secondary rounded-lg" />
+      <div className="h-4 w-1/2 bg-bg-hover rounded-lg" />
+      <div className="flex justify-between pt-4 border-t border-border-subtle pt-4">
+        <div className="h-4 w-20 bg-bg-hover rounded-lg" />
+        <div className="h-4 w-12 bg-bg-hover rounded-lg" />
+      </div>
+    </div>
+  );
+}

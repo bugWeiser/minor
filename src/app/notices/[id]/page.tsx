@@ -19,8 +19,8 @@ const CATEGORY_CHIP_THEMES: Record<string, string> = {
 
 export default function NoticeDetailPage() {
   const { id } = useParams() as { id: string };
-  const { notices, loading } = useNotices();
-  const { user, appUser } = useAuth();
+  const { filteredNotices: notices, loading } = useNotices();
+  const { user, appUser, normalizedProfile } = useAuth();
   const router = useRouter();
   const [saved, setSaved] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -29,7 +29,7 @@ export default function NoticeDetailPage() {
 
   useEffect(() => {
     // Mark as read
-    if (notice && user && appUser && (!appUser.readNotices || !appUser.readNotices.includes(notice.id))) {
+    if (notice && user && normalizedProfile && (!appUser?.readNotices || !appUser.readNotices.includes(notice.id))) {
       markNoticeAsRead(user.uid, notice.id).catch(() => {});
     }
     // Check saved state
@@ -99,7 +99,13 @@ export default function NoticeDetailPage() {
       {/* NAVIGATION TOOLBAR */}
       <nav className="flex items-center justify-between pb-4">
         <button
-          onClick={() => router.push('/notices')}
+          onClick={() => {
+            if (window.history.length > 2) {
+              router.back();
+            } else {
+              router.push('/notices');
+            }
+          }}
           className="flex items-center gap-2 text-[13px] font-bold text-text-muted hover:text-charcoal transition-all group"
         >
           <HiOutlineArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
@@ -107,7 +113,7 @@ export default function NoticeDetailPage() {
         </button>
 
         <div className="flex items-center gap-2">
-           {appUser?.isAdmin && (
+           {normalizedProfile?.role === 'admin' && (
              <button
                onClick={handleDelete}
                className="h-10 px-4 rounded-xl flex items-center gap-2 text-[12px] font-bold border border-red-200 bg-soft-red text-danger hover:bg-red-100 transition-all"

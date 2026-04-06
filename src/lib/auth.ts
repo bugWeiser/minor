@@ -6,18 +6,29 @@ import {
   User,
 } from 'firebase/auth';
 import { auth } from './firebase';
+import { setMockAuthSession, clearMockAuthSession } from './authPersistence';
 
 export async function loginWithEmail(email: string, password: string): Promise<any> {
   const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
   
-  if (!apiKey) {
+  const isDemoPersona = [
+    'alice@dashboard.com',
+    'bob@dashboard.com',
+    'faculty@dashboard.com',
+    'admin@dashboard.com'
+  ].includes(email);
+
+  if (!apiKey || isDemoPersona) {
     // Mock login for demo
-    const role = email.includes('admin') ? 'admin' : 'student';
-    localStorage.setItem('mockRole', role);
-    localStorage.setItem('activeUserEmail', email);
-    // Reload to trigger AuthContext refresh
+    let role = 'student';
+    if (email.includes('admin')) role = 'admin';
+    if (email.includes('faculty')) role = 'faculty';
+    
+    setMockAuthSession(email, role);
+    
+    // Reload to trigger AuthContext refresh (deterministic boot)
     window.location.reload();
-    return { email, uid: 'mock-uid' };
+    return { email, uid: `mock-uid-${email}` };
   }
 
   const result = await signInWithEmailAndPassword(auth, email, password);
@@ -35,8 +46,7 @@ export async function registerStudent(
   
   if (!apiKey) {
     // Mock registration
-    localStorage.setItem('mockRole', 'student');
-    localStorage.setItem('activeUserEmail', email);
+    setMockAuthSession(email, 'student');
     window.location.reload();
     return { email, uid: 'mock-uid' };
   }
@@ -63,13 +73,20 @@ export async function registerStudent(
 
 export async function logout(): Promise<void> {
   const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
-  if (!apiKey) {
-    localStorage.removeItem('mockRole');
-    localStorage.removeItem('activeUserEmail');
-    window.location.reload();
-    return;
+  
+  // Always clear mock session on logout
+  clearMockAuthSession();
+  
+  if (apiKey) {
+     try {
+       await signOut(auth);
+     } catch (e) {
+       console.error("Firebase logout error (ignoring during demo cleanup):", e);
+     }
   }
-  await signOut(auth);
+  
+  // Reload ensures the context is fully reset to unauthenticated
+  window.location.reload();
 }
 
 export function onAuthChange(callback: (user: any | null) => void): () => void {

@@ -29,7 +29,7 @@ const getCategoryStyles = (category: string, urgency: string) => {
 };
 
 export default function NotificationsWidget() {
-  const { notices, loading } = useNotices();
+  const { filteredNotices: notices, loading } = useNotices();
   const { appUser } = useAuth();
   const router = useRouter();
 

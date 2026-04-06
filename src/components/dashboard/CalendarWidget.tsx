@@ -6,10 +6,11 @@ import { useEvents } from '@/hooks/useEvents';
 import { format, isSameDay } from 'date-fns';
 import 'react-calendar/dist/Calendar.css';
 import { HiOutlineCalendarDays, HiOutlineBell, HiOutlineClock } from 'react-icons/hi2';
+import { EVENT_CATEGORY_Tailwind_MAP } from '@/lib/constants';
 
 export default function CalendarWidget() {
   const [date, setDate] = useState<Date>(new Date());
-  const { events, loading } = useEvents();
+  const { filteredEvents: events, loading } = useEvents();
 
   // Pulse effect and dots for days with events
   const tileContent = ({ date: tileDate, view }: { date: Date; view: string }) => {
@@ -19,13 +20,16 @@ export default function CalendarWidget() {
     
     return (
       <div className="flex justify-center gap-0.5 mt-1">
-        {dayEvents.slice(0, 3).map((event, i) => (
-          <div 
-            key={i} 
-            className="w-1.5 h-1.5 rounded-full shadow-[0_0_4px_rgba(0,0,0,0.1)] transition-transform group-hover:scale-125" 
-            style={{ backgroundColor: event.color }}
-          />
-        ))}
+        {dayEvents.slice(0, 3).map((event, i) => {
+          const style = EVENT_CATEGORY_Tailwind_MAP[event.category as keyof typeof EVENT_CATEGORY_Tailwind_MAP] || EVENT_CATEGORY_Tailwind_MAP.General;
+          return (
+            <div 
+              key={i} 
+              className={`w-1.5 h-1.5 rounded-full shadow-[0_0_4px_rgba(0,0,0,0.1)] transition-transform group-hover:scale-125 ${style.marker}`} 
+              title={`${event.title} (${event.category})`}
+            />
+          );
+        })}
       </div>
     );
   };
@@ -44,12 +48,12 @@ export default function CalendarWidget() {
         </div>
       </header>
 
-      <div className="flex-1">
+      <div className="flex-1 overflow-x-auto scrollbar-hide">
         <Calendar 
           onChange={(val: any) => setDate(val as Date)} 
           value={date} 
           tileContent={tileContent}
-          className="w-full !font-sans !border-0 bg-transparent react-calendar !text-[13px] group"
+          className="w-full !font-sans !border-0 bg-transparent react-calendar !text-[13px] group min-w-[280px]"
         />
       </div>
       
@@ -71,8 +75,14 @@ export default function CalendarWidget() {
             </div>
           ) : (
             selectedDayEvents.map(event => (
-              <div key={event.id} className="flex gap-4 p-3 rounded-2xl bg-bg-card-secondary/50 border border-border-subtle hover:bg-white hover:border-charcoal hover:shadow-xl hover:shadow-black/5 transition-all duration-300">
-                <div className="w-1 rounded-full shrink-0 shadow-sm" style={{ backgroundColor: event.color }}></div>
+              <div 
+                key={event.id} 
+                className="flex gap-4 p-3 rounded-2xl bg-bg-card-secondary/50 border border-border-subtle hover:bg-white hover:border-charcoal hover:shadow-xl hover:shadow-black/5 transition-all duration-300"
+                title={`View details for ${event.title}`}
+              >
+                <div 
+                  className={`w-1 rounded-full shrink-0 shadow-sm ${(EVENT_CATEGORY_Tailwind_MAP[event.category as keyof typeof EVENT_CATEGORY_Tailwind_MAP] || EVENT_CATEGORY_Tailwind_MAP.General).marker}`}
+                ></div>
                 <div className="flex-1 min-w-0">
                   <p className="text-[13px] font-black text-charcoal truncate tracking-tight">{event.title}</p>
                   <p className="text-[10px] font-bold text-text-muted uppercase tracking-[0.15em] mt-0.5 opacity-60 flex items-center gap-1.5">

@@ -5,6 +5,8 @@ import { useNotices } from '@/hooks/useNotices';
 import { useAuth } from '@/context/AuthContext';
 import { CATEGORIES } from '@/lib/constants';
 import EmptyState from '@/components/EmptyState';
+import SectionHeader from '@/components/ui/SectionHeader';
+import FilterChips from '@/components/ui/FilterChips';
 import { useRouter } from 'next/navigation';
 import { timeAgo } from '@/lib/utils';
 import { format } from 'date-fns';
@@ -38,7 +40,7 @@ const CATEGORY_STYLE: Record<string, { bg: string, text: string, Icon: any }> = 
 
 export default function NotificationsPage() {
   const [activeTab, setActiveTab] = useState<NotifTab>('notifications');
-  const { notices, loading } = useNotices();
+  const { filteredNotices: notices, loading } = useNotices();
   const { appUser } = useAuth();
   const router = useRouter();
 
@@ -79,34 +81,24 @@ export default function NotificationsPage() {
     <div className="space-y-8 animate-fadeUp">
       
       {/* PAGE HEADER */}
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2 border-b border-border-subtle transition-all">
-        <section>
-          <h1 className="text-3xl font-bold text-text-primary tracking-tight">Recent Alerts</h1>
-          <p className="text-charcoal font-black uppercase tracking-[0.12em] text-[11px] mt-2 group cursor-default">
-            {loading ? 'Polling notification nodes...' : `${notifications.filter(n => n.isUnread).length} critical packets requires human interaction`}
-          </p>
-        </section>
-      </header>
+      <SectionHeader
+        title="Recent Alerts"
+        subtitle={
+          loading ? 'Polling notification nodes...' : `${notifications.filter(n => n.isUnread).length} critical packets requires human interaction`
+        }
+        subtitleVariant="strong"
+      />
 
-      {/* SEGMENTED CONTROL */}
-      <div className="flex items-center gap-2.5 bg-white border border-border-subtle p-2 rounded-[22px] shadow-sm w-fit transition-all focus-within:shadow-md focus-within:border-border-strong">
-        {(['notifications', 'preferences'] as NotifTab[]).map(tab => (
-          <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={`
-              flex items-center gap-2.5 px-6 py-3 rounded-2xl text-[13px] font-bold transition-all duration-200 border
-              ${activeTab === tab
-                ? 'bg-charcoal text-white border-charcoal shadow-lg shadow-charcoal/20'
-                : 'bg-white text-text-muted border-border-subtle hover:bg-bg-hover hover:text-text-primary hover:border-border-strong'
-              }
-            `}
-          >
-            {tab === 'notifications' ? <HiOutlineBellAlert className="w-4 h-4" /> : <HiOutlineCog6Tooth className="w-4 h-4" />}
-            {tab === 'notifications' ? 'Active Feed' : 'Frequency Preferences'}
-          </button>
-        ))}
-      </div>
+      <FilterChips
+        items={[
+          { label: 'Active Feed', value: 'notifications', icon: HiOutlineBellAlert },
+          { label: 'Frequency Preferences', value: 'preferences', icon: HiOutlineCog6Tooth },
+        ]}
+        activeValue={activeTab}
+        onChange={(val) => setActiveTab(val as NotifTab)}
+        activeStyle="charcoal"
+        shape="rounded"
+      />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
@@ -188,6 +180,7 @@ export default function NotificationsPage() {
                           <span className={`text-[14px] font-bold transition-colors ${enabled ? 'text-charcoal' : 'text-text-muted'}`}>{cat} Announcements</span>
                         </div>
                         <button
+                          title={`Toggle ${cat} Notifications`}
                           onClick={() => togglePref(cat)}
                           className={`relative w-[52px] h-[28px] rounded-full transition-all duration-300 ease-in-out border ${
                             enabled ? 'bg-charcoal border-charcoal' : 'bg-bg-card-secondary border-border-subtle'
@@ -244,7 +237,7 @@ export default function NotificationsPage() {
                  </div>
                  
                  <div className="h-1.5 rounded-full bg-bg-card-secondary overflow-hidden mt-4">
-                    <div className="h-full bg-accent transition-all duration-1000 delay-300" style={{ width: `${(notifications.filter(n => n.isUnread).length / 20) * 100}%` }} />
+                    <div className="h-full bg-accent transition-all duration-1000 delay-300" {...({ style: { width: `${(notifications.filter(n => n.isUnread).length / 20) * 100}%` } } as React.HTMLAttributes<HTMLDivElement>)} />
                  </div>
               </div>
            </section>

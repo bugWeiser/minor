@@ -4,13 +4,12 @@ import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { useAssignments } from '@/hooks/useAssignments';
 import { useAuth } from '@/context/AuthContext';
-import { deleteAssignment } from '@/lib/firestore';
-import { filterByUserTags } from '@/lib/filterUtils';
-import AssignmentCard from '@/components/assignments/AssignmentCard';
-import EmptyState from '@/components/EmptyState';
-import { ListItemSkeleton } from '@/components/ui/LoadingSkeleton';
 import { Assignment } from '@/lib/types';
-import { HiOutlineFunnel, HiOutlineClipboardDocumentList, HiOutlineClock, HiOutlineChevronRight, HiOutlineChartBar, HiOutlineCheckCircle, HiOutlineExclamationCircle } from 'react-icons/hi2';
+import AssignmentCard from '@/components/assignments/AssignmentCard';
+import SectionHeader from '@/components/ui/SectionHeader';
+import FilterChips from '@/components/ui/FilterChips';
+import { ListItemSkeleton } from '@/components/ui/LoadingSkeleton';
+import { HiOutlineClipboardDocumentList, HiOutlineClock, HiOutlineChevronRight, HiOutlineChartBar, HiOutlineCheckCircle, HiOutlineExclamationCircle } from 'react-icons/hi2';
 
 type FilterTab = 'All' | 'Pending' | 'Completed' | 'Overdue';
 
@@ -22,30 +21,10 @@ function getDaysLeft(dueDate: Date): number {
   return Math.ceil((due.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
 }
 
-function isThisWeek(date: Date): boolean {
-  const daysLeft = getDaysLeft(date);
-  return daysLeft >= 0 && daysLeft <= 7;
-}
-
 export default function AssignmentsPage() {
-  const { assignments, loading } = useAssignments();
-  const { appUser } = useAuth();
+  const { filteredAssignments, loading, completedIds, toggleComplete } = useAssignments();
+  const { normalizedProfile } = useAuth();
   const [activeTab, setActiveTab] = useState<FilterTab>('All');
-  const [completedIds, setCompletedIds] = useState<string[]>([]);
-
-  // Load completed from localStorage
-  useEffect(() => {
-    const stored = localStorage.getItem('completedAssignments');
-    if (stored) setCompletedIds(JSON.parse(stored));
-  }, []);
-
-  const toggleComplete = (id: string) => {
-    setCompletedIds(prev => {
-      const next = prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id];
-      localStorage.setItem('completedAssignments', JSON.stringify(next));
-      return next;
-    });
-  };
 
   const handleDelete = async (id: string) => {
     if (!window.confirm('Delete this academic task from the repository?')) return;
@@ -58,25 +37,19 @@ export default function AssignmentsPage() {
     }
   };
 
-  // Tag-filtered assignments
-  const userAssignments = useMemo(() =>
-    filterByUserTags(assignments, appUser?.tags ?? [], appUser?.isAdmin),
-    [assignments, appUser]
-  );
-
   const overdue = useMemo(() =>
-    userAssignments.filter(a => !completedIds.includes(a.id) && getDaysLeft(a.dueDate) < 0),
-    [userAssignments, completedIds]
+    filteredAssignments.filter((a: Assignment) => !completedIds.includes(a.id) && getDaysLeft(a.dueDate) < 0),
+    [filteredAssignments, completedIds]
   );
 
   const pending = useMemo(() =>
-    userAssignments.filter(a => !completedIds.includes(a.id) && getDaysLeft(a.dueDate) >= 0),
-    [userAssignments, completedIds]
+    filteredAssignments.filter((a: Assignment) => !completedIds.includes(a.id) && getDaysLeft(a.dueDate) >= 0),
+    [filteredAssignments, completedIds]
   );
 
   const completed = useMemo(() =>
-    userAssignments.filter(a => completedIds.includes(a.id)),
-    [userAssignments, completedIds]
+    filteredAssignments.filter((a: Assignment) => completedIds.includes(a.id)),
+    [filteredAssignments, completedIds]
   );
 
   const TABS: { label: FilterTab; icon: any }[] = [
@@ -87,28 +60,25 @@ export default function AssignmentsPage() {
   ];
 
   const filteredItems = useMemo(() => {
-    if (activeTab === 'All') return userAssignments;
+    if (activeTab === 'All') return filteredAssignments;
     if (activeTab === 'Pending') return pending;
     if (activeTab === 'Overdue') return overdue;
     if (activeTab === 'Completed') return completed;
-    return userAssignments;
-  }, [activeTab, userAssignments, pending, overdue, completed]);
+    return filteredAssignments;
+  }, [activeTab, filteredAssignments, pending, overdue, completed]);
 
-  const completionRate = userAssignments.length > 0 ? Math.round((completed.length / userAssignments.length) * 100) : 0;
+  const completionRate = filteredAssignments.length > 0 ? Math.round((completed.length / filteredAssignments.length) * 100) : 0;
 
   return (
     <div className="space-y-8 animate-fadeUp">
       
       {/* PAGE HEADER */}
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2 border-b border-border-subtle transition-all">
-        <section>
-          <h1 className="text-3xl font-bold text-text-primary tracking-tight">Curricula Tasks</h1>
-          <p className="text-text-muted font-bold uppercase tracking-[0.12em] text-[11px] mt-2 group cursor-default">
-            {loading ? 'Analyzing schedules...' : `${pending.length} pending academic assignments requiring attention`}
-            {appUser?.department && ` · ${appUser.department} Core Department`}
-          </p>
-        </section>
-      </header>
+      <SectionHeader
+        title="Curricula Tasks"
+        subtitle={
+          loading ? 'Analyzing schedules...' : `${pending.length} pending academic assignments requiring attention${normalizedProfile?.department ? ` · ${normalizedProfile.department} Core Department` : ''}`
+        }
+      />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
@@ -116,24 +86,13 @@ export default function AssignmentsPage() {
         <div className="lg:col-span-2 space-y-6">
           
           {/* Segmented Controls / Chips */}
-          <div className="flex flex-wrap gap-2.5 bg-white border border-border-subtle p-2 rounded-[22px] shadow-sm w-fit transition-all focus-within:shadow-md">
-            {TABS.map(tab => (
-              <button
-                key={tab.label}
-                onClick={() => setActiveTab(tab.label)}
-                className={`
-                  flex items-center gap-2.5 px-6 py-3 rounded-2xl text-[13px] font-bold transition-all duration-200 border
-                  ${activeTab === tab.label
-                    ? 'bg-charcoal text-white border-charcoal shadow-lg shadow-charcoal/20'
-                    : 'bg-white text-text-muted border-border-subtle hover:bg-bg-hover hover:text-text-primary hover:border-border-strong'
-                  }
-                `}
-              >
-                <tab.icon className={`w-4 h-4 ${activeTab === tab.label ? 'text-accent' : 'text-text-muted'}`} />
-                {tab.label}
-              </button>
-            ))}
-          </div>
+          <FilterChips
+            items={TABS.map(tab => ({ label: tab.label, value: tab.label, icon: tab.icon }))}
+            activeValue={activeTab}
+            onChange={(val) => setActiveTab(val as FilterTab)}
+            activeStyle="charcoal"
+            shape="rounded"
+          />
 
           <div className="space-y-4">
              {loading ? (
@@ -148,16 +107,16 @@ export default function AssignmentsPage() {
                </div>
              ) : (
                <div className="space-y-3">
-                 {filteredItems.map((a, i) => (
-                   <AssignmentCard
-                     key={a.id}
-                     assignment={a}
-                     isCompleted={completedIds.includes(a.id)}
-                     onToggleComplete={toggleComplete}
-                     onDelete={appUser?.isAdmin ? handleDelete : undefined}
-                     index={i}
-                   />
-                 ))}
+                  {filteredItems.map((a, i) => (
+                    <AssignmentCard
+                      key={a.id}
+                      assignment={a}
+                      isCompleted={completedIds.includes(a.id)}
+                      onToggleComplete={toggleComplete}
+                      onDelete={normalizedProfile?.role === 'admin' ? handleDelete : undefined}
+                      index={i}
+                    />
+                  ))}
                </div>
              )}
           </div>
@@ -176,7 +135,7 @@ export default function AssignmentsPage() {
 
               <div className="space-y-4">
                  {[
-                   { label: 'Cumulative Volume', val: userAssignments.length, color: 'text-text-primary' },
+                   { label: 'Cumulative Volume', val: filteredAssignments.length, color: 'text-text-primary' },
                    { label: 'Unfinished Cycles', val: pending.length, color: 'text-warning' },
                    { label: 'Critical Overdue', val: overdue.length, color: 'text-danger' },
                    { label: 'Completed Credits', val: completed.length, color: 'text-charcoal' },

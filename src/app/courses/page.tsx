@@ -15,8 +15,8 @@ const MOCK_COURSES = [
 ];
 
 export default function CoursesPage() {
-  const { appUser } = useAuth();
-  const enrolledCourses = appUser?.courses || [];
+  const { normalizedProfile } = useAuth();
+  const enrolledCourses = normalizedProfile?.enrolledCourses || [];
   const displayCourses = enrolledCourses.length > 0 
     ? MOCK_COURSES.filter(c => enrolledCourses.includes(c.name)) 
     : MOCK_COURSES;
@@ -43,13 +43,15 @@ export default function CoursesPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {displayCourses.map((course, i) => {
-            const isLowAttendance = course.attendancePercent < 75;
+            const safeProgress = Math.min(100, Math.max(0, course.progress || 0));
+            const safeAttendance = Math.min(100, Math.max(0, course.attendancePercent || 0));
+            const isLowAttendance = safeAttendance < 75;
             
             return (
               <div
                 key={course.id}
                 className="card-shell p-6 bg-white relative overflow-hidden flex flex-col group"
-                style={{ animationDelay: `${i * 50}ms` }}
+                {...({ style: { animationDelay: `${i * 50}ms` } } as React.HTMLAttributes<HTMLDivElement>)}
               >
                 {/* Background Decor */}
                 <div className="absolute -right-4 -top-4 w-24 h-24 bg-bg-card-secondary rounded-full opacity-50 group-hover:scale-110 transition-transform duration-500" />
@@ -65,23 +67,23 @@ export default function CoursesPage() {
                 </header>
 
                 <div className="flex-1 relative z-10">
-                   <h3 className="text-[17px] font-bold text-text-primary leading-tight group-hover:text-charcoal transition-colors">
-                     {course.name}
+                   <h3 className="text-[17px] font-bold text-text-primary leading-tight group-hover:text-charcoal transition-colors line-clamp-2">
+                     {course.name || 'Unnamed Module'}
                    </h3>
-                   <p className="text-[12px] font-medium text-text-secondary mt-1 flex items-center gap-1.5">
-                      <HiOutlineAcademicCap className="w-4 h-4 text-text-muted" />
-                      {course.faculty}
+                   <p className="text-[12px] font-medium text-text-secondary mt-1 flex items-center gap-1.5 truncate">
+                      <HiOutlineAcademicCap className="w-4 h-4 text-text-muted shrink-0" />
+                      {course.faculty || 'Unassigned Faculty'}
                    </p>
                    
                    <div className="mt-6 flex items-center justify-between">
                       <p className="text-[11px] font-bold text-text-muted uppercase tracking-widest">Mastery Level</p>
-                      <p className="text-[13px] font-black text-charcoal">{course.progress}%</p>
+                      <p className="text-[13px] font-black text-charcoal">{safeProgress}%</p>
                    </div>
                    
                    <div className="mt-2 h-1.5 bg-bg-card-secondary rounded-full overflow-hidden">
                       <div 
                         className="h-full bg-accent transition-all duration-1000 ease-out delay-100"
-                        style={{ width: `${course.progress}%` }} 
+                        {...({ style: { width: `${safeProgress}%` } } as React.HTMLAttributes<HTMLDivElement>)} 
                       />
                    </div>
                 </div>
@@ -104,7 +106,7 @@ export default function CoursesPage() {
                           {isLowAttendance ? 'Critical Threshold' : 'Stability Rating'}
                         </p>
                         <p className={`text-[12px] font-bold ${isLowAttendance ? 'text-danger' : 'text-charcoal'}`}>
-                          {course.attendancePercent}% Consistency
+                          {safeAttendance}% Consistency
                         </p>
                       </div>
                       <Link href={`/courses/${course.id}`} className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${isLowAttendance ? 'bg-danger text-white' : 'bg-charcoal text-white'} hover:shadow-lg active:scale-90`}>

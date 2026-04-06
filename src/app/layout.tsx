@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { ThemeProvider } from "@/context/ThemeContext";
+import { InstitutionProvider } from "@/context/InstitutionContext";
 import AppShell from "@/components/layout/AppShell";
 import NotificationToast from "@/components/NotificationToast";
 import PushNotificationManager from "@/components/PushNotificationManager";
@@ -24,14 +25,16 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)]`}>
         <ThemeProvider>
-          <AuthProvider>
-            {/* AppShell handles the Sidebar, TopBar, and BottomNav routing logic */}
-            <AppShell>
-              {children}
-            </AppShell>
-            <PushNotificationManager />
-            <NotificationToast />
-          </AuthProvider>
+          <InstitutionProvider>
+            <AuthProvider>
+              {/* AppShell handles the Sidebar, TopBar, and BottomNav routing logic */}
+              <AppShell>
+                {children}
+              </AppShell>
+              <PushNotificationManager />
+              <NotificationToast />
+            </AuthProvider>
+          </InstitutionProvider>
         </ThemeProvider>
       </body>
     </html>

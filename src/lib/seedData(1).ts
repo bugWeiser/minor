@@ -27,6 +27,7 @@ export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
     isPinned: true,
     attachmentUrl: null,
     attachmentName: null,
+    organizationId: 'org-1',
   },
   {
     title: 'Assignment Submission Deadline Extended',
@@ -40,6 +41,7 @@ export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
     isPinned: false,
     attachmentUrl: null,
     attachmentName: null,
+    organizationId: 'org-1',
   },
   {
     title: 'New Elective Courses for Next Semester',
@@ -53,6 +55,7 @@ export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
     isPinned: false,
     attachmentUrl: null,
     attachmentName: null,
+    organizationId: 'org-1',
   },
   {
     title: 'Library Hours Extended During Exams',
@@ -66,6 +69,7 @@ export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
     isPinned: false,
     attachmentUrl: null,
     attachmentName: null,
+    organizationId: 'org-1',
   },
   {
     title: 'Guest Lecture: Introduction to Quantum Computing',
@@ -79,6 +83,7 @@ export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
     isPinned: false,
     attachmentUrl: null,
     attachmentName: null,
+    organizationId: 'org-1',
   },
 
   // PLACEMENT (5)
@@ -94,6 +99,7 @@ export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
     isPinned: true,
     attachmentUrl: null,
     attachmentName: null,
+    organizationId: 'org-1',
   },
   {
     title: 'Infosys Hiring Drive — April 12',
@@ -107,6 +113,7 @@ export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
     isPinned: false,
     attachmentUrl: null,
     attachmentName: null,
+    organizationId: 'org-1',
   },
   {
     title: 'Resume Building Workshop',
@@ -120,6 +127,7 @@ export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
     isPinned: false,
     attachmentUrl: null,
     attachmentName: null,
+    organizationId: 'org-1',
   },
   {
     title: 'Wipro Elite NLTH Results Announced',
@@ -133,6 +141,7 @@ export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
     isPinned: false,
     attachmentUrl: null,
     attachmentName: null,
+    organizationId: 'org-1',
   },
   {
     title: 'Mock Interview Sessions — Week of April 7',
@@ -146,6 +155,7 @@ export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
     isPinned: false,
     attachmentUrl: null,
     attachmentName: null,
+    organizationId: 'org-1',
   },
 
   // EVENTS (5)
@@ -161,6 +171,7 @@ export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
     isPinned: true,
     attachmentUrl: null,
     attachmentName: null,
+    organizationId: 'org-1',
   },
   {
     title: 'Hackathon: Code for Change',
@@ -174,6 +185,7 @@ export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
     isPinned: false,
     attachmentUrl: null,
     attachmentName: null,
+    organizationId: 'org-1',
   },
   {
     title: 'Photography Exhibition — Call for Entries',
@@ -187,6 +199,7 @@ export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
     isPinned: false,
     attachmentUrl: null,
     attachmentName: null,
+    organizationId: 'org-1',
   },
   {
     title: 'Blood Donation Camp — April 8',
@@ -200,6 +213,7 @@ export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
     isPinned: false,
     attachmentUrl: null,
     attachmentName: null,
+    organizationId: 'org-1',
   },
   {
     title: 'TEDx SAGI — Speaker Applications Open',
@@ -213,6 +227,7 @@ export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
     isPinned: false,
     attachmentUrl: null,
     attachmentName: null,
+    organizationId: 'org-1',
   },
 
   // SCHOLARSHIPS (4)
@@ -228,6 +243,7 @@ export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
     isPinned: false,
     attachmentUrl: null,
     attachmentName: null,
+    organizationId: 'org-1',
   },
   {
     title: 'AICTE Pragati Scholarship for Girls',
@@ -241,6 +257,7 @@ export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
     isPinned: false,
     attachmentUrl: null,
     attachmentName: null,
+    organizationId: 'org-1',
   },
   {
     title: 'Research Fellowship for Final Year Students',
@@ -254,6 +271,7 @@ export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
     isPinned: false,
     attachmentUrl: null,
     attachmentName: null,
+    organizationId: 'org-1',
   },
   {
     title: 'Sports Scholarship Applications Open',
@@ -267,6 +285,7 @@ export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
     isPinned: false,
     attachmentUrl: null,
     attachmentName: null,
+    organizationId: 'org-1',
   },
 
   // SPORTS (4)
@@ -282,6 +301,7 @@ export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
     isPinned: false,
     attachmentUrl: null,
     attachmentName: null,
+    organizationId: 'org-1',
   },
   {
     title: 'Yoga Session Every Morning — 6 AM',
@@ -295,6 +315,7 @@ export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
     isPinned: false,
     attachmentUrl: null,
     attachmentName: null,
+    organizationId: 'org-1',
   },
   {
     title: 'Basketball Court Renovation Complete',
@@ -308,6 +329,7 @@ export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
     isPinned: false,
     attachmentUrl: null,
     attachmentName: null,
+    organizationId: 'org-1',
   },
   {
     title: 'University Athletics Team Selection Trials',
@@ -321,6 +343,7 @@ export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
     isPinned: false,
     attachmentUrl: null,
     attachmentName: null,
+    organizationId: 'org-1',
   },
 
   // HOSTEL (4)
@@ -336,6 +359,7 @@ export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
     isPinned: false,
     attachmentUrl: null,
     attachmentName: null,
+    organizationId: 'org-1',
   },
   {
     title: 'Hostel Room Allotment — Next Academic Year',
@@ -349,6 +373,7 @@ export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
     isPinned: false,
     attachmentUrl: null,
     attachmentName: null,
+    organizationId: 'org-1',
   },
   {
     title: 'Water Supply Disruption — April 6',
@@ -362,6 +387,7 @@ export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
     isPinned: false,
     attachmentUrl: null,
     attachmentName: null,
+    organizationId: 'org-1',
   },
   {
     title: 'Hostel Night Curfew Timing Reminder',
@@ -375,6 +401,7 @@ export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
     isPinned: false,
     attachmentUrl: null,
     attachmentName: null,
+    organizationId: 'org-1',
   },
 
   // GENERAL (3)
@@ -390,6 +417,7 @@ export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
     isPinned: false,
     attachmentUrl: null,
     attachmentName: null,
+    organizationId: 'org-1',
   },
   {
     title: 'Canteen Timings Changed',
@@ -403,6 +431,7 @@ export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
     isPinned: false,
     attachmentUrl: null,
     attachmentName: null,
+    organizationId: 'org-1',
   },
   {
     title: 'Lost & Found: MacBook Charger',
@@ -416,41 +445,56 @@ export const SEED_NOTICES: Omit<Notice, 'id'>[] = [
     isPinned: false,
     attachmentUrl: null,
     attachmentName: null,
+    organizationId: 'org-1',
   },
 ];
 
 export const SEED_EVENTS: Omit<CalendarEvent, 'id'>[] = [
-  { title: "Mid-Semester Exams Begin", category: "Exam", date: new Date("2026-04-14T00:00:00Z"), tags: ["ALL"], color: "#EF4444", description: "" },
-  { title: "Mid-Semester Exams End", category: "Exam", date: new Date("2026-04-25T00:00:00Z"), tags: ["ALL"], color: "#EF4444", description: "" },
-  { title: "TCS Pre-Placement Talk", category: "Deadline", date: new Date("2026-04-03T00:00:00Z"), tags: ["CSE-4","IT-4","ECE-4"], color: "#10B981", description: "" },
-  { title: "Resume Workshop", category: "Workshop", date: new Date("2026-04-06T00:00:00Z"), tags: ["ALL"], color: "#F59E0B", description: "" },
-  { title: "Infosys On-Campus Drive", category: "Deadline", date: new Date("2026-04-12T00:00:00Z"), tags: ["CSE-4","IT-4"], color: "#10B981", description: "" },
-  { title: "Aarohan Cultural Fest - Day 1", category: "Club", date: new Date("2026-04-18T00:00:00Z"), tags: ["ALL"], color: "#8B5CF6", description: "" },
-  { title: "Aarohan Cultural Fest - Day 2", category: "Club", date: new Date("2026-04-19T00:00:00Z"), tags: ["ALL"], color: "#8B5CF6", description: "" },
-  { title: "Aarohan Cultural Fest - Day 3", category: "Club", date: new Date("2026-04-20T00:00:00Z"), tags: ["ALL"], color: "#8B5CF6", description: "" },
-  { title: "Blood Donation Camp", category: "Club", date: new Date("2026-04-08T00:00:00Z"), tags: ["ALL"], color: "#EF4444", description: "" },
-  { title: "Cricket Tournament Starts", category: "Sports", date: new Date("2026-04-12T00:00:00Z"), tags: ["ALL"], color: "#F43F5E", description: "" },
-  { title: "Athletics Selection Trials", category: "Sports", date: new Date("2026-04-09T00:00:00Z"), tags: ["ALL"], color: "#F43F5E", description: "" },
-  { title: "Scholarship Deadline (State)", category: "Deadline", date: new Date("2026-04-14T00:00:00Z"), tags: ["ALL"], color: "#8B5CF6", description: "" },
-  { title: "AICTE Pragati Deadline", category: "Deadline", date: new Date("2026-04-19T00:00:00Z"), tags: ["ALL"], color: "#8B5CF6", description: "" },
-  { title: "Hostel Room Allotment Starts", category: "Deadline", date: new Date("2026-04-18T00:00:00Z"), tags: ["ALL"], color: "#06B6D4", description: "" },
-  { title: "TEDx SAGI Event", category: "Club", date: new Date("2026-05-05T00:00:00Z"), tags: ["ALL"], color: "#F59E0B", description: "" },
+  { title: "Mid-Semester Exams Begin", category: "Exam", date: new Date("2026-04-14T00:00:00Z"), tags: ["ALL"], color: "#EF4444", description: "", organizationId: 'org-1' },
+  { title: "Mid-Semester Exams End", category: "Exam", date: new Date("2026-04-25T00:00:00Z"), tags: ["ALL"], color: "#EF4444", description: "", organizationId: 'org-1' },
+  { title: "TCS Pre-Placement Talk", category: "Deadline", date: new Date("2026-04-03T00:00:00Z"), tags: ["CSE-4","IT-4","ECE-4"], color: "#10B981", description: "", organizationId: 'org-1' },
+  { title: "Resume Workshop", category: "Workshop", date: new Date("2026-04-06T00:00:00Z"), tags: ["ALL"], color: "#F59E0B", description: "", organizationId: 'org-1' },
+  { title: "Infosys On-Campus Drive", category: "Deadline", date: new Date("2026-04-12T00:00:00Z"), tags: ["CSE-4","IT-4"], color: "#10B981", description: "", organizationId: 'org-1' },
+  { title: "Aarohan Cultural Fest - Day 1", category: "Club", date: new Date("2026-04-18T00:00:00Z"), tags: ["ALL"], color: "#8B5CF6", description: "", organizationId: 'org-1' },
+  { title: "Aarohan Cultural Fest - Day 2", category: "Club", date: new Date("2026-04-19T00:00:00Z"), tags: ["ALL"], color: "#8B5CF6", description: "", organizationId: 'org-1' },
+  { title: "Aarohan Cultural Fest - Day 3", category: "Club", date: new Date("2026-04-20T00:00:00Z"), tags: ["ALL"], color: "#8B5CF6", description: "", organizationId: 'org-1' },
+  { title: "Blood Donation Camp", category: "Club", date: new Date("2026-04-08T00:00:00Z"), tags: ["ALL"], color: "#EF4444", description: "", organizationId: 'org-1' },
+  { title: "Cricket Tournament Starts", category: "Sports", date: new Date("2026-04-12T00:00:00Z"), tags: ["ALL"], color: "#F43F5E", description: "", organizationId: 'org-1' },
+  { title: "Athletics Selection Trials", category: "Sports", date: new Date("2026-04-09T00:00:00Z"), tags: ["ALL"], color: "#F43F5E", description: "", organizationId: 'org-1' },
+  { title: "Scholarship Deadline (State)", category: "Deadline", date: new Date("2026-04-14T00:00:00Z"), tags: ["ALL"], color: "#8B5CF6", description: "", organizationId: 'org-1' },
+  { title: "AICTE Pragati Deadline", category: "Deadline", date: new Date("2026-04-19T00:00:00Z"), tags: ["ALL"], color: "#8B5CF6", description: "", organizationId: 'org-1' },
+  { title: "Hostel Room Allotment Starts", category: "Deadline", date: new Date("2026-04-18T00:00:00Z"), tags: ["ALL"], color: "#06B6D4", description: "", organizationId: 'org-1' },
+  { title: "TEDx SAGI Event", category: "Club", date: new Date("2026-05-05T00:00:00Z"), tags: ["ALL"], color: "#F59E0B", description: "", organizationId: 'org-1' },
 ];
 
 export const SEED_ASSIGNMENTS: Omit<Assignment, 'id'>[] = [
-  { title: "Binary Search Tree Implementation", course: "Data Structures (CS301)", dueDate: new Date("2026-04-10T00:00:00Z"), tags: ["CSE-3"], description: "Implement BST with insert, delete, search, and traversal operations. Submit code + report.", postedBy: "Faculty", postedAt: daysAgo(2) },
-  { title: "Financial Statement Analysis Report", course: "Financial Accounting (BBA401)", dueDate: new Date("2026-04-12T00:00:00Z"), tags: ["BBA-4"], description: "Analyze financial statements of any listed Indian company. 15-page report with ratio analysis.", postedBy: "Faculty", postedAt: daysAgo(2) },
-  { title: "Marketing Mix Case Study", course: "Marketing Management (BBA402)", dueDate: new Date("2026-04-08T00:00:00Z"), tags: ["BBA-4"], description: "Prepare a case study on the marketing mix of a startup company. Include 4Ps analysis.", postedBy: "Faculty", postedAt: daysAgo(2) },
-  { title: "Database ER Diagram Project", course: "DBMS (CS302)", dueDate: new Date("2026-04-15T00:00:00Z"), tags: ["CSE-3"], description: "Design ER diagram for a hospital management system. Include at least 8 entities.", postedBy: "Faculty", postedAt: daysAgo(2) },
-  { title: "Circuit Analysis Lab Report", course: "Network Analysis (ECE201)", dueDate: new Date("2026-04-09T00:00:00Z"), tags: ["ECE-2"], description: "Lab report for experiments 5-8. Include observations, calculations, and graphs.", postedBy: "Faculty", postedAt: daysAgo(2) },
-  { title: "Business Communication Presentation", course: "Business Communication (BBA201)", dueDate: new Date("2026-04-11T00:00:00Z"), tags: ["BBA-2", "BBA-4"], description: "10-minute presentation on effective workplace communication. Teams of 3.", postedBy: "Faculty", postedAt: daysAgo(2) },
-  { title: "Operating Systems Lab Assignment", course: "Operating Systems (CS401)", dueDate: new Date("2026-04-18T00:00:00Z"), tags: ["CSE-4"], description: "Implement process scheduling algorithms (FCFS, SJF, Round Robin). Compare performance.", postedBy: "Faculty", postedAt: daysAgo(2) },
-  { title: "Entrepreneurship Business Plan", course: "Entrepreneurship (BBA403)", dueDate: new Date("2026-04-20T00:00:00Z"), tags: ["BBA-4"], description: "Develop a complete business plan for a tech startup. Include financial projections for 3 years.", postedBy: "Faculty", postedAt: daysAgo(2) },
-  { title: "Machine Learning Mini Project", course: "ML (CS402)", dueDate: new Date("2026-04-22T00:00:00Z"), tags: ["CSE-4"], description: "Build a classification model using any real-world dataset. Submit Jupyter notebook + presentation.", postedBy: "Faculty", postedAt: daysAgo(2) },
-  { title: "Digital Marketing Campaign Proposal", course: "Digital Marketing (BBA404)", dueDate: new Date("2026-04-25T00:00:00Z"), tags: ["BBA-4"], description: "Create a complete digital marketing campaign proposal for a local business.", postedBy: "Faculty", postedAt: daysAgo(2) },
+  { title: "Binary Search Tree Implementation", course: "Data Structures (CS301)", dueDate: new Date("2026-04-10T00:00:00Z"), tags: ["CSE-3"], description: "Implement BST with insert, delete, search, and traversal operations. Submit code + report.", postedBy: "Faculty", postedAt: daysAgo(2), priority: 'high', organizationId: 'org-1' },
+  { title: "Financial Statement Analysis Report", course: "Financial Accounting (BBA401)", dueDate: new Date("2026-04-12T00:00:00Z"), tags: ["BBA-4"], description: "Analyze financial statements of any listed Indian company. 15-page report with ratio analysis.", postedBy: "Faculty", postedAt: daysAgo(2), priority: 'medium', organizationId: 'org-1' },
+  { title: "Marketing Mix Case Study", course: "Marketing Management (BBA402)", dueDate: new Date("2026-04-08T00:00:00Z"), tags: ["BBA-4"], description: "Prepare a case study on the marketing mix of a startup company. Include 4Ps analysis.", postedBy: "Faculty", postedAt: daysAgo(2), priority: 'urgent', organizationId: 'org-1' },
+  { title: "Database ER Diagram Project", course: "DBMS (CS302)", dueDate: new Date("2026-04-15T00:00:00Z"), tags: ["CSE-3"], description: "Design ER diagram for a hospital management system. Include at least 8 entities.", postedBy: "Faculty", postedAt: daysAgo(2), priority: 'medium', organizationId: 'org-1' },
+  { title: "Circuit Analysis Lab Report", course: "Network Analysis (ECE201)", dueDate: new Date("2026-04-09T00:00:00Z"), tags: ["ECE-2"], description: "Lab report for experiments 5-8. Include observations, calculations, and graphs.", postedBy: "Faculty", postedAt: daysAgo(2), priority: 'high', organizationId: 'org-1' },
+  { title: "Business Communication Presentation", course: "Business Communication (BBA201)", dueDate: new Date("2026-04-11T00:00:00Z"), tags: ["BBA-2", "BBA-4"], description: "10-minute presentation on effective workplace communication. Teams of 3.", postedBy: "Faculty", postedAt: daysAgo(2), priority: 'medium', organizationId: 'org-1' },
+  { title: "Operating Systems Lab Assignment", course: "Operating Systems (CS401)", dueDate: new Date("2026-04-18T00:00:00Z"), tags: ["CSE-4"], description: "Implement process scheduling algorithms (FCFS, SJF, Round Robin). Compare performance.", postedBy: "Faculty", postedAt: daysAgo(2), priority: 'high', organizationId: 'org-1' },
+  { title: "Entrepreneurship Business Plan", course: "Entrepreneurship (BBA403)", dueDate: new Date("2026-04-20T00:00:00Z"), tags: ["BBA-4"], description: "Develop a complete business plan for a tech startup. Include financial projections for 3 years.", postedBy: "Faculty", postedAt: daysAgo(2), priority: 'urgent', organizationId: 'org-1' },
+  { title: "Machine Learning Mini Project", course: "ML (CS402)", dueDate: new Date("2026-04-22T00:00:00Z"), tags: ["CSE-4"], description: "Build a classification model using any real-world dataset. Submit Jupyter notebook + presentation.", postedBy: "Faculty", postedAt: daysAgo(2), priority: 'high', organizationId: 'org-1' },
+  { title: "Digital Marketing Campaign Proposal", course: "Digital Marketing (BBA404)", dueDate: new Date("2026-04-25T00:00:00Z"), tags: ["BBA-4"], description: "Create a complete digital marketing campaign proposal for a local business.", postedBy: "Faculty", postedAt: daysAgo(2), priority: 'medium', organizationId: 'org-1' },
 ];
 
 export const SEED_USERS: AppUser[] = [
+  {
+    uid: 'faculty-anita',
+    email: 'anita.rao@bugweiser.edu',
+    name: 'Prof. Anita Rao',
+    department: 'CSE',
+    year: 0,
+    courses: ['CS301', 'CS402'],
+    isAdmin: false,
+    role: 'faculty',
+    tags: ['CSE', 'FACULTY'],
+    subscribedCategories: ['Academic', 'General'],
+    fcmToken: null,
+    organizationId: 'org-1'
+  },
   {
     uid: "admin001",
     email: "admin@dashboard.com",
@@ -461,7 +505,8 @@ export const SEED_USERS: AppUser[] = [
     isAdmin: true,
     tags: ["ALL"],
     subscribedCategories: ["Academic","Placement","Events","Scholarships","Sports","Hostel","General"],
-    fcmToken: null
+    fcmToken: null,
+    organizationId: 'org-demo'
   },
   {
     uid: "student001",
@@ -473,7 +518,8 @@ export const SEED_USERS: AppUser[] = [
     isAdmin: false,
     tags: ["BBA-4", "ALL"],
     subscribedCategories: ["Academic","Placement","Events","Scholarships"],
-    fcmToken: null
+    fcmToken: null,
+    organizationId: 'org-demo'
   },
   {
     uid: "student002",

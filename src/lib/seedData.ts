@@ -462,7 +462,23 @@ export const SEED_USERS: AppUser[] = [
     isAdmin: true,
     tags: ["ALL"],
     subscribedCategories: ["Academic","Placement","Events","Scholarships","Sports","Hostel","General"],
-    fcmToken: null
+    fcmToken: null,
+    role: 'admin',
+    organizationId: 'org-demo',
+  },
+  {
+    uid: "faculty001",
+    email: "faculty@dashboard.com",
+    name: "Dr. R.K. Sharma",
+    department: "School of Management",
+    year: 0,
+    courses: ["Strategic Management", "International Business"],
+    isAdmin: false,
+    tags: ["ALL"],
+    subscribedCategories: ["Academic","Placement","Events","General"],
+    fcmToken: null,
+    role: 'faculty',
+    organizationId: 'org-demo',
   },
   {
     uid: "student001",
@@ -474,7 +490,9 @@ export const SEED_USERS: AppUser[] = [
     isAdmin: false,
     tags: ["BBA-4", "ALL"],
     subscribedCategories: ["Academic","Placement","Events","Scholarships", "Sports", "Hostel", "General"],
-    fcmToken: null
+    fcmToken: null,
+    role: 'student',
+    organizationId: 'org-demo',
   },
   {
     uid: "student002",
@@ -486,6 +504,8 @@ export const SEED_USERS: AppUser[] = [
     isAdmin: false,
     tags: ["CSE-3", "ALL"],
     subscribedCategories: ["Academic","Placement","Events"],
-    fcmToken: null
+    fcmToken: null,
+    role: 'student',
+    organizationId: 'org-demo',
   },
 ];

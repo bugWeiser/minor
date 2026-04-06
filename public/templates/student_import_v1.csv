@@ -1,0 +1,5 @@
+email,fullName,rollNumber,department,year,phoneNumber,enrollmentStatus
+alice.student@bugweiser.edu,Alice Sharma,SAGI/BBA/2022/047,BBA,3,9876543210,Active
+bob.smith@university.edu,Bob Smith,CSE/2023/102,CSE,2,9123456789,Active
+claire.academic@college.edu,Claire Academic,MED/2021/005,Medical,4,9000012345,Active
+student.test@campus.com,Test Student,GEN/2024/999,General,1,8888899999,Inactive

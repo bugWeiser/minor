@@ -2,7 +2,9 @@
 
 import { Assignment } from '@/lib/types';
 import { format } from 'date-fns';
-import { HiOutlineCheck, HiOutlineClock, HiOutlineBookOpen, HiOutlineChevronRight, HiOutlineTrash } from 'react-icons/hi2';
+import { HiOutlineCheck, HiOutlineClock, HiOutlineBookOpen, HiOutlineChevronRight, HiOutlineTrash, HiOutlineFlag } from 'react-icons/hi2';
+import { AssignPriority } from '@/lib/types';
+import { PRIORITY_Tailwind_MAP } from '@/lib/constants';
 
 interface Props {
   assignment: Assignment;
@@ -26,7 +28,6 @@ export default function AssignmentCard({ assignment, isCompleted, onToggleComple
         }
       `}
       onClick={() => onToggleComplete(assignment.id)}
-      style={{ animationDelay: `${index * 50}ms` }}
     >
       {/* Checkbox */}
       <div 
@@ -56,6 +57,12 @@ export default function AssignmentCard({ assignment, isCompleted, onToggleComple
           <span className="text-[11px] font-bold text-text-muted uppercase tracking-wider truncate">
             {assignment.course || 'General Curricula'}
           </span>
+          {assignment.priority && (
+             <span className={`flex items-center gap-1 text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md border ${PRIORITY_Tailwind_MAP[assignment.priority as AssignPriority]?.bg} ${PRIORITY_Tailwind_MAP[assignment.priority as AssignPriority]?.text} ${PRIORITY_Tailwind_MAP[assignment.priority as AssignPriority]?.border}`}>
+               <HiOutlineFlag className="w-2.5 h-2.5" />
+               {assignment.priority}
+             </span>
+          )}
           {onDelete && (
             <button 
               onClick={(e) => { e.stopPropagation(); onDelete(assignment.id); }}

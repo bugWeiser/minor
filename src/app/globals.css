@@ -10,15 +10,19 @@
   --bg-hover: #F8FAFC;
   --border-subtle: #E2E8F0;
   --border-strong: #CBD5E1;
-  
+
   --text-primary: #0F172A;
   --text-secondary: #475569;
   --text-muted: #64748B;
-  
-  --accent-primary: #D9FF3F;     /* neon lime */
-  --accent-primary-dark: #BFEA22;
+
+  /* Institution Theming — override these to white-label */
+  --institution-accent: #D9FF3F;
+  --institution-accent-dark: #BFEA22;
+
+  --accent-primary: var(--institution-accent);     /* neon lime */
+  --accent-primary-dark: var(--institution-accent-dark);
   --accent-secondary: #0F172A;   /* charcoal */
-  
+
   --accent-soft-green: #ECFDF5;
   --accent-soft-blue: #EFF6FF;
   --accent-soft-yellow: #FFFBEB;
@@ -30,7 +34,7 @@
   --color-danger: #EF4444;
   --color-info: #3B82F6;
 
-  /* Shadows - Refined for Light Mode */
+  /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
@@ -39,6 +43,25 @@
   /* Radius */
   --radius-card: 24px;
   --radius-inner: 16px;
+  --radius-pill: 9999px;
+  --radius-chip: 22px;
+  --radius-button: 16px;
+  --radius-badge: 8px;
+  --radius-modal: 32px;
+
+  /* Z-Index Layers */
+  --z-disclaimer: 30;
+  --z-sticky: 40;
+  --z-sidebar: 50;
+  --z-bottom-nav: 50;
+  --z-modal-backdrop: 90;
+  --z-modal: 100;
+  --z-toast: 200;
+
+  /* Transitions */
+  --transition-fast: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 500ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @theme inline {
@@ -70,6 +93,11 @@
 
   --radius-24: var(--radius-card);
   --radius-16: var(--radius-inner);
+  --radius-pill: var(--radius-pill);
+  --radius-chip: var(--radius-chip);
+  --radius-button: var(--radius-button);
+  --radius-badge: var(--radius-badge);
+  --radius-modal: var(--radius-modal);
 
   --shadow-card: var(--shadow-md);
   --shadow-card-hover: var(--shadow-lg);
@@ -213,3 +241,31 @@ body {
   0%, 100% { opacity: 1; }
   50% { opacity: .6; }
 }
+
+/* === DATA-DRIVEN STYLING (Avoids Inline Styles) === */
+.preset-color-btn[data-color="#D9FF3F"] { background-color: #D9FF3F; }
+.preset-color-btn[data-color="#3B82F6"] { background-color: #3B82F6; }
+.preset-color-btn[data-color="#10B981"] { background-color: #10B981; }
+.preset-color-btn[data-color="#F59E0B"] { background-color: #F59E0B; }
+.preset-color-btn[data-color="#EF4444"] { background-color: #EF4444; }
+.preset-color-btn[data-color="#8B5CF6"] { background-color: #8B5CF6; }
+
+.subject-strip[data-subject-color="#6366F1"] { background-color: #6366F1; }
+.subject-strip[data-subject-color="#8B5CF6"] { background-color: #8B5CF6; }
+.subject-strip[data-subject-color="#F59E0B"] { background-color: #F59E0B; }
+.subject-strip[data-subject-color="#10B981"] { background-color: #10B981; }
+.subject-strip[data-subject-color="#F43F5E"] { background-color: #F43F5E; }
+.subject-strip[data-subject-color="#64748B"] { background-color: #64748B; }
+.subject-strip[data-subject-color="#3B82F6"] { background-color: #3B82F6; }
+
+.study-bar[data-h="0"] { height: 0%; }
+.study-bar[data-h="10"] { height: 10%; }
+.study-bar[data-h="20"] { height: 20%; }
+.study-bar[data-h="30"] { height: 30%; }
+.study-bar[data-h="40"] { height: 40%; }
+.study-bar[data-h="50"] { height: 50%; }
+.study-bar[data-h="60"] { height: 60%; }
+.study-bar[data-h="70"] { height: 70%; }
+.study-bar[data-h="80"] { height: 80%; }
+.study-bar[data-h="90"] { height: 90%; }
+.study-bar[data-h="100"] { height: 100%; }

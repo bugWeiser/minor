@@ -3,6 +3,8 @@
 import { useAuth } from '@/context/AuthContext';
 import { useState } from 'react';
 import Badge from '@/components/ui/Badge';
+import SectionHeader from '@/components/ui/SectionHeader';
+import FilterChips from '@/components/ui/FilterChips';
 import { WidgetSkeleton } from '@/components/ui/LoadingSkeleton';
 import { HiOutlineChartBar, HiOutlineAcademicCap, HiOutlineTrophy, HiOutlineArrowTrendingUp, HiOutlineChevronRight } from 'react-icons/hi2';
 
@@ -32,10 +34,14 @@ const RESULTS_DATA = {
 };
 
 export default function ResultsPage() {
-  const { loading } = useAuth();
+  const { loading, normalizedProfile } = useAuth();
   const [activeSem, setActiveSem] = useState<string>('Sem 8');
   
-  const student = RESULTS_DATA.student;
+  const student = {
+    ...RESULTS_DATA.student,
+    name: normalizedProfile?.fullName || RESULTS_DATA.student.name,
+    program: normalizedProfile?.department ? `Bachelor of ${normalizedProfile.department}` : RESULTS_DATA.student.program
+  };
   const semesters = RESULTS_DATA.semesters as Record<string, any>;
   const activeSemData = semesters[activeSem];
 
@@ -57,14 +63,10 @@ export default function ResultsPage() {
     <div className="space-y-8 animate-fadeUp">
       
       {/* PAGE HEADER */}
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2 border-b border-border-subtle">
-        <section>
-          <h1 className="text-3xl font-bold text-text-primary tracking-tight">Bugweiser Metrix Analytics</h1>
-          <p className="text-text-muted font-bold uppercase tracking-[0.12em] text-[11px] mt-2 group cursor-default">
-            Academic progression assessment for {student.name} · BATCH {student.batch}
-          </p>
-        </section>
-      </header>
+      <SectionHeader
+        title="Bugweiser Metrix Analytics"
+        subtitle={`Academic progression assessment for ${student.name} · BATCH ${student.batch}`}
+      />
 
       {/* SUMMARY STAT CARDS */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -88,7 +90,7 @@ export default function ResultsPage() {
            <p className="text-[13px] font-bold text-charcoal/60 mt-1 uppercase tracking-wider">Cumulative GPA</p>
            
            <div className="mt-8 h-1.5 bg-white/40 rounded-full overflow-hidden relative z-10">
-              <div className="h-full bg-charcoal transition-all duration-1000 delay-300" style={{ width: `${(student.cgpa/10)*100}%` }} />
+              <div className="h-full bg-charcoal transition-all duration-1000 delay-300" {...({ style: { width: `${(student.cgpa/10)*100}%` } } as React.HTMLAttributes<HTMLDivElement>)} />
            </div>
         </div>
 
@@ -108,7 +110,7 @@ export default function ResultsPage() {
            <p className="text-[13px] font-bold text-text-muted mt-1 uppercase tracking-wider">Semester 7 SGPA</p>
            
            <div className="mt-8 h-1.5 bg-bg-card-secondary rounded-full overflow-hidden">
-              <div className="h-full bg-accent transition-all duration-1000 delay-500" style={{ width: `${(student.currentSgpa/10)*100}%` }} />
+              <div className="h-full bg-accent transition-all duration-1000 delay-500" {...({ style: { width: `${(student.currentSgpa/10)*100}%` } } as React.HTMLAttributes<HTMLDivElement>)} />
            </div>
         </div>
 
@@ -128,29 +130,19 @@ export default function ResultsPage() {
            <p className="text-[13px] font-bold text-text-muted mt-1 uppercase tracking-wider">Batch Rank</p>
            
            <div className="mt-8 h-1.5 bg-bg-card-secondary rounded-full overflow-hidden">
-              <div className="h-full bg-charcoal transition-all duration-1000 delay-700" style={{ width: `${(1 - (student.batchRank/student.totalStudents)) * 100}%` }} />
+              <div className="h-full bg-charcoal transition-all duration-1000 delay-700" {...({ style: { width: `${(1 - (student.batchRank/student.totalStudents)) * 100}%` } } as React.HTMLAttributes<HTMLDivElement>)} />
            </div>
         </div>
       </div>
 
       {/* SEMESTER SELECTOR CHIPS */}
-      <div className="flex flex-wrap gap-2.5 bg-white border border-border-subtle p-2 rounded-[22px] shadow-sm w-fit transition-all focus-within:shadow-md">
-        {Object.keys(semesters).map(sem => (
-          <button
-            key={sem}
-            onClick={() => setActiveSem(sem)}
-            className={`
-              px-6 py-3 rounded-2xl text-[13px] font-bold transition-all duration-200 border
-              ${activeSem === sem
-                ? 'bg-charcoal text-white border-charcoal shadow-lg shadow-charcoal/20'
-                : 'bg-white text-text-muted border-border-subtle hover:bg-bg-hover hover:text-text-primary hover:border-border-strong'
-              }
-            `}
-          >
-            {sem}
-          </button>
-        ))}
-      </div>
+      <FilterChips
+        items={Object.keys(semesters).map(sem => ({ label: sem, value: sem }))}
+        activeValue={activeSem}
+        onChange={setActiveSem}
+        activeStyle="charcoal"
+        shape="rounded"
+      />
 
       {/* MAIN CONTENT SPLIT (Table + Chart) */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
@@ -175,25 +167,35 @@ export default function ResultsPage() {
                   </tr>
                 </thead>
                 <tbody>
-                   {activeSemData.subjects.map((item: any, idx: number) => (
-                    <tr key={idx} className="group border-b border-border-subtle last:border-0 hover:bg-bg-hover transition-colors">
-                      <td className="px-6 py-4">
-                        <p className="text-[14px] font-bold text-text-primary group-hover:text-charcoal transition-colors">{item.name}</p>
-                        <p className="text-[10px] font-bold text-text-muted uppercase tracking-wider mt-0.5">{item.code} · {item.credits} Units</p>
-                      </td>
-                      <td className="px-6 py-4 text-center">
-                        <span className={`text-xl font-black ${getGradeColor(item.grade)}`}>
-                          {item.grade}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-center">
-                         <span className="text-[14px] font-black text-text-primary">{item.points !== null ? item.points.toFixed(1) : '--'}</span>
-                      </td>
-                      <td className="px-6 py-4 text-right">
-                        <Badge variant={item.status as any} />
-                      </td>
-                    </tr>
-                  ))}
+                   {activeSemData?.subjects?.length > 0 ? (
+                     activeSemData.subjects.map((item: any, idx: number) => (
+                      <tr key={idx} className="group border-b border-border-subtle last:border-0 hover:bg-bg-hover transition-colors">
+                        <td className="px-6 py-4">
+                          <p className="text-[14px] font-bold text-text-primary group-hover:text-charcoal transition-colors">{item.name}</p>
+                          <p className="text-[10px] font-bold text-text-muted uppercase tracking-wider mt-0.5">{item.code} · {item.credits} Units</p>
+                        </td>
+                        <td className="px-6 py-4 text-center">
+                          <span className={`text-xl font-black ${getGradeColor(item.grade)}`}>
+                            {item.grade}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-center">
+                           <span className="text-[14px] font-black text-text-primary">{item.points !== null ? item.points.toFixed(1) : '--'}</span>
+                        </td>
+                        <td className="px-6 py-4 text-right">
+                          <Badge variant={item.status as any} />
+                        </td>
+                      </tr>
+                    ))
+                   ) : (
+                     <tr className="border-b border-border-subtle last:border-0">
+                       <td colSpan={4} className="px-6 py-12 text-center opacity-50">
+                         <HiOutlineAcademicCap className="w-10 h-10 text-text-muted mb-3 mx-auto" />
+                         <p className="text-sm font-bold text-text-muted">No published transcript available</p>
+                         <p className="text-[11px] font-medium text-text-muted mt-1 uppercase tracking-widest">Grades in review or semester not started</p>
+                       </td>
+                     </tr>
+                   )}
                 </tbody>
               </table>
            </div>
@@ -202,7 +204,7 @@ export default function ResultsPage() {
         {/* PROGRESSION CHART CARD (1/3) */}
         <div className="xl:col-span-1 card-shell p-6 bg-charcoal text-white relative overflow-hidden group">
            {/* Background Grid Pattern */}
-           <div className="absolute inset-0 opacity-5 pointer-events-none" style={{ backgroundImage: 'radial-gradient(var(--bg-hover) 1px, transparent 0)', backgroundSize: '24px 24px' }} />
+           <div className="absolute inset-0 opacity-5 pointer-events-none" {...({ style: { backgroundImage: 'radial-gradient(var(--bg-hover) 1px, transparent 0)', backgroundSize: '24px 24px' } } as React.HTMLAttributes<HTMLDivElement>)} />
            
            <header className="flex justify-between items-center mb-8 relative z-10">
               <h2 className="text-xl font-bold tracking-tight">Timeline</h2>
@@ -228,7 +230,7 @@ export default function ResultsPage() {
                    <div className="h-1.5 rounded-full bg-white/10 overflow-hidden group/bar">
                       <div 
                         className={`h-full rounded-full transition-all duration-700 ease-out ${isCurrent ? 'bg-accent shadow-[0_0_12px_rgba(217,255,63,0.3)]' : 'bg-white/20 group-hover:bg-white/40'}`}
-                        style={{ width: `${width}%` }}
+                        {...({ style: { width: `${width}%` } } as React.HTMLAttributes<HTMLDivElement>)}
                       />
                    </div>
                  </div>

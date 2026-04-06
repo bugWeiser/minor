@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { loginWithEmail } from '@/lib/auth';
@@ -15,6 +15,7 @@ import {
   HiOutlineLockClosed,
   HiOutlineEnvelope
 } from 'react-icons/hi2';
+import { SEO } from '@/components/SEO';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -24,11 +25,19 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   
   const router = useRouter();
-  const { user, appUser } = useAuth();
+  const { user, appUser, normalizedProfile } = useAuth();
+
+  useEffect(() => {
+    if (user && appUser && normalizedProfile) {
+      if (normalizedProfile.role === 'admin') {
+        router.push('/admin');
+      } else {
+        router.push('/dashboard');
+      }
+    }
+  }, [user, appUser, normalizedProfile, router]);
 
   if (user && appUser) {
-    if (appUser.role === 'admin' || appUser.isAdmin) router.push('/admin');
-    else router.push('/');
     return null;
   }
 
@@ -48,6 +57,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex selection:bg-accent/40 selection:text-charcoal bg-white">
+      <SEO title="Institutional Access" description="Secure login for students, faculty, and administrators of the Bugweiser platform." />
       
       {/* LEFT HALF: Minimalist Illustration Panel */}
       <div className="hidden lg:flex w-[45%] bg-bg-page border-r border-border-subtle flex-col items-center justify-center p-12 relative overflow-hidden group">
@@ -135,12 +145,16 @@ export default function LoginPage() {
               {[
                 { label: 'Alice (BBA)', email: 'alice@dashboard.com', color: 'bg-soft-blue text-charcoal border-blue-100' },
                 { label: 'Bob (CSE)', email: 'bob@dashboard.com', color: 'bg-soft-green text-charcoal border-emerald-100' },
+                { label: 'Faculty', email: 'faculty@dashboard.com', color: 'bg-soft-yellow text-charcoal border-yellow-100' },
                 { label: 'Platform Admin', email: 'admin@dashboard.com', color: 'bg-charcoal text-white border-charcoal shadow-md shadow-charcoal/30' }
               ].map(btn => (
                 <button
                   key={btn.email}
                   type="button"
-                  onClick={() => { setEmail(btn.email); setPassword(btn.email === 'admin@dashboard.com' ? 'admin123' : 'password123'); }}
+                  onClick={() => { 
+                    setEmail(btn.email); 
+                    setPassword(btn.email.includes('admin') || btn.email.includes('faculty') ? 'admin123' : 'password123'); 
+                  }}
                   className={`px-4 py-2.5 rounded-xl text-[13px] font-bold transition-all border active:scale-95 flex items-center gap-2 ${btn.color}`}
                 >
                   <HiOutlineUser className="w-4 h-4" />
@@ -188,6 +202,12 @@ export default function LoginPage() {
               >
                 {showPassword ? <HiOutlineEyeSlash className="w-5 h-5" /> : <HiOutlineEye className="w-5 h-5" />}
               </button>
+            </div>
+
+            <div className="flex justify-end">
+                <Link href="/forgot-password" className="text-[13px] font-bold text-text-muted hover:text-charcoal hover:underline decoration-accent decoration-2 underline-offset-4 decoration-dashed transition-all">
+                    Forgot Security Phrase?
+                </Link>
             </div>
             
             {error && (

@@ -10,17 +10,19 @@ import { filterByUserTags } from '@/lib/filterUtils';
 import { CalendarEvent } from '@/lib/types';
 import EventCard from '@/components/calendar/EventCard';
 import EmptyState from '@/components/EmptyState';
+import SectionHeader from '@/components/ui/SectionHeader';
 import { CalendarSkeleton } from '@/components/ui/LoadingSkeleton';
 import { format, isSameDay, isFuture, isPast } from 'date-fns';
 import { deleteEvent } from '@/lib/firestore';
 import { HiOutlineCalendarDays, HiOutlineFunnel, HiOutlineBell, HiOutlineChevronRight, HiOutlineMagnifyingGlass } from 'react-icons/hi2';
+import { EVENT_CATEGORIES, EVENT_CATEGORY_Tailwind_MAP, EventCategory } from '@/lib/constants';
 
-const EVENT_CATEGORIES = ['All', 'Exam', 'Workshop', 'Holiday', 'Club', 'Sports', 'Deadline'];
+const FILTER_CATEGORIES = ['All', ...EVENT_CATEGORIES];
 
 export default function CalendarPage() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [activeCategory, setActiveCategory] = useState('All');
-  const { events, loading } = useEvents();
+  const { filteredEvents: events, loading } = useEvents();
   const { appUser } = useAuth();
 
   // Tag-filtered events
@@ -64,13 +66,15 @@ export default function CalendarPage() {
     if (dayEvents.length === 0) return null;
     return (
       <div className="flex justify-center flex-wrap gap-0.5 mt-1">
-        {dayEvents.slice(0, 3).map((ev, i) => (
-          <div
-            key={i}
-            className="w-1.5 h-1.5 rounded-full shadow-[0_0_4px_rgba(0,0,0,0.1)]"
-            style={{ backgroundColor: ev.color }}
-          />
-        ))}
+        {dayEvents.slice(0, 3).map((event, i) => {
+          const style = EVENT_CATEGORY_Tailwind_MAP[event.category as EventCategory] || EVENT_CATEGORY_Tailwind_MAP.General;
+          return (
+            <div
+              key={i}
+              className={`w-1.5 h-1.5 rounded-full shadow-[0_0_4px_rgba(0,0,0,0.1)] ${style.marker}`}
+            />
+          );
+        })}
       </div>
     );
   };
@@ -79,15 +83,12 @@ export default function CalendarPage() {
     <div className="space-y-8 animate-fadeUp">
       
       {/* PAGE HEADER */}
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2 border-b border-border-subtle transition-all">
-        <section>
-          <h1 className="text-3xl font-bold text-text-primary tracking-tight">Academic Schedule</h1>
-          <p className="text-text-muted font-bold uppercase tracking-[0.12em] text-[11px] mt-2 group cursor-default">
-            {loading ? 'Consulting repositories...' : `${userEvents.length} critical timestamps indexed and monitored`}
-            {appUser?.department && ` · ${appUser.department} Core Department`}
-          </p>
-        </section>
-      </header>
+      <SectionHeader
+        title="Academic Schedule"
+        subtitle={
+          loading ? 'Consulting repositories...' : `${userEvents.length} critical timestamps indexed and monitored${appUser?.department ? ` · ${appUser.department} Core Department` : ''}`
+        }
+      />
 
       {/* FILTER CHIPS (Scrollable) */}
       <div className="flex items-center gap-3 bg-white border border-border-subtle p-2 rounded-[22px] shadow-sm w-fit transition-all focus-within:shadow-md">
@@ -96,7 +97,7 @@ export default function CalendarPage() {
            <span className="text-[11px] font-bold text-text-muted uppercase tracking-wider">Filters</span>
         </div>
         <div className="flex gap-2 overflow-x-auto pb-1.5 pt-1.5 pr-2 scrollbar-hide max-w-[320px] md:max-w-none">
-          {EVENT_CATEGORIES.map(cat => (
+          {FILTER_CATEGORIES.map(cat => (
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}

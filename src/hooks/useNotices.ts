@@ -4,6 +4,9 @@ import { useState, useEffect, useMemo } from 'react';
 import { Notice, Category } from '@/lib/types';
 import { SEED_NOTICES } from '@/lib/seedData';
 import { isExpired } from '@/lib/utils';
+import { useAuth } from '@/context/AuthContext';
+import { isContentRelevantToProfile } from '@/lib/targetingEngine';
+import { useInstitution } from '@/context/InstitutionContext';
 
 // Generate stable IDs for seed data
 function getSeededNotices(): Notice[] {
@@ -14,6 +17,8 @@ function getSeededNotices(): Notice[] {
 }
 
 export function useNotices() {
+  const { normalizedProfile } = useAuth();
+  const { activeOrgId } = useInstitution();
   const [notices, setNotices] = useState<Notice[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -22,7 +27,7 @@ export function useNotices() {
   useEffect(() => {
     const syncNotices = async () => {
       try {
-        const res = await fetch('/api/notices');
+        const res = await fetch(`/api/notices?orgId=${activeOrgId || 'org-1'}`);
         const data = await res.json();
         // Convert ISO strings back to Date objects
         const formatted = data.map((n: any) => ({
@@ -43,18 +48,27 @@ export function useNotices() {
     // Poll for changes every 5 seconds for "real-time" demo feel
     const interval = setInterval(syncNotices, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [activeOrgId]);
+
+  // Apply audience targeting and draft filtering across total pool safely
+  const targetedNotices = useMemo(
+    () => notices.filter(n => 
+      isContentRelevantToProfile(n.tags, normalizedProfile) && 
+      n.publishState !== 'draft'
+    ),
+    [notices, normalizedProfile]
+  );
 
   // Active notices (not expired)
   const activeNotices = useMemo(
-    () => notices.filter((n) => !isExpired(n.expiryDate)),
-    [notices]
+    () => targetedNotices.filter((n) => !isExpired(n.expiryDate)),
+    [targetedNotices]
   );
 
   // Archived notices (expired)
   const archivedNotices = useMemo(
-    () => notices.filter((n) => isExpired(n.expiryDate)),
-    [notices]
+    () => targetedNotices.filter((n) => isExpired(n.expiryDate)),
+    [targetedNotices]
   );
 
   // Pinned notices (from active, not expired)
@@ -130,7 +144,11 @@ export function useNotices() {
   };
 
   return {
-    notices,
+    allNotices: notices.map(n => ({ 
+      ...n, 
+      publishState: n.publishState || 'published',
+      updatedAt: n.updatedAt || n.postedAt 
+    })),
     activeNotices,
     archivedNotices,
     pinnedNotices,

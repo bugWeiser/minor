@@ -23,9 +23,9 @@ export function ButtonGroup({ className, children, ...props }: ButtonGroupProps)
     >
       {React.Children.map(children, (child) => {
         if (!React.isValidElement(child)) return child;
-        const validChild = child as React.ReactElement<any>;
-        return React.cloneElement(validChild, {
-          className: cn(validChild.props.className, "border-0 border-r-2 border-pencil last:border-r-0 hover:rotate-0")
+        const childEl = child as React.ReactElement<{ className?: string }>;
+        return React.cloneElement(childEl, {
+          className: cn(childEl.props.className, "border-0 border-r-2 border-pencil last:border-r-0 hover:rotate-0")
         });
       })}
     </div>
