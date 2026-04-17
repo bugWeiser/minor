@@ -62,9 +62,34 @@ export default function DashboardPage() {
     return 'Good evening';
   };
 
-  const activeNotices = notices.filter(n => !n.expiryDate || n.expiryDate > new Date());
-  const todayEvents = events.filter(e => isToday(e.date));
-  const pendingAssignments = assignments.filter(a => !a.isCompleted && (isFuture(a.dueDate) || isToday(a.dueDate)));
+  // Safely process dates and filter
+  const safeDate = (d: any) => d instanceof Date ? d : new Date(d);
+
+  const activeNotices = notices.filter(n => {
+    if (!n.expiryDate) return true;
+    try {
+      return safeDate(n.expiryDate) > new Date();
+    } catch {
+      return true;
+    }
+  });
+
+  const todayEvents = events.filter(e => {
+    try {
+      return isToday(safeDate(e.date));
+    } catch {
+      return false;
+    }
+  });
+
+  const pendingAssignments = assignments.filter(a => {
+    try {
+      const d = safeDate(a.dueDate);
+      return !a.isCompleted && (isFuture(d) || isToday(d));
+    } catch {
+      return false;
+    }
+  });
   const unreadCount = activeNotices.filter(n => !appUser?.readNotices?.includes(n.id)).length;
 
   const MOCK_HOURS = [

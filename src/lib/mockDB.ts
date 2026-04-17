@@ -1,5 +1,5 @@
 import { Notice, CalendarEvent, Assignment, NormalizedUserProfile } from './types';
-import { SEED_NOTICES, SEED_EVENTS, SEED_ASSIGNMENTS } from './seedData(1)';
+import { SEED_NOTICES, SEED_EVENTS, SEED_ASSIGNMENTS } from './seedData';
 
 // In-memory simulation of a database for demo purposes
 // In a real app, this would be replaced by a proper database like PostgreSQL or MongoDB
