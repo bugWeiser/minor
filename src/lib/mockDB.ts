@@ -129,8 +129,7 @@ class MockDatabase {
   }
 
   // Notices
-  getNotices(orgId?: string) { 
-    if (!orgId) return this.notices;
+  getNotices(orgId: string) { 
     return this.notices.filter(n => n.organizationId === orgId); 
   }
   addNotice(data: Omit<Notice, 'id' | 'postedAt' | 'createdAt' | 'updatedAt'>) {
@@ -144,7 +143,7 @@ class MockDatabase {
       createdAt: now,
       updatedAt: now,
       createdBy: data.createdBy || 'Unknown Admin',
-      organizationId: data.organizationId || 'org-1'
+      organizationId: data.organizationId
     };
     this.notices.unshift(newNotice);
     return newNotice;
@@ -164,8 +163,7 @@ class MockDatabase {
   }
 
   // Assignments
-  getAssignments(orgId?: string) { 
-    if (!orgId) return this.assignments;
+  getAssignments(orgId: string) { 
     return this.assignments.filter(a => a.organizationId === orgId);
   }
   addAssignment(data: Omit<Assignment, 'id' | 'postedAt' | 'createdAt' | 'updatedAt'>) {
@@ -179,7 +177,7 @@ class MockDatabase {
       createdAt: now,
       updatedAt: now,
       createdBy: data.createdBy || 'Unknown Admin',
-      organizationId: data.organizationId || 'org-1'
+      organizationId: data.organizationId
     };
     this.assignments.unshift(newAssignment);
     return newAssignment;
@@ -199,8 +197,7 @@ class MockDatabase {
   }
 
   // Events
-  getEvents(orgId?: string) { 
-    if (!orgId) return this.events;
+  getEvents(orgId: string) { 
     return this.events.filter(e => e.organizationId === orgId); 
   }
   addEvent(data: Omit<CalendarEvent, 'id' | 'createdAt' | 'updatedAt'>) {
@@ -213,7 +210,7 @@ class MockDatabase {
        createdAt: now,
        updatedAt: now,
        createdBy: data.createdBy || 'Unknown Admin',
-       organizationId: data.organizationId || 'org-1'
+       organizationId: data.organizationId
     };
     this.events.unshift(newEvent);
     return newEvent;

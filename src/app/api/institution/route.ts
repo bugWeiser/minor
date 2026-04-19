@@ -12,7 +12,17 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const data = await request.json();
+    const userRole = request.headers.get('x-user-role');
+    const userOrgId = request.headers.get('x-user-org-id');
+    const id = data.id || 'org-1';
     
+    if (userRole !== 'admin' && userRole !== 'demo') {
+       return NextResponse.json({ error: 'Unauthorized Configuration Access' }, { status: 403 });
+    }
+    if (userOrgId !== id && userRole !== 'demo') {
+       return NextResponse.json({ error: 'Tenant Mismatch' }, { status: 403 });
+    }
+
     // Slug Validation (3-50 chars, lowercase, alphanumeric, hyphen only)
     if (data.slug) {
       const isSlugValid = /^[a-z0-9-]{3,50}$/.test(data.slug);
@@ -31,7 +41,6 @@ export async function POST(request: Request) {
        return NextResponse.json({ error: 'Invalid hex color format' }, { status: 400 });
     }
 
-    const id = data.id || 'org-1';
     const updated = db.updateInstitutionConfig(id, data);
     return NextResponse.json(updated);
   } catch (error) {

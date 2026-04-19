@@ -11,14 +11,21 @@ import { useInstitution } from '@/context/InstitutionContext';
 
 export function useEvents() {
   const { normalizedProfile } = useAuth();
-  const { activeOrgId } = useInstitution();
+  const { activeOrgId, loading: configLoading } = useInstitution();
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (configLoading) return;
     const syncEvents = async () => {
       try {
-        const res = await fetch(`/api/events?orgId=${activeOrgId || 'org-1'}`);
+        const res = await fetch(`/api/events?orgId=${activeOrgId || 'org-1'}`, {
+          headers: {
+            'x-user-org-id': normalizedProfile?.organizationId || '',
+            'x-user-role': normalizedProfile?.role || 'none'
+          }
+        });
+        if (!res.ok) throw new Error('Events API Error');
         const data = await res.json();
         // Restore Date types
         const formatted = data.map((e: any) => ({
@@ -38,7 +45,7 @@ export function useEvents() {
     syncEvents();
     const interval = setInterval(syncEvents, 2000);
     return () => clearInterval(interval);
-  }, [activeOrgId]);
+  }, [activeOrgId, normalizedProfile]);
 
   return {
     allEvents: events.map(e => ({ 

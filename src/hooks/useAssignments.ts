@@ -11,7 +11,7 @@ import { useInstitution } from '@/context/InstitutionContext';
 
 export function useAssignments() {
   const { normalizedProfile } = useAuth();
-  const { activeOrgId } = useInstitution();
+  const { activeOrgId, loading: configLoading } = useInstitution();
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [completedIds, setCompletedIds] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
@@ -37,9 +37,16 @@ export function useAssignments() {
   };
 
   useEffect(() => {
+    if (configLoading) return;
     const syncAssignments = async () => {
       try {
-        const res = await fetch(`/api/assignments?orgId=${activeOrgId || 'org-1'}`);
+        const res = await fetch(`/api/assignments?orgId=${activeOrgId || 'org-1'}`, {
+          headers: {
+            'x-user-org-id': normalizedProfile?.organizationId || '',
+            'x-user-role': normalizedProfile?.role || 'none'
+          }
+        });
+        if (!res.ok) throw new Error('Assignments API Error');
         const data = await res.json();
         // Restore Date objects
         const formatted = data.map((a: any) => ({
@@ -59,7 +66,7 @@ export function useAssignments() {
     syncAssignments();
     const interval = setInterval(syncAssignments, 2000);
     return () => clearInterval(interval);
-  }, [activeOrgId]);
+  }, [activeOrgId, normalizedProfile]);
 
   return {
     allAssignments: assignments.map(a => ({ 

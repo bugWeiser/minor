@@ -19,16 +19,23 @@ function getSeededNotices(): Notice[] {
 
 export function useNotices() {
   const { normalizedProfile } = useAuth();
-  const { activeOrgId } = useInstitution();
+  const { activeOrgId, loading: configLoading } = useInstitution();
   const [notices, setNotices] = useState<Notice[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<Category | 'All'>('All');
 
   useEffect(() => {
+    if (configLoading) return;
     const syncNotices = async () => {
       try {
-        const res = await fetch(`/api/notices?orgId=${activeOrgId || 'org-1'}`);
+        const res = await fetch(`/api/notices?orgId=${activeOrgId || 'org-1'}`, {
+          headers: {
+            'x-user-org-id': normalizedProfile?.organizationId || '',
+            'x-user-role': normalizedProfile?.role || 'none'
+          }
+        });
+        if (!res.ok) throw new Error('API Error');
         const data = await res.json();
         // Convert ISO strings back to Date objects
         const formatted = data.map((n: any) => ({
@@ -49,7 +56,7 @@ export function useNotices() {
     // Poll for changes every 5 seconds for "real-time" demo feel
     const interval = setInterval(syncNotices, 5000);
     return () => clearInterval(interval);
-  }, [activeOrgId]);
+  }, [activeOrgId, normalizedProfile]);
 
   // Apply audience targeting and draft filtering across total pool safely
   const targetedNotices = useMemo(
