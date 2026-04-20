@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Assignment } from '@/lib/types';
-import { db } from '@/lib/mockDB';
 import { DEMO_SYNC_POLLING_INTERVAL } from '@/lib/constants';
 import { useAuth } from '@/context/AuthContext';
 import { useInstitution } from '@/context/InstitutionContext';
@@ -13,16 +12,36 @@ export function useAdminAssignments() {
   const { normalizedProfile } = useAuth();
   const { activeOrgId, loading: configLoading } = useInstitution();
 
-  const fetchAssignments = useCallback(() => {
-    const allAssignments = db.getAssignments(activeOrgId);
-    // Sort by updatedAt descending
-    setAssignments([...allAssignments].sort((a, b) => {
-      const dateA = a.updatedAt || a.postedAt || new Date(0);
-      const dateB = b.updatedAt || b.postedAt || new Date(0);
-      return new Date(dateB).getTime() - new Date(dateA).getTime();
-    }));
-    setLoading(false);
-  }, [activeOrgId]);
+  const fetchAssignments = useCallback(async () => {
+    if (!activeOrgId) return;
+    try {
+      const res = await fetch(`/api/assignments?orgId=${activeOrgId}`, {
+        headers: {
+          'x-user-org-id': normalizedProfile?.organizationId || '',
+          'x-user-role': normalizedProfile?.role || 'none'
+        }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const allAssignments = data.map((n: any) => ({
+          ...n,
+          dueDate: new Date(n.dueDate),
+          postedAt: new Date(n.postedAt),
+          createdAt: new Date(n.createdAt),
+          updatedAt: new Date(n.updatedAt)
+        })).sort((a: Assignment, b: Assignment) => {
+          const dateA = a.updatedAt || a.postedAt || new Date(0);
+          const dateB = b.updatedAt || b.postedAt || new Date(0);
+          return new Date(dateB).getTime() - new Date(dateA).getTime();
+        });
+        setAssignments(allAssignments);
+      }
+    } catch (e) {
+      console.warn("Failed to fetch admin assignments", e);
+    } finally {
+      setLoading(false);
+    }
+  }, [activeOrgId, normalizedProfile]);
 
   useEffect(() => {
     if (configLoading) return;
@@ -32,31 +51,57 @@ export function useAdminAssignments() {
   }, [fetchAssignments]);
 
   const createAssignment = async (data: Partial<Assignment>) => {
-    const newAssignment = db.addAssignment({
-      ...data,
-      organizationId: activeOrgId,
-      updatedBy: normalizedProfile?.id,
-    } as Omit<Assignment, 'id' | 'postedAt' | 'createdAt' | 'updatedAt'>);
-    fetchAssignments();
-    return newAssignment;
+    const res = await fetch('/api/assignments', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-user-org-id': normalizedProfile?.organizationId || '',
+        'x-user-role': normalizedProfile?.role || 'none'
+      },
+      body: JSON.stringify({
+        ...data,
+        organizationId: activeOrgId,
+        createdBy: normalizedProfile?.fullName || 'Admin User'
+      })
+    });
+    if (res.ok) fetchAssignments();
+    return res.ok;
   };
 
   const updateAssignment = async (id: string, data: Partial<Assignment>) => {
-    db.updateAssignment(id, data);
-    fetchAssignments();
+    const res = await fetch(`/api/assignments?id=${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-user-org-id': normalizedProfile?.organizationId || '',
+        'x-user-role': normalizedProfile?.role || 'none'
+      },
+      body: JSON.stringify({
+        ...data,
+        updatedBy: normalizedProfile?.fullName || 'Admin User'
+      })
+    });
+    if (res.ok) fetchAssignments();
+    return res.ok;
   };
 
   const deleteAssignment = async (id: string) => {
-    db.deleteAssignment(id);
-    fetchAssignments();
+    const res = await fetch(`/api/assignments?id=${id}`, {
+      method: 'DELETE',
+      headers: {
+        'x-user-org-id': normalizedProfile?.organizationId || '',
+        'x-user-role': normalizedProfile?.role || 'none'
+      }
+    });
+    if (res.ok) fetchAssignments();
+    return res.ok;
   };
 
   const togglePublishStatus = async (id: string) => {
     const assignment = assignments.find(a => a.id === id);
     if (assignment) {
       const newState = assignment.publishState === 'published' ? 'draft' : 'published';
-      db.updateAssignment(id, { publishState: newState });
-      fetchAssignments();
+      return updateAssignment(id, { publishState: newState });
     }
   };
 
