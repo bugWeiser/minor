@@ -50,8 +50,8 @@ export default function AdminEventsPage() {
         ) : (
           <AdminEventList 
             events={events} 
-            onDelete={deleteEvent}
-            onTogglePublish={togglePublishStatus}
+            onDelete={async (id) => { await deleteEvent(id); }}
+            onTogglePublish={async (id) => { await togglePublishStatus(id); }}
           />
         )}
       </div>

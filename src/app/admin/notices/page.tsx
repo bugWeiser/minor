@@ -42,9 +42,9 @@ export default function AdminNoticesPage() {
         <AdminNoticeList 
           notices={notices}
           loading={loading}
-          onTogglePublish={togglePublishStatus}
-          onTogglePin={togglePinStatus}
-          onDelete={deleteNotice}
+          onTogglePublish={async (id) => { await togglePublishStatus(id); }}
+          onTogglePin={async (id) => { await togglePinStatus(id); }}
+          onDelete={async (id) => { await deleteNotice(id); }}
         />
       </div>
       </div>

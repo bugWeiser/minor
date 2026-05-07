@@ -50,8 +50,8 @@ export default function AdminAssignmentsPage() {
         ) : (
           <AdminAssignmentList 
             assignments={assignments} 
-            onDelete={deleteAssignment}
-            onTogglePublish={togglePublishStatus}
+            onDelete={async (id) => { await deleteAssignment(id); }}
+            onTogglePublish={async (id) => { await togglePublishStatus(id); }}
           />
         )}
       </div>
