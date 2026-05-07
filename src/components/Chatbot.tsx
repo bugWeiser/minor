@@ -19,11 +19,9 @@ export default function Chatbot() {
       sender: 'bot',
       text: 'Hi! I am Chitragupt AI Assistant. How can I help you today?',
       options: [
-        { label: 'View Dashboard', action: 'navigate', path: '/' },
-        { label: 'Check Results', action: 'navigate', path: '/results' },
-        { label: 'Admin Setup Guide', action: 'navigate', path: '/admin/guide' },
-        { label: 'About Chitragupt', action: 'navigate', path: '/about' },
-        { label: 'View Privacy Policy', action: 'navigate', path: '/privacy' },
+        { label: 'Navigate me to...', action: 'show_navigation' },
+        { label: 'What is Chitragupt?', action: 'ask_question' },
+        { label: 'Who built this?', action: 'ask_question' },
       ]
     }
   ]);
@@ -39,6 +37,21 @@ export default function Chatbot() {
     scrollToBottom();
   }, [messages, isOpen]);
 
+  const generateBotResponse = (lowerInput: string) => {
+    let botText = 'I am your virtual assistant! Currently, I am in demo mode. Please use the navigation options above to explore the platform.';
+      
+    if (lowerInput.includes('what is') || lowerInput.includes('who are you') || lowerInput.includes('chitragupt')) {
+      botText = 'I am Chitragupt, an AI assistant designed to help students navigate the campus digital ecosystem effortlessly. I bring order to information chaos!';
+    } else if (lowerInput.includes('who built') || lowerInput.includes('creator')) {
+      botText = 'I was built as a presentation demo for this platform! My purpose is to showcase how AI can assist students in finding what they need instantly.';
+    } else if (lowerInput.includes('help')) {
+      botText = 'I can help you find your exam results, check recent notices, or guide you to the administrator settings. Try clicking "Navigate me to..."!';
+    } else if (lowerInput.includes('hello') || lowerInput.includes('hi')) {
+      botText = 'Hello there! How can I assist your campus experience today?';
+    }
+    return botText;
+  };
+
   const handleSend = () => {
     if (!inputText.trim()) return;
     
@@ -49,23 +62,10 @@ export default function Chatbot() {
 
     // Simulate bot response based on user input
     setTimeout(() => {
-      const lowerInput = inputText.toLowerCase();
-      let botText = 'I am your virtual assistant! Currently, I am in demo mode. Please use the navigation options above to explore the platform.';
-      
-      if (lowerInput.includes('what is') || lowerInput.includes('who are you')) {
-        botText = 'I am Chitragupt, an AI assistant designed to help students navigate the campus digital ecosystem effortlessly. I bring order to information chaos!';
-      } else if (lowerInput.includes('who built') || lowerInput.includes('creator')) {
-        botText = 'I was built as a presentation demo for this platform! My purpose is to showcase how AI can assist students in finding what they need instantly.';
-      } else if (lowerInput.includes('help')) {
-        botText = 'I can help you find your exam results, check recent notices, or guide you to the administrator settings. Try clicking one of the navigation options above!';
-      } else if (lowerInput.includes('hello') || lowerInput.includes('hi')) {
-        botText = 'Hello there! How can I assist your campus experience today?';
-      }
-
       setMessages(prev => [...prev, {
         id: Date.now().toString(),
         sender: 'bot',
-        text: botText,
+        text: generateBotResponse(inputText.toLowerCase()),
       }]);
     }, 1000);
   };
@@ -83,6 +83,30 @@ export default function Chatbot() {
         }]);
         router.push(option.path!);
       }, 500);
+    } else if (option.action === 'show_navigation') {
+      setTimeout(() => {
+        setMessages(prev => [...prev, {
+          id: Date.now().toString(),
+          sender: 'bot',
+          text: 'Where would you like to go?',
+          options: [
+            { label: 'Student Dashboard', action: 'navigate', path: '/' },
+            { label: 'Academic Results', action: 'navigate', path: '/results' },
+            { label: 'Help & Support', action: 'navigate', path: '/help' },
+            { label: 'Admin Setup Guide', action: 'navigate', path: '/admin/guide' },
+            { label: 'About Chitragupt', action: 'navigate', path: '/about' },
+            { label: 'Privacy Policy', action: 'navigate', path: '/privacy' },
+          ]
+        }]);
+      }, 500);
+    } else if (option.action === 'ask_question') {
+      setTimeout(() => {
+        setMessages(prev => [...prev, {
+          id: Date.now().toString(),
+          sender: 'bot',
+          text: generateBotResponse(option.label.toLowerCase()),
+        }]);
+      }, 1000);
     }
   };
 
