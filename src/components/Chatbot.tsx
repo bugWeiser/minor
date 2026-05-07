@@ -201,13 +201,13 @@ export default function Chatbot() {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="w-14 h-14 rounded-full bg-charcoal text-accent shadow-xl hover:scale-105 transition-transform flex items-center justify-center group relative"
+          className="w-16 h-16 rounded-full bg-charcoal text-accent shadow-xl hover:scale-105 transition-transform flex items-center justify-center group relative"
         >
           <span className="absolute -top-1 -right-1 flex h-4 w-4">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
             <span className="relative inline-flex rounded-full h-4 w-4 bg-accent border-2 border-charcoal"></span>
           </span>
-          <FiMessageSquare size={24} />
+          <FiMessageSquare size={32} />
         </button>
       )}
     </div>
