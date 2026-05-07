@@ -143,8 +143,8 @@ export default function LoginPage() {
             </p>
             <div className="flex flex-wrap gap-2.5 relative z-10">
               {[
-                { label: 'Alice (BBA)', email: 'alice@dashboard.com', color: 'bg-soft-blue text-charcoal border-blue-100' },
-                { label: 'Bob (CSE)', email: 'bob@dashboard.com', color: 'bg-soft-green text-charcoal border-emerald-100' },
+                { label: 'Ananya (BBA)', email: 'ananya@dashboard.com', color: 'bg-soft-blue text-charcoal border-blue-100' },
+                { label: 'Bhavish (CSE)', email: 'bhavish@dashboard.com', color: 'bg-soft-green text-charcoal border-emerald-100' },
                 { label: 'Faculty', email: 'faculty@dashboard.com', color: 'bg-soft-yellow text-charcoal border-yellow-100' },
                 { label: 'Platform Admin', email: 'admin@dashboard.com', color: 'bg-charcoal text-white border-charcoal shadow-md shadow-charcoal/30' }
               ].map(btn => (

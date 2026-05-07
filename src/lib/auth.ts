@@ -12,8 +12,8 @@ export async function loginWithEmail(email: string, password: string): Promise<a
   const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
   
   const isDemoPersona = [
-    'alice@dashboard.com',
-    'bob@dashboard.com',
+    'ananya@dashboard.com',
+    'bhavish@dashboard.com',
     'faculty@dashboard.com',
     'admin@dashboard.com'
   ].includes(email);

@@ -455,7 +455,7 @@ export const SEED_USERS: AppUser[] = [
   {
     uid: "admin001",
     email: "admin@dashboard.com",
-    name: "Dr. Admin",
+    name: "Dr. Aditya Prasad",
     department: "Administration",
     year: 0,
     courses: [],
@@ -482,8 +482,8 @@ export const SEED_USERS: AppUser[] = [
   },
   {
     uid: "student001",
-    email: "alice@dashboard.com",
-    name: "Alice Sharma",
+    email: "ananya@dashboard.com",
+    name: "Ananya Sharma",
     department: "School of Management",
     year: 4,
     courses: ["Strategic Management", "International Business", "Corporate Law & Governance", "Entrepreneurship Development", "Digital Marketing", "Project Management"],
@@ -496,8 +496,8 @@ export const SEED_USERS: AppUser[] = [
   },
   {
     uid: "student002",
-    email: "bob@dashboard.com",
-    name: "Bob Patel",
+    email: "bhavish@dashboard.com",
+    name: "Bhavish Patel",
     department: "CSE",
     year: 3,
     courses: ["Data Structures","DBMS","Computer Networks"],
