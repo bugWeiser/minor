@@ -90,7 +90,7 @@ export default function Chatbot() {
     <div className="fixed bottom-24 lg:bottom-6 right-4 lg:right-6 z-[999] flex flex-col items-end">
       {/* Chat Window */}
       {isOpen && (
-        <div className="mb-4 w-[calc(100vw-2rem)] sm:w-96 bg-white rounded-2xl shadow-2xl border border-neutral-200 flex flex-col overflow-hidden animate-fadeUp">
+        <div className="mb-4 w-[calc(100vw-2rem)] sm:w-[420px] bg-white rounded-2xl shadow-2xl border border-neutral-200 flex flex-col overflow-hidden animate-fadeUp">
           {/* Header */}
           <div className="bg-charcoal text-accent px-4 py-3 flex justify-between items-center">
             <div className="flex items-center gap-2">
@@ -108,7 +108,7 @@ export default function Chatbot() {
           </div>
 
           {/* Messages */}
-          <div className="flex-1 max-h-[60vh] sm:max-h-96 min-h-64 p-4 overflow-y-auto bg-neutral-50 flex flex-col gap-3">
+          <div className="flex-1 max-h-[65vh] sm:max-h-[500px] min-h-[400px] p-4 overflow-y-auto bg-neutral-50 flex flex-col gap-3">
             {messages.map((msg) => (
               <div key={msg.id} className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}>
                 <div className={`max-w-[85%] p-3 rounded-2xl text-sm ${msg.sender === 'user' ? 'bg-charcoal text-white rounded-br-sm' : 'bg-white text-charcoal border border-neutral-200 rounded-bl-sm shadow-sm'}`}>
