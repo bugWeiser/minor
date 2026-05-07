@@ -21,7 +21,9 @@ export default function Chatbot() {
       options: [
         { label: 'View Dashboard', action: 'navigate', path: '/' },
         { label: 'Check Results', action: 'navigate', path: '/results' },
-        { label: 'Need Help?', action: 'navigate', path: '/help' },
+        { label: 'Admin Setup Guide', action: 'navigate', path: '/admin/guide' },
+        { label: 'About Chitragupt', action: 'navigate', path: '/about' },
+        { label: 'View Privacy Policy', action: 'navigate', path: '/privacy' },
       ]
     }
   ]);
@@ -45,12 +47,25 @@ export default function Chatbot() {
     setMessages(prev => [...prev, newMsg]);
     setInputText('');
 
-    // Simulate bot response
+    // Simulate bot response based on user input
     setTimeout(() => {
+      const lowerInput = inputText.toLowerCase();
+      let botText = 'I am your virtual assistant! Currently, I am in demo mode. Please use the navigation options above to explore the platform.';
+      
+      if (lowerInput.includes('what is') || lowerInput.includes('who are you')) {
+        botText = 'I am Chitragupt, an AI assistant designed to help students navigate the campus digital ecosystem effortlessly. I bring order to information chaos!';
+      } else if (lowerInput.includes('who built') || lowerInput.includes('creator')) {
+        botText = 'I was built as a presentation demo for this platform! My purpose is to showcase how AI can assist students in finding what they need instantly.';
+      } else if (lowerInput.includes('help')) {
+        botText = 'I can help you find your exam results, check recent notices, or guide you to the administrator settings. Try clicking one of the navigation options above!';
+      } else if (lowerInput.includes('hello') || lowerInput.includes('hi')) {
+        botText = 'Hello there! How can I assist your campus experience today?';
+      }
+
       setMessages(prev => [...prev, {
         id: Date.now().toString(),
         sender: 'bot',
-        text: 'I am your virtual assistant! Currently, I am in demo mode. Please use the navigation options to explore the platform.',
+        text: botText,
       }]);
     }, 1000);
   };
