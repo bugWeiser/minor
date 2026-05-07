@@ -14,7 +14,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
               <HiOutlineBuildingLibrary className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-xl font-black tracking-tight leading-none">Bugweiser</h1>
+              <h1 className="text-xl font-black tracking-tight leading-none">Chitragupt</h1>
               <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest mt-1 opacity-60">Pilot Edition</p>
             </div>
           </Link>
@@ -46,7 +46,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <HiOutlineBuildingLibrary className="w-5 h-5 text-charcoal" />
-              <span className="font-black text-lg tracking-tight">Bugweiser</span>
+              <span className="font-black text-lg tracking-tight">Chitragupt</span>
             </div>
             <p className="text-xs font-bold text-text-muted leading-relaxed max-w-xs">
               Empowering institutions with adaptive, personalized student communication. Built for the next generation of academic excellence.
@@ -74,7 +74,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
         </div>
         <div className="max-w-5xl mx-auto px-6 mt-12 pt-8 border-t border-border-subtle flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-[10px] font-black text-text-muted uppercase tracking-widest opacity-40">
-            &copy; 2026 Bugweiser SaaS. All rights reserved.
+            &copy; 2026 Chitragupt SaaS. All rights reserved.
           </p>
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-success" />

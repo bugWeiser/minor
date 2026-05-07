@@ -26,7 +26,7 @@ export default function MarketingHomePage() {
             <div className="w-10 h-10 rounded-xl bg-charcoal text-white flex items-center justify-center shadow-lg shadow-charcoal/20">
               <HiOutlineAcademicCap className="w-6 h-6" />
             </div>
-            <span className="text-xl font-black text-charcoal tracking-tight">Bugweiser</span>
+            <span className="text-xl font-black text-charcoal tracking-tight">Chitragupt</span>
             <span className="text-[10px] font-bold uppercase tracking-widest text-text-muted bg-bg-card-secondary px-2 py-1 rounded-md border border-border-subtle ml-2 hidden sm:inline-block">
               SaaS Education
             </span>
@@ -64,7 +64,7 @@ export default function MarketingHomePage() {
           <div className="max-w-4xl mx-auto text-center relative z-10 animate-fadeUp">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-border-subtle text-[12px] font-bold text-text-secondary mb-8 shadow-sm">
               <span className="w-2 h-2 rounded-full bg-green-500 soft-pulse" />
-              Bugweiser Minor 2.0 is now live
+              Chitragupt 2.0 is now live
             </div>
             
             <h1 className="text-5xl md:text-7xl font-black text-charcoal tracking-tight leading-[1.1] mb-8">
@@ -123,7 +123,7 @@ export default function MarketingHomePage() {
            <HiOutlineAcademicCap className="w-6 h-6" />
         </div>
         <p className="text-[13px] font-bold text-text-muted">
-          &copy; {new Date().getFullYear()} Bugweiser Technologies. All Rights Reserved.
+          &copy; {new Date().getFullYear()} Chitragupt Technologies. All Rights Reserved.
         </p>
       </footer>
     </div>

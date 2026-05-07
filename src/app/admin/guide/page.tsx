@@ -87,7 +87,7 @@ export default function AdminGuidePage() {
           </p>
         </div>
         <a 
-          href="mailto:pilot@bugweiser.edu"
+          href="mailto:pilot@chitragupt.edu"
           className="px-8 py-4 bg-institution-accent text-charcoal text-xs font-black uppercase tracking-widest rounded-2xl hover:bg-white transition-all transform active:scale-95 z-10"
         >
           Contact Solution Architect
@@ -96,7 +96,7 @@ export default function AdminGuidePage() {
 
       <div className="text-center pt-8">
         <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] opacity-40">
-          Bugweiser SaaS &bull; Pilot Administration Kit &bull; v1.2.0
+          Chitragupt SaaS &bull; Pilot Administration Kit &bull; v1.2.0
         </p>
       </div>
     </div>

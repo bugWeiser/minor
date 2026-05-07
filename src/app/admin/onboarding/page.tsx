@@ -37,11 +37,11 @@ export default function AdminOnboardingWizard() {
       const noticeData = await noticeRes.json();
 
       // Check for presence of "Imported" users in localStorage (simulated)
-      const hasImportedHistory = localStorage.getItem('bugweiser_import_id') !== null;
+      const hasImportedHistory = localStorage.getItem('chitragupt_import_id') !== null;
 
       setStats({
         // Configured if name/branding changed from default or slug is custom
-        hasCustomOrg: orgData.name !== 'Bugweiser University' || orgData.accentColor !== '#D9FF3F' || orgData.slug !== 'bugweiser-u',
+        hasCustomOrg: orgData.name !== 'Chitragupt University' || orgData.accentColor !== '#D9FF3F' || orgData.slug !== 'chitragupt-u',
         // Structure set if departments differ from seed set (4) or include a specific "custom" tag
         hasAcademicStructure: academicData.departments.length !== 4,
         hasUsers: hasImportedHistory, 
@@ -117,7 +117,7 @@ export default function AdminOnboardingWizard() {
               <span className="text-[10px] font-black text-white bg-charcoal px-2.5 py-1 rounded-lg uppercase tracking-widest">Onboarding Phase</span>
             </div>
             <h1 className="text-4xl font-black text-charcoal tracking-tighter">Institution Launch Wizard</h1>
-            <p className="text-sm font-bold text-text-muted mt-2 max-w-md">Complete these foundational steps to transition the Bugweiser platform from Demo to Operational Reality.</p>
+            <p className="text-sm font-bold text-text-muted mt-2 max-w-md">Complete these foundational steps to transition the Chitragupt platform from Demo to Operational Reality.</p>
           </div>
 
           <div className="bg-white p-6 rounded-[32px] border border-border-subtle shadow-sm min-w-[200px] text-center">

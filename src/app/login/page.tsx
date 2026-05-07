@@ -57,7 +57,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex selection:bg-accent/40 selection:text-charcoal bg-white">
-      <SEO title="Institutional Access" description="Secure login for students, faculty, and administrators of the Bugweiser platform." />
+      <SEO title="Institutional Access" description="Secure login for students, faculty, and administrators of the Chitragupt platform." />
       
       {/* LEFT HALF: Minimalist Illustration Panel */}
       <div className="hidden lg:flex w-[45%] bg-bg-page border-r border-border-subtle flex-col items-center justify-center p-12 relative overflow-hidden group">
@@ -123,7 +123,7 @@ export default function LoginPage() {
             <div className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center shadow-lg shadow-accent/20">
               <HiOutlineAcademicCap className="w-5 h-5 text-charcoal" />
             </div>
-            <span className="text-2xl font-black text-charcoal tracking-tighter">Bugweiser</span>
+            <span className="text-2xl font-black text-charcoal tracking-tighter">Chitragupt</span>
           </div>
 
           <header className="mb-12">

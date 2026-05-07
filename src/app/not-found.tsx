@@ -39,7 +39,7 @@ export default function NotFound() {
         </div>
 
         <p className="text-[10px] font-black text-text-muted uppercase tracking-widest opacity-40 pt-12">
-          Bugweiser SaaS &bull; Pilot Edition &bull; 2026
+          Chitragupt SaaS &bull; Pilot Edition &bull; 2026
         </p>
       </div>
     </div>

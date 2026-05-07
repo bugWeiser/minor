@@ -6,8 +6,8 @@ export default function PrivacyPage() {
       <LegalHeader title="Privacy Policy" lastUpdated="April 06, 2026" />
       
       <LegalSection title="1. Introduction">
-        <p>Bugweiser (&quot;we&quot;, &quot;us&quot;, or &quot;our&quot;) provides an adaptive communication platform for educational institutions. This Privacy Policy explains how we collect, use, and protect information when you use our student dashboard and administrative tools.</p>
-        <p>By using the platform, you agree to the practices described in this policy. Use of Bugweiser is typically governed by your institution&apos;s agreement with us.</p>
+        <p>Chitragupt (&quot;we&quot;, &quot;us&quot;, or &quot;our&quot;) provides an adaptive communication platform for educational institutions. This Privacy Policy explains how we collect, use, and protect information when you use our student dashboard and administrative tools.</p>
+        <p>By using the platform, you agree to the practices described in this policy. Use of Chitragupt is typically governed by your institution&apos;s agreement with us.</p>
       </LegalSection>
 
       <LegalSection title="2. Information We Collect">

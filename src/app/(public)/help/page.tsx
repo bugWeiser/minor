@@ -13,7 +13,7 @@ export default function HelpPage() {
             <h3 className="text-xl font-black tracking-tight mb-2">Direct Contact</h3>
             <p className="text-sm font-bold opacity-80 leading-relaxed">Need technical assistance? Our support engineers are available during institutional business hours.</p>
           </div>
-          <a href="mailto:support@bugweiser.edu" className="inline-block px-6 py-3 bg-white text-charcoal text-xs font-black uppercase tracking-widest rounded-xl hover:bg-neutral-100 transition-colors">
+          <a href="mailto:support@chitragupt.edu" className="inline-block px-6 py-3 bg-white text-charcoal text-xs font-black uppercase tracking-widest rounded-xl hover:bg-neutral-100 transition-colors">
             Email Support
           </a>
         </div>
@@ -51,9 +51,9 @@ export default function HelpPage() {
           <div className="space-y-2">
             <h4 className="text-sm font-black text-charcoal uppercase tracking-widest flex items-center gap-2">
               <HiOutlineQuestionMarkCircle className="w-4 h-4 text-institution-accent" />
-              Can I access Bugweiser on my phone?
+              Can I access Chitragupt on my phone?
             </h4>
-            <p className="text-xs font-bold leading-relaxed">Yes! Bugweiser is a Progressive Web App (PWA) fully optimized for mobile browsers. You can even &quot;Add to Home Screen&quot; for a native app experience.</p>
+            <p className="text-xs font-bold leading-relaxed">Yes! Chitragupt is a Progressive Web App (PWA) fully optimized for mobile browsers. You can even &quot;Add to Home Screen&quot; for a native app experience.</p>
           </div>
 
           <div className="space-y-2">
@@ -67,7 +67,7 @@ export default function HelpPage() {
       </LegalSection>
 
       <LegalSection title="Admin Help">
-        <p>If you are an institutional administrator, please refer to the <strong>&quot;Getting Started with Bugweiser&quot;</strong> checklist located in your Administrative Dashboard sidebar. This guide covers bulk student imports, targeting engine configuration, and branding customization.</p>
+        <p>If you are an institutional administrator, please refer to the <strong>&quot;Getting Started with Chitragupt&quot;</strong> checklist located in your Administrative Dashboard sidebar. This guide covers bulk student imports, targeting engine configuration, and branding customization.</p>
       </LegalSection>
     </>
   );

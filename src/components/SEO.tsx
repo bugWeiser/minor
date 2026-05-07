@@ -12,14 +12,14 @@ interface SEOProps {
 
 export function SEO({ 
   title, 
-  description = "Bugweiser: Adaptive, personalized student communication platform for educational institutions.",
+  description = "Chitragupt: Adaptive, personalized student communication platform for educational institutions.",
   ogImage = "/og-image.png",
   ogType = "website"
 }: SEOProps) {
   const pathname = usePathname();
-  const siteName = "Bugweiser";
+  const siteName = "Chitragupt";
   const fullTitle = title ? `${title} | ${siteName}` : siteName;
-  const canonicalUrl = `https://bugweiser.edu${pathname}`;
+  const canonicalUrl = `https://chitragupt.edu${pathname}`;
 
   return (
     <>

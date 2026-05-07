@@ -175,7 +175,7 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
               <div className="absolute right-0 top-[52px] hidden group-hover:block w-56 bg-white rounded-[24px] shadow-2xl border border-border-subtle p-2 z-50 animate-fadeUp">
                 <p className="px-3 py-2 text-[9px] font-black text-text-muted uppercase tracking-[0.2em] mb-1">Select Tenant</p>
                 {[
-                  { name: 'Bugweiser University', slug: 'bugweiser-u' },
+                  { name: 'Chitragupt University', slug: 'chitragupt-u' },
                   { name: 'Demo Institution', slug: 'demo' }
                 ].map(org => {
                   const isActive = activeOrgSlug === org.slug;
@@ -254,7 +254,7 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
                           {[
                             { name: 'Alice (BBA)', email: 'alice@dashboard.com', role: 'student' },
                             { name: 'Bob (CSE)', email: 'bob@dashboard.com', role: 'student' },
-                            { name: 'Prof. Anita Rao', email: 'anita.rao@bugweiser.edu', role: 'faculty' },
+                            { name: 'Prof. Anita Rao', email: 'anita.rao@chitragupt.edu', role: 'faculty' },
                             { name: 'Admin Node', email: 'admin@dashboard.com', role: 'admin' }
                           ].map(persona => {
                             const isActive = normalizedProfile?.email === persona.email;

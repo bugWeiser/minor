@@ -1,6 +1,6 @@
-# 🛠️ Setup & Deployment Guide: Bugweiser
+# 🛠️ Setup & Deployment Guide: Chitragupt
 
-Follow these steps to get the **Bugweiser Smart Dashboard** running locally in less than 2 minutes. The project is pre-configured with a **Mock Backend**, so no API keys are required for the initial demo.
+Follow these steps to get the **Chitragupt Smart Dashboard** running locally in less than 2 minutes. The project is pre-configured with a **Mock Backend**, so no API keys are required for the initial demo.
 
 ---
 
@@ -13,7 +13,7 @@ Ensure you have the following installed on your machine:
 
 ### **Step 1: Clone the Repository**
 ```bash
-git clone https://github.com/bugWeiser/minor.git
+git clone https://github.com/chitragupt/minor.git
 cd minor
 ```
 

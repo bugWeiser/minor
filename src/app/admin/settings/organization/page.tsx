@@ -126,7 +126,7 @@ export default function OrganizationSettingsPage() {
                   required
                   value={formData.name}
                   onChange={e => setFormData({ ...formData, name: e.target.value })}
-                  placeholder="e.g. Bugweiser State University"
+                  placeholder="e.g. Chitragupt State University"
                   className="w-full h-14 bg-bg-page border border-border-subtle rounded-2xl px-5 text-[15px] font-bold focus:border-charcoal focus:ring-1 focus:ring-charcoal outline-none transition-all preset-color-btn"
                 />
               </div>
@@ -139,7 +139,7 @@ export default function OrganizationSettingsPage() {
                     required
                     value={formData.slug}
                     onChange={e => setFormData({ ...formData, slug: e.target.value.toLowerCase().replace(/\s+/g, '-') })}
-                    placeholder="bugweiser-u"
+                    placeholder="chitragupt-u"
                     title="Institution Slug"
                     className={`w-full h-14 bg-bg-page border rounded-2xl px-5 text-[15px] font-bold outline-none transition-all preset-color-btn ${isSlugValid ? 'border-border-subtle focus:border-charcoal' : 'border-danger focus:border-danger'}`}
                   />

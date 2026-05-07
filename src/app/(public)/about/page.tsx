@@ -4,11 +4,11 @@ import { HiOutlineUserCircle, HiOutlineMegaphone, HiOutlineCalendarDays, HiOutli
 export default function AboutPage() {
   return (
     <>
-      <LegalHeader title="About Bugweiser" lastUpdated="April 06, 2026" />
+      <LegalHeader title="About Chitragupt" lastUpdated="April 06, 2026" />
       
       <div className="prose prose-sm max-w-none mb-16 text-text-muted font-bold leading-relaxed">
         <p className="text-lg text-charcoal">
-          Bugweiser is a powerful, organization-aware student communication platform designed to solve the &quot;information overload&quot; problem in modern educational campuses.
+          Chitragupt is a powerful, organization-aware student communication platform designed to solve the &quot;information overload&quot; problem in modern educational campuses.
         </p>
       </div>
 
@@ -16,7 +16,7 @@ export default function AboutPage() {
         <p>In large institutions, students are often bombarded with irrelevant emails, group messages, and physical posters. Vital academic information—like exam schedule changes or placement deadlines—gets lost in the noise.</p>
       </LegalSection>
 
-      <LegalSection title="The Bugweiser Solution">
+      <LegalSection title="The Chitragupt Solution">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
           <div className="p-6 bg-white border border-border-subtle rounded-[24px] space-y-4 shadow-sm hover:shadow-md transition-shadow">
             <div className="w-10 h-10 rounded-xl bg-institution-accent/10 text-institution-accent flex items-center justify-center">
@@ -31,7 +31,7 @@ export default function AboutPage() {
               <HiOutlineShieldCheck className="w-6 h-6" />
             </div>
             <h3 className="text-sm font-black text-charcoal uppercase tracking-widest">SaaS Tenancy</h3>
-            <p className="text-xs font-bold leading-relaxed">Built with a hardened multi-tenant architecture, Bugweiser isolates data for each institution while providing a premium, branded experience.</p>
+            <p className="text-xs font-bold leading-relaxed">Built with a hardened multi-tenant architecture, Chitragupt isolates data for each institution while providing a premium, branded experience.</p>
           </div>
         </div>
       </LegalSection>
@@ -81,7 +81,7 @@ export default function AboutPage() {
       </LegalSection>
 
       <LegalSection title="Why Education Leaders Choose Us">
-        <p>Bugweiser provides deans, principals, and registrars with a centralized control plane. It reduces physical clutter, eliminates &quot;forgotten&quot; notices, and provides a modern, cloud-first interface that students actually want to use.</p>
+        <p>Chitragupt provides deans, principals, and registrars with a centralized control plane. It reduces physical clutter, eliminates &quot;forgotten&quot; notices, and provides a modern, cloud-first interface that students actually want to use.</p>
       </LegalSection>
     </>
   );

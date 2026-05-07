@@ -6,7 +6,7 @@ export default function DataHandlingPage() {
       <LegalHeader title="Data Handling & Processing" lastUpdated="April 06, 2026" />
       
       <LegalSection title="1. DPDP Compliance Framework">
-        <p>In accordance with Digital Personal Data Protection (DPDP) principles, Bugweiser acts as a designated &quot;Data Processor&quot; for the &quot;Data Fiduciary&quot; (your educational institution). We process data only under the instructions and within the scope defined by the institutional agreement.</p>
+        <p>In accordance with Digital Personal Data Protection (DPDP) principles, Chitragupt acts as a designated &quot;Data Processor&quot; for the &quot;Data Fiduciary&quot; (your educational institution). We process data only under the instructions and within the scope defined by the institutional agreement.</p>
       </LegalSection>
 
       <LegalSection title="2. Purposes of Processing">
@@ -37,7 +37,7 @@ export default function DataHandlingPage() {
       </LegalSection>
 
       <LegalSection title="6. Rights of the Data Principal">
-        <p>Under DPDP and similar regulations, you have the right to grievance redressal, right to correct, and right to withdraw consent. As a processor, Bugweiser assists your institution in fulfilling these rights. Contact your institution&apos;s IT support for formal requests.</p>
+        <p>Under DPDP and similar regulations, you have the right to grievance redressal, right to correct, and right to withdraw consent. As a processor, Chitragupt assists your institution in fulfilling these rights. Contact your institution&apos;s IT support for formal requests.</p>
       </LegalSection>
     </>
   );

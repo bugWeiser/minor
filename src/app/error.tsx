@@ -13,7 +13,7 @@ export default function Error({
 }) {
   useEffect(() => {
     // Log the error to an error reporting service
-    console.error('Bugweiser System Error:', error);
+    console.error('Chitragupt System Error:', error);
   }, [error]);
 
   return (
@@ -54,7 +54,7 @@ export default function Error({
         </div>
 
         <p className="text-[10px] font-black text-text-muted uppercase tracking-widest opacity-40 pt-12">
-          Bugweiser SaaS &bull; Pilot Edition &bull; 2026
+          Chitragupt SaaS &bull; Pilot Edition &bull; 2026
         </p>
       </div>
     </div>

@@ -64,7 +64,7 @@ export default function ResultsPage() {
       
       {/* PAGE HEADER */}
       <SectionHeader
-        title="Bugweiser Metrix Analytics"
+        title="Chitragupt Metrix Analytics"
         subtitle={`Academic progression assessment for ${student.name} · BATCH ${student.batch}`}
       />
 

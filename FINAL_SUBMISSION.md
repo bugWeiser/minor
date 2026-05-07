@@ -1,11 +1,11 @@
-# 🏆 Final Submission Manifest: Bugweiser (Hack-A-Sprint 2026)
+# 🏆 Final Submission Manifest: Chitragupt (Hack-A-Sprint 2026)
 
 This document satisfies the mandatory GitHub submission requirements for the final presentation.
 
 ---
 
 ## ⚖️ 1. Legal Content Sourcing
-*How Bugweiser ensures compliance with academic and information laws.*
+*How Chitragupt ensures compliance with academic and information laws.*
 
 | Source Category | Specific Section / Law | Purpose in Platform |
 | :--- | :--- | :--- |
@@ -17,7 +17,7 @@ This document satisfies the mandatory GitHub submission requirements for the fin
 ---
 
 ## 🤖 2. LLM Prompt Templates
-*The following templates are used by our 'Bugweiser Metrix' engine to process raw data.*
+*The following templates are used by our 'Chitragupt Metrix' engine to process raw data.*
 
 ### **A. Notice Summarization (The 'TL;DR' Engine)**
 ```markdown
@@ -91,11 +91,11 @@ This document satisfies the mandatory GitHub submission requirements for the fin
 *How notices are exported for offline use.*
 
 The system uses `jsPDF` and `jspdf-autotable` to generate official PDFs.
-- **Header:** University Logo + Bugweiser Verification QR
+- **Header:** University Logo + Chitragupt Verification QR
 - **Content:** Formatted notice body with "Digital Signature" placeholder.
 - **Footer:** Date of Generation + IP Hash for integrity verification.
 
 ---
-**Team:** [bugWeiser]  
+**Team:** [chitragupt]  
 **Challenge ID:** [WD-E01]  
-**Repository:** [https://github.com/bugWeiser/minor](https://github.com/bugWeiser/minor)
+**Repository:** [https://github.com/chitragupt/minor](https://github.com/chitragupt/minor)

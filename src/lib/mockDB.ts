@@ -13,22 +13,22 @@ class MockDatabase {
   private institutions: any[] = [
     {
       id: 'org-1',
-      name: 'Bugweiser University',
-      slug: 'bugweiser-u',
+      name: 'Chitragupt University',
+      slug: 'chitragupt-u',
       logoUrl: '',
       accentColor: '#D9FF3F',
-      contactEmail: 'admin@bugweiser.edu',
+      contactEmail: 'admin@chitragupt.edu',
       address: '123 Pixel Avenue, Tech City',
       academicYear: '2026 Season',
       footerDisclaimer: 'Official Institutional Asset. Unauthorized access or redistribution is strictly prohibited.'
     },
     {
       id: 'org-demo',
-      name: 'Bugweiser Sandbox',
+      name: 'Chitragupt Sandbox',
       slug: 'demo',
       logoUrl: '',
       accentColor: '#D9FF3F', // Neon Green (User preferred)
-      contactEmail: 'sandbox@bugweiser.edu',
+      contactEmail: 'sandbox@chitragupt.edu',
       address: 'Cloud Instance #01',
       academicYear: 'Demo Period',
       footerDisclaimer: 'DEMO ENVIRONMENT: Data in this sandbox is for simulation and training purposes ONLY.'
@@ -89,8 +89,8 @@ class MockDatabase {
 
     // 2. Seed Org-Demo (Sandbox)
     this.addNotice({
-      title: "Welcome to Bugweiser Sandbox",
-      body: "This is your isolated demo environment. Data created here is strictly separate from Bugweiser University.",
+      title: "Welcome to Chitragupt Sandbox",
+      body: "This is your isolated demo environment. Data created here is strictly separate from Chitragupt University.",
       category: "General",
       tags: ["ALL"],
       urgency: "Normal",

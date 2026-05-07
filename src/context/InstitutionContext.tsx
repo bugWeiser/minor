@@ -25,11 +25,11 @@ interface ContextType extends InstitutionConfig {
 
 const DEFAULT_CONFIG: InstitutionConfig = {
   id: 'org-1',
-  name: 'Bugweiser University',
-  slug: 'bugweiser-u',
+  name: 'Chitragupt University',
+  slug: 'chitragupt-u',
   logoUrl: '',
   accentColor: '#D9FF3F',
-  contactEmail: 'admin@bugweiser.edu',
+  contactEmail: 'admin@chitragupt.edu',
   address: '123 Pixel Avenue, Tech City',
   academicYear: '2026 Season',
   footerDisclaimer: 'Official Institutional Asset. Unauthorized access or redistribution is strictly prohibited.'
@@ -38,7 +38,7 @@ const DEFAULT_CONFIG: InstitutionConfig = {
 const InstitutionContext = createContext<ContextType>({
   ...DEFAULT_CONFIG,
   activeOrgId: 'org-1',
-  activeOrgSlug: 'bugweiser-u',
+  activeOrgSlug: 'chitragupt-u',
   loading: true,
   refreshConfig: async () => {}
 });
@@ -50,8 +50,8 @@ export function InstitutionProvider({ children }: { children: ReactNode }) {
 
   // 1. Resolve Active Tenant Precedence
   const resolveActiveTenant = useCallback(() => {
-    // Priority 1: URL Override (?org=demo or ?org=bugweiser-u)
-    if (typeof window === 'undefined') return 'bugweiser-u';
+    // Priority 1: URL Override (?org=demo or ?org=chitragupt-u)
+    if (typeof window === 'undefined') return 'chitragupt-u';
     const urlOrg = searchParams.get('org');
     if (urlOrg) return urlOrg;
 
@@ -75,7 +75,7 @@ export function InstitutionProvider({ children }: { children: ReactNode }) {
     if (lastSessionOrg && lastSessionOrg !== 'undefined') return lastSessionOrg;
 
     // Priority 5: Fallback
-    return 'bugweiser-u';
+    return 'chitragupt-u';
   }, [searchParams]);
 
   const activeIdOrSlug = resolveActiveTenant();

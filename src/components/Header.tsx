@@ -12,7 +12,7 @@ export default function Header() {
           <div className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center text-charcoal shadow-lg shadow-accent/20 group-hover:rotate-3 transition-transform">
             <HiOutlineAcademicCap className="w-5 h-5" />
           </div>
-          <span className="text-xl font-black text-charcoal tracking-tighter">Bugweiser</span>
+          <span className="text-xl font-black text-charcoal tracking-tighter">Chitragupt</span>
         </Link>
         <div className="flex items-center gap-4">
           {!isFirebaseConfigured && (
