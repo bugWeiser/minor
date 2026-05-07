@@ -21,6 +21,7 @@ export default function Chatbot() {
       options: [
         { label: 'Navigate me to...', action: 'show_navigation' },
         { label: 'Frequently Asked Questions', action: 'show_faqs' },
+        { label: 'Tell me about recent alerts', action: 'ask_question' },
         { label: 'What is Chitragupt?', action: 'ask_question' },
         { label: 'Who built this?', action: 'ask_question' },
       ]
@@ -49,6 +50,8 @@ export default function Chatbot() {
       botText = 'You can use the "Navigate me to..." option to jump to different parts of the platform, or type your questions here. I can help you find exam results, notices, and settings.';
     } else if (lowerInput.includes('secure') || lowerInput.includes('data') || lowerInput.includes('privacy')) {
       botText = 'Yes! Your data is strictly isolated using our multi-tenant architecture. We comply with DPDP guidelines, ensuring your academic information is protected.';
+    } else if (lowerInput.includes('alert') || lowerInput.includes('recent')) {
+      botText = 'You have 2 unread alerts: (1) Your Computer Networks assignment is due tomorrow. (2) There is a rescheduled seminar in Room 402 at 3:00 PM today. Please check your Dashboard for details.';
     } else if (lowerInput.includes('hello') || lowerInput.includes('hi')) {
       botText = 'Hello there! How can I assist your campus experience today?';
     }
