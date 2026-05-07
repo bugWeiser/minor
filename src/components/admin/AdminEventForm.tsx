@@ -8,7 +8,7 @@ import { HiOutlineCalendarDays, HiOutlineClock, HiOutlineMapPin, HiOutlineUserCi
 
 interface AdminEventFormProps {
   initialData?: CalendarEvent;
-  onSubmit: (data: Partial<CalendarEvent>) => Promise<void>;
+  onSubmit: (data: Partial<CalendarEvent>) => Promise<any>;
 }
 
 export default function AdminEventForm({ initialData, onSubmit }: AdminEventFormProps) {

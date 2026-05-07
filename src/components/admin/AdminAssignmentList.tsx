@@ -10,8 +10,8 @@ import { useAuth } from '@/context/AuthContext';
 
 interface AdminAssignmentListProps {
   assignments: Assignment[];
-  onDelete: (id: string) => Promise<void>;
-  onTogglePublish: (id: string) => Promise<void>;
+  onDelete: (id: string) => Promise<any>;
+  onTogglePublish: (id: string) => Promise<any>;
 }
 
 export default function AdminAssignmentList({ assignments, onDelete, onTogglePublish }: AdminAssignmentListProps) {

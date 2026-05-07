@@ -8,7 +8,7 @@ import { HiOutlineClipboardDocumentList, HiOutlineAcademicCap, HiOutlineCalendar
 
 interface AdminAssignmentFormProps {
   initialData?: Assignment;
-  onSubmit: (data: Partial<Assignment>) => Promise<void>;
+  onSubmit: (data: Partial<Assignment>) => Promise<any>;
 }
 
 export default function AdminAssignmentForm({ initialData, onSubmit }: AdminAssignmentFormProps) {

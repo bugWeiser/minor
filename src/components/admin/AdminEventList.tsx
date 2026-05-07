@@ -10,8 +10,8 @@ import { useAuth } from '@/context/AuthContext';
 
 interface AdminEventListProps {
   events: CalendarEvent[];
-  onDelete: (id: string) => Promise<void>;
-  onTogglePublish: (id: string) => Promise<void>;
+  onDelete: (id: string) => Promise<any>;
+  onTogglePublish: (id: string) => Promise<any>;
 }
 
 export default function AdminEventList({ events, onDelete, onTogglePublish }: AdminEventListProps) {

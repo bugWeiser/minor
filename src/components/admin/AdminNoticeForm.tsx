@@ -7,7 +7,7 @@ import { HiOutlineCheckCircle, HiOutlineClock, HiOutlineInformationCircle } from
 
 interface Props {
   initialData?: Partial<Notice>;
-  onSubmit: (data: any) => Promise<void>;
+  onSubmit: (data: any) => Promise<any>;
   loading?: boolean;
 }
 
