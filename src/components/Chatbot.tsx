@@ -20,6 +20,7 @@ export default function Chatbot() {
       text: 'Hi! I am Chitragupt AI Assistant. How can I help you today?',
       options: [
         { label: 'Navigate me to...', action: 'show_navigation' },
+        { label: 'Frequently Asked Questions', action: 'show_faqs' },
         { label: 'What is Chitragupt?', action: 'ask_question' },
         { label: 'Who built this?', action: 'ask_question' },
       ]
@@ -44,8 +45,10 @@ export default function Chatbot() {
       botText = 'I am Chitragupt, an AI assistant designed to help students navigate the campus digital ecosystem effortlessly. I bring order to information chaos!';
     } else if (lowerInput.includes('who built') || lowerInput.includes('creator')) {
       botText = 'I was built as a presentation demo for this platform! My purpose is to showcase how AI can assist students in finding what they need instantly.';
-    } else if (lowerInput.includes('help')) {
-      botText = 'I can help you find your exam results, check recent notices, or guide you to the administrator settings. Try clicking "Navigate me to..."!';
+    } else if (lowerInput.includes('how do i use') || lowerInput.includes('help')) {
+      botText = 'You can use the "Navigate me to..." option to jump to different parts of the platform, or type your questions here. I can help you find exam results, notices, and settings.';
+    } else if (lowerInput.includes('secure') || lowerInput.includes('data') || lowerInput.includes('privacy')) {
+      botText = 'Yes! Your data is strictly isolated using our multi-tenant architecture. We comply with DPDP guidelines, ensuring your academic information is protected.';
     } else if (lowerInput.includes('hello') || lowerInput.includes('hi')) {
       botText = 'Hello there! How can I assist your campus experience today?';
     }
@@ -96,6 +99,20 @@ export default function Chatbot() {
             { label: 'Admin Setup Guide', action: 'navigate', path: '/admin/guide' },
             { label: 'About Chitragupt', action: 'navigate', path: '/about' },
             { label: 'Privacy Policy', action: 'navigate', path: '/privacy' },
+          ]
+        }]);
+      }, 500);
+    } else if (option.action === 'show_faqs') {
+      setTimeout(() => {
+        setMessages(prev => [...prev, {
+          id: Date.now().toString(),
+          sender: 'bot',
+          text: 'Here are some frequently asked questions:',
+          options: [
+            { label: 'What is Chitragupt?', action: 'ask_question' },
+            { label: 'Who built this platform?', action: 'ask_question' },
+            { label: 'How do I use this?', action: 'ask_question' },
+            { label: 'Is my data secure?', action: 'ask_question' },
           ]
         }]);
       }, 500);
